@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <title>Hive4 Account Deletion</title>
+    <style>			
+    #header{
+        width:100%;
+        background-image: url('header bg pattern.png');
+        background-repeat: repeat;
+        background-size: contain;
+        background-color: #846228;
+        padding-left:10px;	
+        font-size:30px;	
+        color:#E6DAD1;
+    }
+    body{
+        background-color:#E6DAD1;
+        font-family: Calibri, sans-serif;
+        font-size: 20px;
+    }
+    #del{
+        padding-top: 20px; ;
+        margin-left: auto;
+        margin-right: auto;
+        background-color: #8AB49C;
+        border-radius:50px;	
+		padding:50px;
+        color: #E6DAD1;
+        width: 70%;
+    }
+    a{
+        text-align: center;
+        color: #E6DAD1;
+        text-decoration: none;
+    }
+    a:hover{
+        color: #DE8E04;
+    }
+    .user:hover {
+        opacity: 0.8;
+    }
+
+    .user:hover + p {
+        display: block;
+    }
+    input[type="image"] {
+        border: none;
+        cursor: pointer;
+    }
+    input[type="image"]:focus {
+        outline: none;
+    }
+</style>
+</head>
+<table id=header  border="0">
+<tr>
+    <th style="padding-left: 20px;">
+        <a href="HOME.html">
+            HOME
+        </a>
+    </th>
+    <th>
+        <a href="search product.html">
+            PRODUCTS
+        </a>
+    </th>
+    <th>
+        <a href=".html">
+        ABOUT US
+        </a>
+    </th>
+    <td colspan=2><img src="design 1.png"  style="width:80px; height:80px; padding-right: 30px;"></td>
+    <td>
+        <a href="order.html">
+            <img src="order.png" style="width: 50px;height: 50px;" class="user">
+        </a>
+    </td>
+    <td>
+        <a href="cart.html">
+            <img src="cart.png" style="width: 50px;height: 50px;" class="user">
+        </a>
+    </td>
+    <td>
+        <a href="VIEW ACCOUNT DETAILS.html">
+            <img src="user.png" style="width:71px; height:40px;" class="user">
+        </a>
+    </td>
+</tr>
+</table>
+<br><br>
+<table id=del border="0">
+    <tr colspan=2>
+        <th colspan="2" style="font-size: 40px; font-family: 'Times New Roman', serif; text-align: center;">ACCOUNT DELETION</th>
+    </tr>
+    <tr>
+        <td colspan=2>
+            <p style="text-align: left;">
+                If you delete your account, you will lose access to all your purchase history services on our HIVEFOUR website.
+                <br>
+                <br>
+                “Services you lose connection to”
+                <br>
+                <br>
+                HIVEFOUR website
+                <br>
+                <br>
+                *Removing the membership connection from the HIVEFOUR website may take some time
+            </p>
+        </td>
+    </tr>
+    <tr>
+        <td id="btn">
+            <form action="delete account.php" method="post">
+                <input type="image" name="delete" src="delete account.png" alt="Delete Account">
+            </form>
+        </td>
+        <td>
+            <a href="VIEW ACCOUNT DETAILS.html">
+                <img src="cancel.png">
+            </a>
+        </td>
+</table>
+</html>
