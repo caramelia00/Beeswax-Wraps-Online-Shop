@@ -6,7 +6,8 @@
 	<head>
 		<style>
             #one{
-                width: 600px;
+                width: 800px;
+                height: 650px;
                 background-color: #8AB49C;
                 border-radius: 40px;
                 border-spacing: 5px;
@@ -14,19 +15,22 @@
                 color: #E6DAD1;
                 margin-left: auto;
                 margin-right: auto;
+                
             }
             #status{
-                width: 592px;
+                width: 790px;
+                height: 100px;
                 border: 1px solid #E6DAD1;
                 border-radius: 30px;
                 padding: 10px;
             }
             #summary, #delivery{
-                width: 290px;
-                height: 310px;
+                width: 390px;
+                height: 445px;
                 border: 1px solid #E6DAD1;
                 border-radius: 30px;
                 padding: 10px;
+                font-size:24px;
             }
             .mySelect{
                 background-color: #C7D8CF;
@@ -36,6 +40,16 @@
             #startDateButton, #endDateButton{
                 height: 40px;  
                 width: 40px;
+            }
+            #save{
+                margin-left: auto;
+                margin-right: auto;
+            }
+            .sve{
+                border-radius:15px;
+                padding:5px;
+                background-color: #e6dad1;
+                color: #846228;
             }
             input[type="text"] {
                 width: 100%;
@@ -51,6 +65,8 @@
             body{
                 font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
                 background-color: #E6DAD1;   
+                margin: 0;
+				padding: 0;
             }
 			#header{
 				width:100%;
@@ -123,7 +139,7 @@
 		</table>
 		<br><br>
         <form action="update order details process.php" method="post">
-            <table id="one">
+            <table id="one" border="0">
                 <tr>
                     <td colspan="2">
                         <table id="status" border="0">
@@ -193,7 +209,7 @@
                             </tr>
                             <tr>
                                 <td rowspan="3">
-                                    <img src="wrap 3.png" style="width: 90px; height: 90px;">
+                                    <img src="wrap 3.png" style="width: 130px; height: 130px;">
                                 </td>
                                 <td colspan="2">
                                     Earth & Sun Beeswax Wraps
@@ -266,6 +282,7 @@
                             <tr>
                                 <td>
                                     <label for="start date">Start Date:</label>
+                                    <br>
                                     <label for="end date">End Date:</label>
                                 </td>
                                 </td>
@@ -290,11 +307,18 @@
                         </table>
                     </td>
                 </tr>
+                <tr>
+                    <td colspan="2">
+                        <table id="save" border="0">
+                            <tr>
+                                <td>
+                                        <button type="submit" class="sve">SAVE CHANGES</button>
+                                </td>
+                            </tr>
+                    </td>
+                </tr>
             </table>
         </form>
         <script src="updOrd.js"></script>
 	</body>
 </html>
-	
-	
-	
