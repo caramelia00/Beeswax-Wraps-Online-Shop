@@ -286,47 +286,11 @@
 								<tr>
 									<td>
 										<table border="0">
-											<tr style="padding:15px;">
-												<td rowspan=2><img src="yawnzzn.png"></td>
-												<td>username</td>
-												<td>yawnzzn</td>
-											</tr>
-											<tr>
-												<td>user ID</td>
-												<td>123456</td>
-											</tr>
-											<tr style="padding:15px;">
-												<td rowspan=2><img src="mineji.png"></td>
-												<td>username</td>
-												<td>mineji</td>
-											</tr>
-											<tr>
-												<td>user ID</td>
-												<td>654321</td>
-											</tr>
-											<tr >
-												<td rowspan=2 ><img src="for_everyoung10.png"></td>
-												<td>username</td>
-												<td>for_everyoung10</td>
-											</tr>
-											<tr>
-												<td>user ID</td>
-												<td>456123</td>
-											</tr>
-											<tr style="padding:15px;">
-												<td rowspan=2><img src="hoonparker.png"></td>
-												<td>username</td>
-												<td>hoonparker</td>
-											</tr>
-											<tr>
-												<td>user ID</td>
-												<td>321654</td>
-											</tr>
 											<?php
 
 											$result = getUsersDetailsDashboard();
 											while ($row = mysqli_fetch_assoc($result)) {
-												users($row['User_ID'], $row['Type_Name'], $row['User_Email'], $row['phoneNum']);
+												users($row['User_Name'], $row['Profile_Pic'], $row['User_Email']);
 											}
 											
 											?>
@@ -405,38 +369,30 @@ function dispOrdersDashboard($ordersId,$productName,$size,$quantity,$usersName,$
   }
 
   //--- USERS ---
-  function getUsersDetails() {
+
+  function getUsersDetailsDashboard() {
 	require '../../config/dbconn.php';
   
-	$sql = "SELECT users.User_ID, users.User_Name, users.User_Email, users.usersUid,
-	user_details.Phone_No, user_details.address, user_details.postcode, user_details.city,
-	user_details.State, user_type.Type_Name
-	FROM users
-	JOIN user_details ON users.User_ID = user_details.User_ID
-	JOIN user_type ON users.Type_ID = user_type.Type_ID
-	WHERE user_type.Type_Name = 2";
+	$sql = "SELECT User_ID, User_Name, User_Email, Profile_Pic
+	FROM users";
 	$result = mysqli_query($dbconn, $sql);
 	return $result;
-  }
+}
 
-  function users($name, $type, $email, $phone) {
+  function users($name, $profilePic, $email) {
+	$gmailLink = "https://mail.google.com/mail/?view=cm&fs=1&to=" . urlencode($email);
 	$users = '
-	<div class="card-body">
-	  <div class="customer">
-		<div class="info">
-		  <img src="../assets/img/default-profile.jpg" width="40px" height="40px" alt="" />
-		  <div>
-			<h4>'.$name.'</h4>
-			<small>'.$type.'</small>
-		  </div>
-		</div>
-		<div class="contact">
-		  <a href="mailto:'.$email.'"><span class="bx bx-envelope"></span></a>
-		  <a href="http:///wa.me/'.$phone.'" target="_blank"><span class="bx bxl-whatsapp"></span></a>
-		</div>
-	  </div>
-	</div>
+	<tr style="padding:15px;">
+		<td rowspan=2><img src="'.$profilePic.'" alt="" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover; overflow: hidden;"/></td>
+		<td>username</td>
+		<td>'.$name.'</td>
+	</tr>
+	<tr>
+		<td>Email</td>
+		<td><a href="' . $gmailLink . '" target="_blank">' . $email . '</a></td>
+	</tr>
 	';
 	echo $users;
   }
 ?>
+
