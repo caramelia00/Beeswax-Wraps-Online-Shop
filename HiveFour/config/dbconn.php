@@ -11,9 +11,9 @@ $dbconn = mysqli_connect($host, $user, $pass, $dbname);
 if (!$dbconn) {
     die("Connection failed: " . mysqli_connect_error());
 } 
-else{
+/*else{
     echo "<center>Database connected successfully.</center>";
-}
+}*/
 
 /*function unique_id(){
     $chars = '0123456789abcdefghijklmnopqrxtuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';

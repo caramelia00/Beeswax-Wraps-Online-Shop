@@ -25,7 +25,7 @@ if(isset($_POST['submit'])){
     
         echo "<script>console.log('Redirecting to admin dashboard');</script>";
 
-        header("Location: adminDashboard.php");
+        header("Location: admin dashboard.php");
         exit();
     }
 }
