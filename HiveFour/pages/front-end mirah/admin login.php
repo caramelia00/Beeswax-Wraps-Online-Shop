@@ -18,12 +18,14 @@ if(isset($_POST['submit'])){
             window.location.href = 'admin login.php';
           </script>";
     }else{
-        
         $r = mysqli_fetch_assoc($query);
         
         $_SESSION['username'] = "Administrator";
+		$_SESSION['User_ID'] = $r['User_ID'];
     
-        echo "<script>console.log('Redirecting to admin dashboard');</script>";
+        echo "<pre>";
+		var_dump($_SESSION);
+		echo "</pre>";
 
         header("Location: admin dashboard.php");
         exit();

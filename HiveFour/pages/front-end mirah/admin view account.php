@@ -1,3 +1,10 @@
+<?php 
+	include '../../config/dbconn.php';
+	session_start();
+	## verify if the session user is admin
+	if(isset($_SESSION['username']) && $_SESSION['username'] == "Administrator"){
+?>
+
 <!DOCTYPE html>
 <html>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -63,7 +70,7 @@
 			</th>
 			<th>
 				<a href="admin orders.php">
-				ORDERS
+					ORDERS
 				</a>
 			</th>
 			<td colspan=2><img src="design 1.png"  style="width:60px; height:60px;"></td>
@@ -83,38 +90,15 @@
 	<table id=acc border="0">
 		<tr>
 			<th colspan=3 style="font-size:40px">ACCOUNT DETAILS</th>
-		</tr>
-		<tr>
-			<td rowspan=3 style="text-align:center"><img src="hee.png" style="width:150px;height:150px;"></td>
-			<td style="padding:20px;">Full Name</td>
-			<td>Ethan Lee</td>
-		</tr>
-		<tr>
-			<td style="padding:20px;">Email</td>
-			<td>ethanlee221@outlook.com</td>
-		</tr>
-		<tr>
-			<td style="padding:20px;">Password</td>
-			<td>********</td>
-		</tr>
-		<tr>
-			<td style="text-align:center; font-size:30px">ethanlee</td>
-		</tr>
-		<tr>
-			<td style="text-align:center">132654</td>
+			<?php
+			dispUserAccDetails();
+			?>
 		</tr>
 		<tr>
 			<td style="text-align:center; padding-top:10px;">
 				<a href="admin edit details.php">
 					<img src="edit details.png">
 				</a>
-			</td>
-		</tr>
-		<tr>
-			<td style="text-align:center">
-                <a href="admin delete account.php">
-				    <img src="delete account.png">
-                </a>
 			</td>
 		</tr>
 		<tr>
@@ -126,3 +110,48 @@
 		</tr>
 	</table>
 </html>
+
+<?php
+} 
+Else
+{	## if the session username is no admin, redirect the page to the login page 
+header("Location: admin login.php");
+}
+
+//display the user info
+function dispUserAccDetails(){
+	require '../../config/dbconn.php';
+
+	$accId = $_SESSION['User_ID'];
+
+	$sql = "SELECT *
+	FROM users WHERE User_ID = '$accId'";
+	$result = mysqli_query($dbconn, $sql);
+	$row = mysqli_fetch_assoc($result);
+
+	$users = '
+
+	<tr>
+		<td rowspan=3 style="text-align:center"><img src="'.$row['Profile_Pic'].'" style="width: 150px; height: 150px; border-radius: 50%; object-fit: cover; overflow: hidden;"></td>
+		<td style="padding:20px;">Full Name</td>
+		<td>'.$row['User_Full_Name'].'</td>
+	</tr>
+	<tr>
+		<td style="padding:20px;">Email</td>
+		<td>'.$row['User_Email'].'</td>
+	</tr>
+	<tr>
+		<td style="padding:20px;">Password</td>
+		<td>********</td>
+	</tr>
+	<tr>
+		<td style="text-align:center; font-size:30px">'.$row['User_Name'].'</td>
+	</tr>
+	<tr>
+		<td style="text-align:center">'.$row['User_ID'].'</td>
+	</tr>
+	
+	';
+	echo $users;
+}
+?>

@@ -1,7 +1,7 @@
 <?php 
 	include '../../config/dbconn.php';
 	session_start();
-	## veryify if the session user is admin
+	## verify if the session user is admin
 	if(isset($_SESSION['username']) && $_SESSION['username'] == "Administrator"){
 ?>
 
