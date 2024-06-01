@@ -113,7 +113,7 @@ mysqli_close($dbconn);
 	<form action="" method="post" enctype="multipart/form-data" class="login">
 		<table id=login border="0">
 			<tr>
-				<th colspan=2 style="padding:10px; font-size: 40px; font-family: 'Times New Roman', serif;"">LOGIN</th>
+				<th colspan=2 style="padding:10px; font-size: 40px; font-family: 'Times New Roman', serif;">LOGIN</th>
 			</tr>
 			<tr>
 				<td>

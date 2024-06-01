@@ -1,3 +1,10 @@
+<?php 
+	include '../../config/dbconn.php';
+	session_start();
+	## verify if the session user is admin
+	if(isset($_SESSION['username']) && $_SESSION['username'] == "Administrator"){
+?>
+
 <!DOCTYPE html>
 <html>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -164,3 +171,11 @@
 		}
 	</script>
 </html>
+
+<?php
+} 
+Else
+{	## if the session username is no admin, redirect the page to the login page 
+header("Location: admin login.php");
+}
+?>

@@ -103,7 +103,7 @@
 		</tr>
 		<tr>
 			<td style="text-align:center">
-				<a href="admin log out process.php">
+				<a href="admin logout.php">
 					<img src="log out.png">
 				</a>
 			</td>

@@ -1,3 +1,10 @@
+<?php 
+	include '../../config/dbconn.php';
+	session_start();
+	## verify if the session user is admin
+	if(isset($_SESSION['username']) && $_SESSION['username'] == "Administrator"){
+?>
+
 <!DOCTYPE html>
 <html>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -88,43 +95,127 @@
         <tr>
             <td>
                 <table style border="0">
+					<?php
+					include '../../config/dbconn.php';
+					
+					/*$viewUserId= $_GET['userId'];
+
+					$sql = "SELECT *
+					FROM users
+					JOIN user_details on user_details.User_ID = users.User_ID
+					WHERE User_ID = '$viewUserId'";
+					$result = mysqli_query($dbconn, $sql);
+					echo $result;
+					$row = mysqli_fetch_assoc($result);
+
+					$elements = '
                     <tr>
-                        <td rowspan=3 style="text-align:center"><img src="yawnzzn big.png" style="width:150px;height:150px;"></td>
+                        <td rowspan=3 style="text-align:center"><img src="'.$row['Profile_Picture'].'" style="width:150px;height:150px;"></td>
                         <td style="padding:20px;">Full Name</td>
-                        <td>Daniel Choi</td>
+                        <td>'.$row['User_Full_Name'].'</td>
                     </tr>
                     <tr>
                         <td style="padding:20px;">Email</td>
-                        <td>danielchoi139@outlook.com</td>
+                        <td>'.$row['User_Email'].'</td>
                     </tr>
                     <tr>
                         <td style="padding:20px;">Address 1</td>
-                        <td>Menara TM</td>
+                        <td>'.$row['Address1'].'</td>
                     </tr>
                     <tr>
-                        <td style="text-align:center; font-size:30px">yawnzzn</td>
+                        <td style="text-align:center; font-size:30px">'.$row['User_Name'].'</td>
                         <td style="padding:20px;">Address 2</td>
-                        <td>Jalan Pantai Baharu</td>
+                        <td>'.$row['Address2'].'</td>
                     </tr>
                     <tr>
                         <td rowspan="5" style="text-align:center; vertical-align: top;">123456</td>
                         <td style="padding:20px;">Postcode</td>
-                        <td>50672</td>
+                        <td>'.$row['Postcode'].'</td>
                     </tr>
                     <tr>
                         <td style="padding:20px;">City</td>
-                        <td>W.P. Kuala Lumpur</td>
+                        <td>'.$row['City'].'</td>
                     </tr>
                     <tr>
                         <td style="padding:20px;">State</td>
-                        <td>W.P. Kuala Lumpur</td>
+                        <td>'.$row['State'].'</td>
                     </tr>
                     <tr>
                         <td style="padding:20px;">Phone Number</td>
-                        <td>012-3456789</td>
+                        <td>'.$row['Phone_No'].'</td>
                     </tr>
+					';
+					echo $elements;
+					*/
+					if(isset($_GET['userId'])) {
+						$viewUserId= $_GET['userId'];
+
+						$sql = "SELECT *
+						FROM users
+						JOIN user_details on user_details.User_ID = users.User_ID
+						WHERE users.User_ID = '$viewUserId'";
+						$result = mysqli_query($dbconn, $sql);
+
+						if ($result && mysqli_num_rows($result) > 0) {
+							$row = mysqli_fetch_assoc($result);
+
+							$elements = '
+							<tr>
+								<td rowspan=3 style="text-align:center"><img src="'.$row['Profile_Pic'].'" style="width: 150px; height: 150px; border-radius: 50%; object-fit: cover; overflow: hidden;""></td>
+								<td style="padding:20px;">Full Name</td>
+								<td>'.$row['User_Full_Name'].'</td>
+							</tr>
+							<tr>
+								<td style="padding:20px;">Email</td>
+								<td>'.$row['User_Email'].'</td>
+							</tr>
+							<tr>
+								<td style="padding:20px;">Address 1</td>
+								<td>'.$row['Address1'].'</td>
+							</tr>
+							<tr>
+								<td style="text-align:center; font-size:30px">'.$row['User_Name'].'</td>
+								<td style="padding:20px;">Address 2</td>
+								<td>'.$row['Address2'].'</td>
+							</tr>
+							<tr>
+								<td rowspan="5" style="text-align:center; vertical-align: top;">123456</td>
+								<td style="padding:20px;">Postcode</td>
+								<td>'.$row['Postcode'].'</td>
+							</tr>
+							<tr>
+								<td style="padding:20px;">City</td>
+								<td>'.$row['City'].'</td>
+							</tr>
+							<tr>
+								<td style="padding:20px;">State</td>
+								<td>'.$row['State'].'</td>
+							</tr>
+							<tr>
+								<td style="padding:20px;">Phone Number</td>
+								<td>'.$row['Phone_No'].'</td>
+							</tr>
+							';
+							echo $elements;
+						} else {
+							echo "No user found.";
+						}
+					} else {
+						echo "User ID parameter is missing.";
+					}
+					?>
+
                 </table>        
             </td>
         </tr>
 	</table>
 </html>
+
+<?php
+} 
+Else
+{	## if the session username is no admin, redirect the page to the login page 
+header("Location: admin login.php");
+}
+
+?>
