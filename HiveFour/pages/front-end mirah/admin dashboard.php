@@ -1,3 +1,10 @@
+<?php 
+	include '../../config/dbconn.php';
+	session_start();
+	## verify if the session user is admin
+	if(isset($_SESSION['username']) && $_SESSION['username'] == "Administrator"){
+?>
+
 <!DOCTYPE html>
 <html>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -143,7 +150,17 @@
 			<td>
 				<table id=two border="0">
 					<tr>
-						<td  style="font-size:30px;">4</td>
+						<td  style="font-size:30px;">
+						<?php
+
+						require '../../config/dbconn.php';
+						$sql = "SELECT COUNT(User_ID) FROM users WHERE Type_ID = 'UT01'";
+						$result = mysqli_query($dbconn,$sql);
+						$row = mysqli_fetch_array($result);
+						echo $row[0];
+
+						?>
+						</td>
 						<td rowspan=2 style="padding-left:20px;"><img src="customer.png"></td>
 					</tr>
 					<tr>
@@ -154,7 +171,17 @@
 			<td>
 				<table id=two border="0">
 					<tr>
-						<td  style="font-size:30px;">4</td>
+						<td  style="font-size:30px;">
+						<?php
+							
+						require '../../config/dbconn.php';
+						$sql = "SELECT COUNT(Order_ID) FROM orders";
+						$result = mysqli_query($dbconn,$sql);
+						$row = mysqli_fetch_array($result);
+						echo $row[0];
+
+						?>
+						</td>
 						<td rowspan=2 style="padding-left:20px;"><img src="orders.png"></td>
 					</tr>
 					<tr>
@@ -165,7 +192,17 @@
 			<td>
 				<table id=two border="0">
 					<tr>
-						<td  style="font-size:30px;">4</td>
+						<td  style="font-size:30px;">
+						<?php
+                
+						require '../../config/dbconn.php';
+						$sql = "SELECT COUNT(Product_ID) FROM product";
+						$result = mysqli_query($dbconn,$sql);
+						$row = mysqli_fetch_array($result);
+						echo $row[0];
+		
+						?>
+						</td>
 						<td rowspan=2 style="padding-left:20px;"><img src="products.png"></td>
 					</tr>
 					<tr>
@@ -176,7 +213,17 @@
 			<td>
 				<table id=two border="0">
 					<tr>
-						<td  style="font-size:30px;">4</td>
+						<td  style="font-size:30px;">
+						<?php
+                
+						require '../../config/dbconn.php';
+						$sql = "SELECT SUM(Order_Price) FROM orders";
+						$result = mysqli_query($dbconn,$sql);
+						$row = mysqli_fetch_array($result);
+						echo 'RM '.$row[0];
+		
+						?>
+						</td>
 						<td rowspan=2 style="padding-left:20px;"><img src="income.png"></td>
 					</tr>
 					<tr>
@@ -209,38 +256,14 @@
 									<td style="padding-right:20px; padding: 15px; border-width:2px;">Customer</td>
 									<td style="padding-right:20px; padding: 15px; border-width:2px;">Status</td>
 								</tr>
-								<tr>
-									<td style="padding-right:20px; padding: 15px; border-width:2px;">1025</td>
-									<td style="padding-right:20px; padding: 15px; border-width:2px;">Gummy Bear Beeswax Wraps</td>
-									<td style="padding-right:20px; padding: 15px; border-width:2px;">L</td>
-									<td style="padding-right:20px; padding: 15px; border-width:2px;">1</td>
-									<td style="padding-right:20px; padding: 15px; border-width:2px;">yawnzzn</td>
-									<td style="padding-right:20px; padding: 15px; border-width:2px;">Preparing to ship</td>
-								</tr>
-								<tr>
-									<td style="padding-right:20px; padding: 15px; border-width:2px;">1025</td>
-									<td style="padding-right:20px; padding: 15px; border-width:2px;">Dried Caesalpinia Flower Beeswax Wraps</td>
-									<td style="padding-right:20px; padding: 15px; border-width:2px;">M</td>
-									<td style="padding-right:20px; padding: 15px; border-width:2px;">1</td>
-									<td style="padding-right:20px; padding: 15px; border-width:2px;">yawnzzn</td>
-									<td style="padding-right:20px; padding: 15px; border-width:2px;">Preparing to ship</td>
-								</tr>
-								<tr>
-									<td style="padding-right:20px; padding: 15px; border-width:2px;">1019</td>
-									<td style="padding-right:20px; padding: 15px; border-width:2px;">Earth & Sun Beeswax Wraps</td>
-									<td style="padding-right:20px; padding: 15px; border-width:2px;">S</td>
-									<td style="padding-right:20px; padding: 15px; border-width:2px;">2</td>
-									<td style="padding-right:20px; padding: 15px; border-width:2px;">yawnzzn</td>
-									<td style="padding-right:20px; padding: 15px; border-width:2px;">Completed</td>
-								</tr>
-								<tr>
-									<td style="padding-right:20px; padding: 15px; border-width:2px;">1019</td>
-									<td style="padding-right:20px; padding: 15px; border-width:2px;">Gummy Bear Beeswax Wraps</td>
-									<td style="padding-right:20px; padding: 15px; border-width:2px;">M</td>
-									<td style="padding-right:20px; padding: 15px; border-width:2px;">1</td>
-									<td style="padding-right:20px; padding: 15px; border-width:2px;">yawnzzn</td>
-									<td style="padding-right:20px; padding: 15px; border-width:2px;">Completed</td>
-								</tr>
+								<?php
+
+								$result = getOrdersDashboard();
+								while ($row = mysqli_fetch_assoc($result)) {
+								dispOrdersDashboard($row['Order_ID'],$row['Product_Name'],$row['Size_ID'],$row['Quantity'],$row['User_Name'],$row['Status_Name']);
+								}
+							
+								?>
 							</table>
 						</td>
 					</tr>
@@ -263,42 +286,14 @@
 								<tr>
 									<td>
 										<table border="0">
-											<tr style="padding:15px;">
-												<td rowspan=2><img src="yawnzzn.png"></td>
-												<td>username</td>
-												<td>yawnzzn</td>
-											</tr>
-											<tr>
-												<td>user ID</td>
-												<td>123456</td>
-											</tr>
-											<tr style="padding:15px;">
-												<td rowspan=2><img src="mineji.png"></td>
-												<td>username</td>
-												<td>mineji</td>
-											</tr>
-											<tr>
-												<td>user ID</td>
-												<td>654321</td>
-											</tr>
-											<tr >
-												<td rowspan=2 ><img src="for_everyoung10.png"></td>
-												<td>username</td>
-												<td>for_everyoung10</td>
-											</tr>
-											<tr>
-												<td>user ID</td>
-												<td>456123</td>
-											</tr>
-											<tr style="padding:15px;">
-												<td rowspan=2><img src="hoonparker.png"></td>
-												<td>username</td>
-												<td>hoonparker</td>
-											</tr>
-											<tr>
-												<td>user ID</td>
-												<td>321654</td>
-											</tr>
+											<?php
+
+											$result = getUsersDetailsDashboard();
+											while ($row = mysqli_fetch_assoc($result)) {
+												users($row['User_Name'], $row['Profile_Pic'], $row['User_Email']);
+											}
+											
+											?>
 										</table>
 									</td>
 								</tr>
@@ -312,3 +307,94 @@
 		</tr>
 	</table>
 </html>
+
+<?php
+} 
+Else
+{	## if the session username is no admin, redirect the page to the login page 
+header("Location: admin login.php");
+}
+
+//--- RECENT ORDERS ---
+function getOrdersDashboard() {
+	include '../../config/dbconn.php';
+  
+	$sql = "SELECT *
+	FROM orders
+	JOIN order_details ON order_details.Order_ID = orders.Order_ID
+	JOIN product_size on product_size.Product_Size_ID = order_details.Product_Size_ID
+	JOIN product ON product.Product_ID = product_size.Product_ID
+	JOIN users ON users.User_ID = orders.User_ID
+	JOIN status ON status.Status_ID = orders.Status_ID
+	ORDER BY orders.Order_Date DESC";
+
+	$result = mysqli_query($dbconn, $sql);
+	return $result;
+  }
+
+function dispOrdersDashboard($ordersId,$productName,$size,$quantity,$usersName,$status) {
+	$color = '';
+	if($status == 'Pending') {
+	  $color = 'color:#ffbb33';
+	  $colors = 'orange';
+	}
+	else if($status == 'Preparing') {
+	  $color = 'color:#51BBE3';
+	  $colors = 'light blue';
+	}
+	else if($status == 'Delivered') {
+	  $color = 'color:#47A3C6';
+	  $colors = 'dark blue';
+	}
+	else if($status == 'Completed') {
+	  $color = 'color:#41BB12';
+	  $colors = 'green';
+	}
+	
+	$element = '
+  
+	<tbody>
+	  <tr>
+		<td style="padding-right:20px; padding: 15px; border-width:2px;">'.$ordersId.'</td>
+		<td style="padding-right:20px; padding: 15px; border-width:2px;">'.$productName.'</td>
+		<td style="padding-right:20px; padding: 15px; border-width:2px;">'.$size.'</td>
+		<td style="padding-right:20px; padding: 15px; border-width:2px;">'.$quantity.'</td>
+		<td style="padding-right:20px; padding: 15px; border-width:2px;">'.$usersName.'</td>
+		<td style="padding-right:20px; padding: 15px; border-width:2px; '.$color.';">
+			<span class="status '.$colors.'"></span>'.$status.'
+		</td>
+	  </tr>
+	</tbody>
+  
+	';
+	echo $element;
+  }
+
+  //--- USERS ---
+
+  function getUsersDetailsDashboard() {
+	require '../../config/dbconn.php';
+  
+	$sql = "SELECT User_ID, User_Name, User_Email, Profile_Pic
+	FROM users";
+	$result = mysqli_query($dbconn, $sql);
+	return $result;
+}
+
+  function users($name, $profilePic, $email) {
+	$gmailLink = "https://mail.google.com/mail/?view=cm&fs=1&to=" . urlencode($email);
+	$users = '
+	<tr style="padding:15px;">
+		<td rowspan=2><img src="'.$profilePic.'" alt="" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover; overflow: hidden;"/></td>
+		<td>username</td>
+		<td>'.$name.'</td>
+	</tr>
+	<tr>
+		<td>Email</td>
+		<td><a href="' . $gmailLink . '" target="_blank">' . $email . '</a></td>
+	</tr>
+	';
+	echo $users;
+  }
+?>
+

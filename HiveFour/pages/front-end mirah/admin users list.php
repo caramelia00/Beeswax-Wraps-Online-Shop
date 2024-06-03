@@ -1,3 +1,10 @@
+<?php 
+	include '../../config/dbconn.php';
+	session_start();
+	## verify if the session user is admin
+	if(isset($_SESSION['username']) && $_SESSION['username'] == "Administrator"){
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -87,10 +94,10 @@
     </style>
 </head>
 <body>
-	<table id=header  border="0">
+	<table id="header" border="0">
 		<tr>
 			<th style="padding-left: 20px;">
-				<a href="admin view user details.php">
+				<a href="admin users list.php">
 					USERS
 				</a>
 			</th>
@@ -118,17 +125,19 @@
 		</tr>
 	</table>
     <h1 style="text-align: center; color: #8AB49C;">SEARCH CUSTOMER</h1>
-    <form id="searchForm" action="search users.php" method="get">
+    <form id="searchForm" action="search.php" method="POST">
         <table style="width: 800px; border-spacing: 5px;" border="0">
             <tr>
                 <td>
                     <table id="bar" border="0">
                         <tr>
                             <td style="text-align: center;">
-                                    <input type="text" id="searchInput" name="query" placeholder="Insert product name" class="searchbar">
+                                    <input type="text" id="searchInput" name="query" placeholder="Insert customer name or ID" class="searchbar">
                             </td>
                             <td style="text-align: right;">
-                                <button type="submit" class="sIcon"><img src="search.png" style="width: 22px; height: 22px;"></button>
+                                <button type="submit" name="submitCustomer" class="sIcon" style="width: 22px; height: 22px; background: none; border: none; padding: 0; cursor: pointer;">
+                                    <img src="search.png" alt="Submit" style="display: inline-block;">
+                                </button>
                             </td>
                         </tr>
                     </table>
@@ -137,76 +146,13 @@
         </table>
     </form>
     <div id="searchResults"></div>
-    <br>    
-    <table id="list"border="0">
-    <!-- template for how the list of users will look -->
-        <tr >
-            <td rowspan=2 style="width: 54px;"><img src="yawnzzn.png"></td>
-            <td style="width: 80px;">username:</td>
-            <td>yawnzzn</td>
-            <td rowspan=2 style="width: 120px;">
-                <a href="admin view user details.php"> 
-                    <!-- link to specific user details -->
-                    <b>view</b>
-                </a>
-            </td>
-        </tr>
-        <tr>
-            <td style="width: 80px;">user ID:</td>
-            <td>123456</td>
-        </tr>
-    </table>
-    <br>
-    <table id="list"border="0">
-        <tr >
-            <td rowspan=2 style="width: 54px;"><img src="mineji.png"></td>
-            <td style="width: 80px;">username:</td>
-            <td>mineji</td>
-            <td rowspan=2 style="width: 120px;">
-                <a href="admin view user details.php">
-                    <b>view</b>
-                </a>
-            </td>
-        </tr>
-        <tr>
-            <td style="width: 80px;">user ID:</td>
-            <td>654321</td>
-        </tr>
-    </table>
-    <br>
-    <table id="list" border="0">
-        <tr >
-            <td rowspan=2 style="width: 54px;""><img src="for_everyoung10.png"></td>
-            <td style="width: 80px;">username:</td>
-            <td>for_everyoung10</td>
-            <td rowspan=2 style="width: 120px;">
-                <a href="admin view user details.php">
-                    <b>view</b>
-                </a>
-            </td>
-        </tr>
-        <tr>
-            <td style="width: 80px;">user ID:</td>
-            <td>456123</td>
-        </tr>
-    </table>
-    <br>
-    <table id="list"border="0">
-        <tr >
-            <td rowspan=2 style="width: 54px;"><img src="hoonparker.png"></td>
-            <td style="width: 80px;">username:</td>
-            <td>hoonparker</td>
-            <td rowspan=2 style="width: 120px;">
-                <a href="admin view user details.php">
-                    <b>view</b>
-                </a>
-            </td>
-        </tr>
-        <tr>
-            <td style="width: 80px;">user ID:</td>
-            <td>321654</td>
-        </tr>
-    </table>
+    <?php
+        $result = getAllCustomers();
+        while ($row = mysqli_fetch_assoc($result)) {
+        displayCustomer($row['User_ID'], $row['User_Name'], $row['Profile_Pic']);
+        }
+    ?>
+    <!---
     <script>
         document.getElementById('searchForm').addEventListener('submit', function(event) {
         event.preventDefault(); // Prevent default form submission
@@ -223,5 +169,51 @@
             .catch(error => console.error('Error:', error));
         });
     </script>
+    --->
 </body>
 </html>
+
+<?php
+}else
+{	## if the session username is no admin, redirect the page to the login page 
+header("Location: admin login.php");
+}
+
+// get customers from database
+function getAllCustomers(){
+    include '../../config/dbconn.php';
+  
+	$sql = "SELECT *
+	FROM users
+    WHERE Type_ID='UT01'";
+	$result = mysqli_query($dbconn, $sql);
+	return $result;
+}
+
+// display customer
+function displayCustomer($userId, $userName, $profilePic){
+    $user = '
+        <br>
+        <form id="viewForm" action="" method="GET">    
+        <table id="list"border="0">
+        <tr>
+        <td rowspan=2  style="width: 54px;"><img src="'.$profilePic.'" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover; overflow: hidden;"></td>
+        <td style="width: 80px;">username:</td>
+        <td>'.$userName.'</td>
+        <td rowspan=2 style="width: 120px;">
+            <a href="admin view user details.php?userId='.$userId.'"> 
+                <b>view</b>
+            </a>
+        </td>
+        </tr>
+        <tr>
+            <td style="width: 80px;">user ID:</td>
+            <td>'.$userId.'</td>
+        </tr>
+        </form>
+        </table>
+    ';
+    echo $user;
+}
+?>
+

@@ -1,3 +1,38 @@
+<?php
+session_start();
+
+include '../../config/dbconn.php';
+
+if(isset($_POST['submit'])){
+    // Retrieve and sanitize user inputs
+    $email = mysqli_real_escape_string($dbconn, $_POST['email']);
+    $password = mysqli_real_escape_string($dbconn, $_POST['pass']);
+
+    $sql= "SELECT * FROM users WHERE Type_ID='UT02' AND User_Email = '$email' AND User_Password = '$password'";
+    $query = mysqli_query($dbconn, $sql) or die("Error: " . mysqli_error($dbconn));
+    $row = mysqli_num_rows($query);
+
+    if($row == 0){  
+        echo "<script>
+            alert('Incorrect email or password.');
+            window.location.href = 'admin login.php';
+          </script>";
+    }else{
+        $r = mysqli_fetch_assoc($query);
+        
+        $_SESSION['username'] = "Administrator";
+		$_SESSION['User_ID'] = $r['User_ID'];
+    
+        echo "<pre>";
+		var_dump($_SESSION);
+		echo "</pre>";
+
+        header("Location: admin dashboard.php");
+        exit();
+    }
+}
+mysqli_close($dbconn);
+?> 
 <!DOCTYPE html>
 <html>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -46,7 +81,9 @@
                 color: #E6DAD1;
 				text-decoration: none;
 			}
-            input[type="text"] {
+            input[type="text"],
+			input[type="email"],
+			input[type="password"] {
                 width: 100%;
                 padding: 5px;
                 border: 1px solid #C7D8CF;
@@ -66,16 +103,17 @@
             }
 		</style>
 	</head>
+	<body>
 	<table id=header  border="0">
 		<tr>
 			<th><img src="design 1.png"  style="width:80px; height:80px;"></td>
 		</tr>
 	</table>
 	<br><br><br><br>
-	<form action="admin login process.php" method="post">
+	<form action="" method="post" enctype="multipart/form-data" class="login">
 		<table id=login border="0">
 			<tr>
-				<th colspan=2 style="padding:10px; font-size: 40px; font-family: 'Times New Roman', serif;"">LOGIN</th>
+				<th colspan=2 style="padding:10px; font-size: 40px; font-family: 'Times New Roman', serif;">LOGIN</th>
 			</tr>
 			<tr>
 				<td>
@@ -84,7 +122,7 @@
 							<td style=" color:#9D5A4D;">Email</td>
 						</tr>
 						<tr>
-							<td ><input type="text" name="adEmail"></td>
+							<td ><input type="email" name="email"></td>
 						</tr>
                     </table>
                     <br>
@@ -93,16 +131,19 @@
 							<td style=" color:#9D5A4D;">Password</td>
 						</tr>
 						<tr>
-							<td ><input type="text" name="adPass"></td>
+							<td ><input type="password" name="pass"></td>
 						</tr>
                     </table>
 				</td>
 			</tr>
             <tr>
                 <td style=" padding-top: 10px; text-align: center;">
-                    <input type="image" src="login.png" alt="Submit" >
+				<button type="submit" name="submit" style="background: none; border: none; padding: 0; cursor: pointer;">
+					<img src="login.png" alt="Submit" style="display: inline-block;">
+				</button>
                 </td>
             </tr>
 		</table>
 	</form>
+</body>
 </html>

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 15, 2024 at 07:14 PM
+-- Generation Time: May 31, 2024 at 01:53 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.0.28
 
@@ -103,7 +103,7 @@ CREATE TABLE `payment` (
   `Amount_Paid` double NOT NULL,
   `Payment_Date` date NOT NULL,
   `Payment_Time` time(6) NOT NULL,
-  `Receipt` longblob DEFAULT NULL,
+  `Receipt` varchar(60) DEFAULT NULL,
   `Order_ID` varchar(45) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -125,7 +125,7 @@ INSERT INTO `payment` (`Payment_ID`, `Amount_Paid`, `Payment_Date`, `Payment_Tim
 CREATE TABLE `product` (
   `Product_ID` varchar(45) NOT NULL,
   `Product_Name` varchar(45) NOT NULL,
-  `Product_Image` longblob DEFAULT NULL
+  `Product_Image` varchar(60) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -133,9 +133,9 @@ CREATE TABLE `product` (
 --
 
 INSERT INTO `product` (`Product_ID`, `Product_Name`, `Product_Image`) VALUES
-('PD1', 'Red Rose', 0x4e554c4c),
-('PD2', 'Bluey Cloud', 0x4e554c4c),
-('PD3', 'Flying Bees', 0x4e554c4c);
+('PD1', 'Red Rose', 'NULL'),
+('PD2', 'Bluey Cloud', 'NULL'),
+('PD3', 'Flying Bees', 'NULL');
 
 -- --------------------------------------------------------
 
@@ -176,8 +176,9 @@ CREATE TABLE `status` (
 
 INSERT INTO `status` (`Status_ID`, `Status_Name`) VALUES
 ('S01', 'Pending'),
-('S02', 'Processed'),
-('S03', 'Shipped');
+('S02', 'Preparing'),
+('S03', 'Delivered'),
+('S04', 'Completed');
 
 -- --------------------------------------------------------
 
@@ -191,6 +192,7 @@ CREATE TABLE `users` (
   `User_Full_Name` varchar(50) NOT NULL,
   `User_Email` varchar(45) NOT NULL,
   `User_Password` varchar(45) NOT NULL,
+  `Profile_Pic` varchar(60) NOT NULL,
   `Type_ID` varchar(46) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -198,12 +200,12 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`User_ID`, `User_Name`, `User_Full_Name`, `User_Email`, `User_Password`, `Type_ID`) VALUES
-('U01', 'amzati2004', 'Amirah Izzati Binti Aminuddin', 'amirah@gmail.com', 'amirah123', 'UT01'),
-('U02', 'aalifCurang', 'Aliff Aziz Bin ', 'aaziz@gmail.com', 'alifaziz098', 'UT01'),
-('U03', 'syabat04', 'Nur Batrisyia Binti Norul Haizal', 'batrisyia@gmail.com', 'batrisyia123', 'UT01'),
-('U04', 'aidandellion', 'Aida Syazwani Binti Samani', 'aidasyazwani04@gmail.com', 'aida123', 'UT02'),
-('U05', 'a_alicafe23', 'Nurul Aliah Haifaa Binti Nasiruddin', 'aliah@gmail.com', 'aliah123', 'UT02');
+INSERT INTO `users` (`User_ID`, `User_Name`, `User_Full_Name`, `User_Email`, `User_Password`, `Profile_Pic`, `Type_ID`) VALUES
+('U01', 'amzati2004', 'Amirah Izzati Binti Aminuddin', 'amirah@gmail.com', 'amirah123', '../../assets/userPic/amirah.jpg', 'UT01'),
+('U02', 'aalifCurang', 'Aliff Aziz Bin ', 'aaziz@gmail.com', 'alifaziz098', '../../assets/userPic/alif.jpg', 'UT01'),
+('U03', 'syabat04', 'Nur Batrisyia Binti Norul Haizal', 'batrisyia@gmail.com', 'batrisyia123', '../../assets/userPic/batrisyia.jpg', 'UT01'),
+('U04', 'aidandellion', 'Aida Syazwani Binti Samani', 'aidasyazwani04@gmail.com', 'aida123', '../../assets/userPic/aida.jpg', 'UT02'),
+('U05', 'a_alicafe23', 'Nurul Aliah Haifaa Binti Nasiruddin', 'aliah@gmail.com', 'aliah123', '../../assets/userPic/aliah.jpg', 'UT02');
 
 -- --------------------------------------------------------
 
@@ -218,6 +220,7 @@ CREATE TABLE `user_details` (
   `Postcode` varchar(45) NOT NULL,
   `State` varchar(45) NOT NULL,
   `City` varchar(45) NOT NULL,
+  `Phone_No` varchar(45) NOT NULL,
   `User_ID` varchar(45) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -225,12 +228,12 @@ CREATE TABLE `user_details` (
 -- Dumping data for table `user_details`
 --
 
-INSERT INTO `user_details` (`User_Details_ID`, `Address1`, `Address2`, `Postcode`, `State`, `City`, `User_ID`) VALUES
-('UD01', '123, Jalan Tun Razak', 'Apartment B, Unit 2B', '50400', 'WP Kuala Lumpur', 'Kuala Lumpur', 'U01'),
-('UD02', '45, Jalan Ampang', 'Taman Ampang', '68000', 'WP Kuala Lumpur', 'Ampang', 'U02'),
-('UD03', '789, Jalan Sultan Ismail', 'NULL', '50250', 'WP Kuala Lumpur', 'Kuala Lumpur', 'U03'),
-('UD04', 'Lot 2410, Lorong Kenanga', 'Kampung Sijangkang', '42500', 'Selangor', 'Telok Panglima Garang', 'U04'),
-('UD05', '12, Jalan Kuchai Lama', 'NULL', '58200', 'WP Kuala Lumpur', 'Kuala Lumpur', 'U05');
+INSERT INTO `user_details` (`User_Details_ID`, `Address1`, `Address2`, `Postcode`, `State`, `City`, `Phone_No`, `User_ID`) VALUES
+('UD01', '123, Jalan Tun Razak', 'Apartment B, Unit 2B', '50400', 'WP Kuala Lumpur', 'Kuala Lumpur', '0124248001', 'U01'),
+('UD02', '45, Jalan Ampang', 'Taman Ampang', '68000', 'WP Kuala Lumpur', 'Ampang', '01239485760', 'U02'),
+('UD03', '789, Jalan Sultan Ismail', 'NULL', '50250', 'WP Kuala Lumpur', 'Kuala Lumpur', '0146060411', 'U03'),
+('UD04', 'Lot 2410, Lorong Kenanga', 'Kampung Sijangkang', '42500', 'Selangor', 'Telok Panglima Garang', '01647839256', 'U04'),
+('UD05', '12, Jalan Kuchai Lama', 'NULL', '58200', 'WP Kuala Lumpur', 'Kuala Lumpur', '01452378695', 'U05');
 
 -- --------------------------------------------------------
 
