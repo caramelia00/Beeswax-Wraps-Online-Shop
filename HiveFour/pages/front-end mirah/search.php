@@ -127,30 +127,14 @@
 			</td>
 		</tr>
 	</table>
-    <h1 style="text-align: center; color: #8AB49C;">SEARCH CUSTOMER</h1>
-    <form id="searchForm" action="search.php" method="POST">
-        <table style="width: 800px; border-spacing: 5px;" border="0">
-            <tr>
-                <td>
-                    <table id="bar" border="0">
-                        <tr>
-                            <td style="text-align: center;">
-                                    <input type="text" id="searchInput" name="query" placeholder="Insert customer name or ID" class="searchbar">
-                            </td>
-                            <td style="text-align: right;">
-                                <button type="submit" name="submit" class="sIcon" style="width: 22px; height: 22px; background: none; border: none; padding: 0; cursor: pointer;">
-                                    <img src="search.png" alt="Submit" style="display: inline-block;">
-                                </button>
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-        </table>
-    </form>
-    <div id="searchResults"></div>
+
+
+    <!--- CUSTOMER --->
     <?php
-        if(isset($_POST['submit'])) {
+        if(isset($_POST['submitCustomer'])) {
+            //displays search bar customer
+            displayCustomerSearchBar();
+
             include '../../config/dbconn.php';
             $search = mysqli_real_escape_string($dbconn, $_POST['query']);
             $result = getCustomer($search);
@@ -167,6 +151,33 @@
             }
         }
     ?>
+
+    <!--- PRODUCT --->
+    <?php
+        if(isset($_POST['submitProduct'])) {
+            //displays search bar product
+            displayProductSearchBar();
+
+            include '../../config/dbconn.php';
+            $search = mysqli_real_escape_string($dbconn, $_POST['query']);
+            $result = getProduct($search);
+            $queryResult = mysqli_num_rows($result);
+
+            if($queryResult > 0) {
+            while($row = mysqli_fetch_assoc($result)) {
+                $resultStck = getProductStock($row['Product_ID']);
+                $productStock = mysqli_fetch_array($resultStck);
+                displayProduct($row['Product_Name'], $row['Product_Image'], $productStock[0], $row['Product_ID']);
+            }
+            }
+            else {
+            echo "<br>";
+            echo "<center>There is no result matching your search!</center>";
+            }
+        }
+    ?>
+
+
 </body>
 </html>
 
@@ -176,7 +187,8 @@
 header("Location: admin login.php");
 }
 
-//get customer based on id from database
+//--- CUSTOMER ---
+//get customer based on name/id from database
 function getCustomer($search){
     include '../../config/dbconn.php';
   
@@ -185,6 +197,34 @@ function getCustomer($search){
     WHERE User_ID LIKE '%$search%' OR User_Full_Name LIKE '%$search%' AND Type_ID='UT01'";
 	$result = mysqli_query($dbconn, $sql);
 	return $result;
+}
+
+//display customer search bar
+function displayCustomerSearchBar(){
+    echo '
+    <h1 style="text-align: center; color: #8AB49C;">SEARCH CUSTOMER</h1>
+    <form id="searchForm" action="search.php" method="POST">
+        <table style="width: 800px; border-spacing: 5px;" border="0">
+            <tr>
+                <td>
+                    <table id="bar" border="0">
+                        <tr>
+                            <td style="text-align: center;">
+                                    <input type="text" id="searchInput" name="query" placeholder="Insert customer name or ID" class="searchbar">
+                            </td>
+                            <td style="text-align: right;">
+                                <button type="submit" name="submitCustomer" class="sIcon" style="width: 22px; height: 22px; background: none; border: none; padding: 0; cursor: pointer;">
+                                    <img src="search.png" alt="Submit" style="display: inline-block;">
+                                </button>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </form>
+    <div id="searchResults"></div>
+    ';
 }
 
 // display customer
@@ -210,6 +250,97 @@ function displayCustomer($userId, $userName, $profilePic){
         </table>
     ';
     echo $user;
+}
+
+//--- PRODUCT ---
+//get product from database
+function getProductStock($productId){
+    include '../../config/dbconn.php';
+  
+	$sql = "SELECT SUM(Size_Stock)
+	FROM product_size
+    WHERE Product_ID='$productId'";
+	$result = mysqli_query($dbconn, $sql);
+	return $result;
+}
+
+///get product based on name/id from database
+function getProduct($search){
+    include '../../config/dbconn.php';
+  
+	$sql = "SELECT *
+	FROM product
+    WHERE Product_ID LIKE '%$search%' OR Product_Name LIKE '%$search%'";
+	$result = mysqli_query($dbconn, $sql);
+	return $result;
+}
+
+//display product search bar
+function displayProductSearchBar(){
+    echo '
+    <h1 style="text-align: center; color: #8AB49C;">SEARCH PRODUCT</h1>
+    <form action="search.php" method="POST">
+        <table style="width: 800px; border-spacing: 5px;" border="0">
+            <tr>
+                <td>
+                    <table id="bar" border="0">
+                        <tr>
+                            <td style="text-align: center;">
+                                    <input type="text" name="query" placeholder="Insert product name" class="searchbar">
+                            </td>
+                            <td style="text-align: right;">
+                                <button type="submit" name="submitProduct" class="sIcon" style="width: 22px; height: 22px; background: none; border: none; padding: 0; cursor: pointer;">
+                                    <img src="search.png" alt="Submit" style="display: inline-block;">
+                                </a>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+                <!--- ADD PRODUCT --->
+                <td style="width: 48px;">
+                    <a href="add new product.php">
+                        <img src="add new.png">
+                    </a>
+                </td>
+            </tr>
+        </table>
+    </form>
+    ';
+}
+
+// display product
+function displayProduct($productName, $productPic, $productStock, $productId){
+    $product = '
+        <br>
+        <form id="updateForm" action="" method="GET">
+        <table id="list" border="0">
+        <tr>
+            <td colspan=5>
+                <p id="myParagraph" style="display:none; color: red; font-size: 25px; text-align: center;">OUT OF STOCK</p>
+            </td>
+        </tr>
+        <tr>
+            <td rowspan=2 style="width: 54px; padding-right: 10px;"><img src="'.$productPic.'" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover; overflow: hidden;"></td>
+            <td style="width: 150px;">product name</td>
+            <td colspan=2>'.$productName.'</td>
+            <td style="width: 120px; padding-left:10px;">
+                <!-- link to specific product details -->
+                <a href="admin update product.php?productId='.$productId.'">
+                    <b>update</b>
+                </a>
+                
+            </td>
+        </tr>
+        <tr>
+            <td style="width: 150px;">stock available</td>
+            <td style="width: 60px;">'.$productStock.'</td>
+            <td>units</td>
+            <td><button id="myButton"><b>Out of stock</b></button></td>
+        </tr>
+        </table>
+        </form>
+    ';
+    echo $product;
 }
 ?>
 

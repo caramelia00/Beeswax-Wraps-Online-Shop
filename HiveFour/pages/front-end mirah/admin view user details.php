@@ -98,55 +98,6 @@
 					<?php
 					include '../../config/dbconn.php';
 					
-					/*$viewUserId= $_GET['userId'];
-
-					$sql = "SELECT *
-					FROM users
-					JOIN user_details on user_details.User_ID = users.User_ID
-					WHERE User_ID = '$viewUserId'";
-					$result = mysqli_query($dbconn, $sql);
-					echo $result;
-					$row = mysqli_fetch_assoc($result);
-
-					$elements = '
-                    <tr>
-                        <td rowspan=3 style="text-align:center"><img src="'.$row['Profile_Picture'].'" style="width:150px;height:150px;"></td>
-                        <td style="padding:20px;">Full Name</td>
-                        <td>'.$row['User_Full_Name'].'</td>
-                    </tr>
-                    <tr>
-                        <td style="padding:20px;">Email</td>
-                        <td>'.$row['User_Email'].'</td>
-                    </tr>
-                    <tr>
-                        <td style="padding:20px;">Address 1</td>
-                        <td>'.$row['Address1'].'</td>
-                    </tr>
-                    <tr>
-                        <td style="text-align:center; font-size:30px">'.$row['User_Name'].'</td>
-                        <td style="padding:20px;">Address 2</td>
-                        <td>'.$row['Address2'].'</td>
-                    </tr>
-                    <tr>
-                        <td rowspan="5" style="text-align:center; vertical-align: top;">123456</td>
-                        <td style="padding:20px;">Postcode</td>
-                        <td>'.$row['Postcode'].'</td>
-                    </tr>
-                    <tr>
-                        <td style="padding:20px;">City</td>
-                        <td>'.$row['City'].'</td>
-                    </tr>
-                    <tr>
-                        <td style="padding:20px;">State</td>
-                        <td>'.$row['State'].'</td>
-                    </tr>
-                    <tr>
-                        <td style="padding:20px;">Phone Number</td>
-                        <td>'.$row['Phone_No'].'</td>
-                    </tr>
-					';
-					echo $elements;
-					*/
 					if(isset($_GET['userId'])) {
 						$viewUserId= $_GET['userId'];
 

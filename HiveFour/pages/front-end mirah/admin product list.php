@@ -1,3 +1,11 @@
+<?php 
+	include '../../config/dbconn.php';
+	session_start();
+	## verify if the session user is admin
+	if(isset($_SESSION['username']) && $_SESSION['username'] == "Administrator"){
+?>
+
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -125,8 +133,10 @@
 			</td>
 		</tr>
 	</table>
+
+    <!--- SEARCH PRODUCT --->
     <h1 style="text-align: center; color: #8AB49C;">SEARCH PRODUCT</h1>
-    <form action="search.php" method="get">
+    <form action="search.php" method="POST">
         <table style="width: 800px; border-spacing: 5px;" border="0">
             <tr>
                 <td>
@@ -136,84 +146,33 @@
                                     <input type="text" name="query" placeholder="Insert product name" class="searchbar">
                             </td>
                             <td style="text-align: right;">
-                                <button type="submit" class="sIcon"><img src="search.png" style="width: 22px; height: 22px;"></button>
+                                <button type="submit" name="submitProduct" class="sIcon" style="width: 22px; height: 22px; background: none; border: none; padding: 0; cursor: pointer;">
+                                    <img src="search.png" alt="Submit" style="display: inline-block;">
+                                </button>
                             </td>
                         </tr>
                     </table>
                 </td>
+    <!--- ADD PRODUCT --->
                 <td style="width: 48px;">
                     <a href="add new product.php">
                         <img src="add new.png">
                     </a>
                 </td>
+
             </tr>
         </table>
     </form>
-    <br>    
-    <table id="list" border="0">
-        <tr>
-            <td colspan=5>
-                <p id="myParagraph" style="display:none; color: red; font-size: 25px; text-align: center;">OUT OF STOCK</p>
-            </td>
-        </tr>
-        <tr>
-            <td rowspan=2 style="width: 54px; padding-right: 10px;"><img src="earth.png"></td>
-            <td style="width: 150px;">product name</td>
-            <td colspan=2>Earth & Sun Beeswax Wraps</td>
-            <td style="width: 120px; padding-left:10px;">
-                <!-- link to specific product details -->
-                <a href="admin update product.php">
-                    <b>update</b>
-                </a>
-                
-            </td>
-        </tr>
-        <tr>
-            <td style="width: 150px;">stock available</td>
-            <td style="width: 60px;">1000</td>
-            <td>units</td>
-            <td><button id="myButton"><b>Out of stock</b></button></td>
-        </tr>
-    </table>
-    <br>
-    <table id="list"border="0">
-        <tr >
-            <td rowspan=2 style="width: 54px; padding-right: 10px;"><img src="gummy.png"></td>
-            <td style="width: 150px;">product name</td>
-            <td colspan="2">Gummy Bears Beeswax Wraps</td>
-            <td style="width: 120px; padding-left:10px;">
-                <a href="admin update product.php">
-                    <b>update</b>
-                </a>
-            </td>
-        </tr>
-        <tr>
-            <td style="width: 150px;">stock available</td>
-            <td style="width: 60px;">950</td>
-            <td>units</td>
-            <td><button id="myButton"><b>Out of stock</b></button></td>
-        </tr>
-    </table>
-    <br>
-    <table id="list" border="0">
-        <tr >
-            <td rowspan=2 style="width: 54px; padding-right: 10px;"><img src="dried.png"></td>
-            <td style="width: 150px;">product name</td>
-            <td colspan="2">Dried Caesalpinia Flower Beeswax Wraps</td>
-            <td style="width: 120px; padding-left:10px;">
-                <a href="admin update product.php">
-                    <b>update</b>
-                </a>
-            </td>
-        </tr>
-        <tr>
-            <td style="width: 150px;">stock available</td>
-            <td style="width: 60px;">965</td>
-            <td>units</td>
-            <td><button id="myButton"><b>Out of stock</b></button></td>
-        </tr>
-    </table>
-    <br>
+    <!--- PRODUCT LIST --->
+    <?php
+        $result = getProduct();
+        while ($row = mysqli_fetch_assoc($result)) {
+        $resultStck = getProductStock($row['Product_ID']);
+        $productStock = mysqli_fetch_array($resultStck);
+        displayProduct($row['Product_Name'], $row['Product_Image'], $productStock[0], $row['Product_ID']);
+        }
+    ?>
+
     <!-- <table id="list"border="0">
         <tr >
             <td rowspan=2 style="width: 54px; padding-right: 10px;"><img src="set.png"></td>
@@ -237,5 +196,78 @@
         document.getElementById('myParagraph').style.display = 'block';
     });
     </script>
+    <script>
+        function handleSearch() {
+            const query = document.getElementById('searchInput').value;
+            const searchLink = document.getElementById('searchLink');
+            searchLink.href = `search.php?query=${encodeURIComponent(query)}`;
+        }
+    </script>
 </body>
 </html>
+
+
+<?php
+} 
+Else
+{	## if the session username is no admin, redirect the page to the login page 
+header("Location: admin login.php");
+}
+
+//get product from database
+function getProductStock($productId){
+    include '../../config/dbconn.php';
+  
+	$sql = "SELECT SUM(Size_Stock)
+	FROM product_size
+    WHERE Product_ID='$productId'";
+	$result = mysqli_query($dbconn, $sql);
+	return $result;
+}
+
+// get products from database
+function getProduct(){
+    include '../../config/dbconn.php';
+  
+	$sql = "SELECT *
+	FROM product";
+	$result = mysqli_query($dbconn, $sql);
+	return $result;
+}
+
+// display product
+function displayProduct($productName, $productPic, $productStock, $productId){
+    $product = '
+        <br>
+        <form id="updateForm" action="" method="GET">
+        <table id="list" border="0">
+        <tr>
+            <td colspan=5>
+                <p id="myParagraph" style="display:none; color: red; font-size: 25px; text-align: center;">OUT OF STOCK</p>
+            </td>
+        </tr>
+        <tr>
+            <td rowspan=2 style="width: 54px; padding-right: 10px;"><img src="'.$productPic.'" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover; overflow: hidden;"></td>
+            <td style="width: 150px;">product name</td>
+            <td colspan=2>'.$productName.'</td>
+            <td style="width: 120px; padding-left:10px;">
+                <!-- link to specific product details -->
+                <a href="admin update product.php?productId='.$productId.'">
+                    <b>update</b>
+                </a>
+                
+            </td>
+        </tr>
+        <tr>
+            <td style="width: 150px;">stock available</td>
+            <td style="width: 60px;">'.$productStock.'</td>
+            <td>units</td>
+            <td><button id="myButton"><b>Out of stock</b></button></td>
+        </tr>
+        </table>
+        </form>
+    ';
+    echo $product;
+}
+
+?>

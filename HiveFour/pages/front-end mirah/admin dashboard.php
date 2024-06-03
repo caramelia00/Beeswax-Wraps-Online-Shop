@@ -319,13 +319,15 @@ header("Location: admin login.php");
 function getOrdersDashboard() {
 	include '../../config/dbconn.php';
   
-	$sql = "SELECT orders.Order_ID, order_details.Quantity, order_details.Size_ID, product.Product_Name, users.User_Name, status.Status_Name
+	$sql = "SELECT *
 	FROM orders
 	JOIN order_details ON order_details.Order_ID = orders.Order_ID
-	JOIN product ON product.Product_ID = order_details.Product_ID
+	JOIN product_size on product_size.Product_Size_ID = order_details.Product_Size_ID
+	JOIN product ON product.Product_ID = product_size.Product_ID
 	JOIN users ON users.User_ID = orders.User_ID
 	JOIN status ON status.Status_ID = orders.Status_ID
 	ORDER BY orders.Order_Date DESC";
+
 	$result = mysqli_query($dbconn, $sql);
 	return $result;
   }

@@ -1,3 +1,10 @@
+<?php 
+	include '../../config/dbconn.php';
+	session_start();
+	## verify if the session user is admin
+	if(isset($_SESSION['username']) && $_SESSION['username'] == "Administrator"){
+?>
+
 <!DOCTYPE html>
 <html>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -97,7 +104,7 @@
 		</tr>
 	</table>
 	<br><br>
-    <form action="add new product process.php" method="post">
+    <form action="add new product process.php" method="POST" enctype="multipart/form-data">
         <table id=acc border="0">
             <tr>
                 <th colspan=3 style="font-size:40px">ADD NEW PRODUCT</th>
@@ -120,32 +127,37 @@
                 <td>Medium</td>
                 <td>RM</td>
                 <td>
-                    <input type="text" name="pSmall" placeholder="Insert Price">
+                    <input type="text" name="pMed" placeholder="Insert Price">
                 </td>
             </tr>
             <tr>
                 <td>Large</td>
                 <td>RM</td>
                 <td>
-                    <input type="text" name="pSmall" placeholder="Insert Price">
+                    <input type="text" name="pLarge" placeholder="Insert Price">
                 </td>
             </tr>
             <tr>
                 <td>Image</td>
                 <td colspan="2">
-                    <form action="/upload" method="post" enctype="multipart/form-data">
-                        <input type="file" name="image" accept="image/*">
-                        <input type="submit" value="Upload">
-                    </form>
+                    <input type="file" name="image" accept="image/*">
+                    <span style="font-size: 15px; font-style: italic;"> File type: .jpg, .jpeg, & .png only & max 10MB </span>
                 </td>
             </tr>
             <tr>
                 <td colspan=3 style="padding-top:10px; text-align: center;">
-                    <a href="admin product list.php">
-                        <input type="image" src="publish.png" alt="Submit" >
-                    </a>
+                    <button type="submit" name="update" style="background: none; border: none; padding: 0; cursor: pointer;">
+                        <img src="publish.png" alt="Submit" value="update" style="display: inline-block;">
+                    </button>
                 </td>
             </tr>
         </table>
 </form>
 </html>
+
+<?php
+}else
+{	## if the session username is no admin, redirect the page to the login page 
+header("Location: admin login.php");
+}
+?>

@@ -135,7 +135,7 @@
                                     <input type="text" id="searchInput" name="query" placeholder="Insert customer name or ID" class="searchbar">
                             </td>
                             <td style="text-align: right;">
-                                <button type="submit" name="submit" class="sIcon" style="width: 22px; height: 22px; background: none; border: none; padding: 0; cursor: pointer;">
+                                <button type="submit" name="submitCustomer" class="sIcon" style="width: 22px; height: 22px; background: none; border: none; padding: 0; cursor: pointer;">
                                     <img src="search.png" alt="Submit" style="display: inline-block;">
                                 </button>
                             </td>
@@ -194,7 +194,7 @@ function getAllCustomers(){
 function displayCustomer($userId, $userName, $profilePic){
     $user = '
         <br>
-        <form id="viewForm" action="admin view user details.php" method="GET">    
+        <form id="viewForm" action="" method="GET">    
         <table id="list"border="0">
         <tr>
         <td rowspan=2  style="width: 54px;"><img src="'.$profilePic.'" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover; overflow: hidden;"></td>
@@ -210,6 +210,7 @@ function displayCustomer($userId, $userName, $profilePic){
             <td style="width: 80px;">user ID:</td>
             <td>'.$userId.'</td>
         </tr>
+        </form>
         </table>
     ';
     echo $user;
