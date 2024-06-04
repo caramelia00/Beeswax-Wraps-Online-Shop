@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 31, 2024 at 01:53 AM
+-- Generation Time: Jun 04, 2024 at 11:48 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.0.28
 
@@ -20,8 +20,7 @@ SET time_zone = "+00:00";
 --
 -- Database: `hivefour`
 --
-CREATE DATABASE IF NOT EXISTS `hivefour` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-USE `hivefour`;
+
 -- --------------------------------------------------------
 
 --
@@ -125,25 +124,45 @@ INSERT INTO `payment` (`Payment_ID`, `Amount_Paid`, `Payment_Date`, `Payment_Tim
 CREATE TABLE `product` (
   `Product_ID` varchar(45) NOT NULL,
   `Product_Name` varchar(45) NOT NULL,
-  `Product_Image` varchar(60) DEFAULT NULL
+  `Product_Image` varchar(60) DEFAULT NULL,
+  `Product_Status_ID` varchar(45) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `product`
 --
 
-INSERT INTO `product` (`Product_ID`, `Product_Name`, `Product_Image`) VALUES
-('PD1', 'Red Rose', 'NULL'),
-('PD2', 'Bluey Cloud', 'NULL'),
-('PD3', 'Flying Bees', 'NULL');
+INSERT INTO `product` (`Product_ID`, `Product_Name`, `Product_Image`, `Product_Status_ID`) VALUES
+('PD1', 'Earth & Sun Beeswax Wraps', '../../assets/prodPic/PD1.png', 'PDS1'),
+('PD2', 'Gummy Bears Beeswax Wraps', '../../assets/prodPic/PD2.png', 'PDS1'),
+('PD3', 'Dried Caesalpinia Flower Beeswax Wraps', '../../assets/prodPic/PD3.png', 'PDS1');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `product_size`
+-- Table structure for table `product_status`
 --
 
-CREATE TABLE `product_size` (
+CREATE TABLE `product_status` (
+  `Product_Status_ID` varchar(45) NOT NULL,
+  `Status_Name` varchar(45) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `product_status`
+--
+
+INSERT INTO `product_status` (`Product_Status_ID`, `Status_Name`) VALUES
+('PDS1', 'Available'),
+('PDS2', 'Unavailable');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `size`
+--
+
+CREATE TABLE `size` (
   `Size_ID` varchar(45) NOT NULL,
   `Size_Name` varchar(45) NOT NULL,
   `Size_Description` varchar(50) DEFAULT NULL,
@@ -151,10 +170,10 @@ CREATE TABLE `product_size` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `product_size`
+-- Dumping data for table `size`
 --
 
-INSERT INTO `product_size` (`Size_ID`, `Size_Name`, `Size_Description`, `Size_Price`) VALUES
+INSERT INTO `size` (`Size_ID`, `Size_Name`, `Size_Description`, `Size_Price`) VALUES
 ('L', 'Large', '13\" x 14\"', 25),
 ('M', 'Medium', '10\" x 11\"', 20),
 ('S', 'Small', '7\" x 8\"', 15);
@@ -204,7 +223,7 @@ INSERT INTO `users` (`User_ID`, `User_Name`, `User_Full_Name`, `User_Email`, `Us
 ('U01', 'amzati2004', 'Amirah Izzati Binti Aminuddin', 'amirah@gmail.com', 'amirah123', '../../assets/userPic/amirah.jpg', 'UT01'),
 ('U02', 'aalifCurang', 'Aliff Aziz Bin ', 'aaziz@gmail.com', 'alifaziz098', '../../assets/userPic/alif.jpg', 'UT01'),
 ('U03', 'syabat04', 'Nur Batrisyia Binti Norul Haizal', 'batrisyia@gmail.com', 'batrisyia123', '../../assets/userPic/batrisyia.jpg', 'UT01'),
-('U04', 'aidandellion', 'Aida Syazwani Binti Samani', 'aidasyazwani04@gmail.com', 'aida123', '../../assets/userPic/aida.jpg', 'UT02'),
+('U04', 'aidandellion', 'AIDA PENGUIN', 'aidasyazwani04@gmail.com', 'aida', '../../assets/userPic/aida.jpg', 'UT02'),
 ('U05', 'a_alicafe23', 'Nurul Aliah Haifaa Binti Nasiruddin', 'aliah@gmail.com', 'aliah123', '../../assets/userPic/aliah.jpg', 'UT02');
 
 -- --------------------------------------------------------
@@ -293,12 +312,19 @@ ALTER TABLE `payment`
 -- Indexes for table `product`
 --
 ALTER TABLE `product`
-  ADD PRIMARY KEY (`Product_ID`);
+  ADD PRIMARY KEY (`Product_ID`),
+  ADD KEY `fk_product_status` (`Product_Status_ID`);
 
 --
--- Indexes for table `product_size`
+-- Indexes for table `product_status`
 --
-ALTER TABLE `product_size`
+ALTER TABLE `product_status`
+  ADD PRIMARY KEY (`Product_Status_ID`);
+
+--
+-- Indexes for table `size`
+--
+ALTER TABLE `size`
   ADD PRIMARY KEY (`Size_ID`);
 
 --
@@ -350,13 +376,19 @@ ALTER TABLE `orders`
 ALTER TABLE `order_details`
   ADD CONSTRAINT `order_details_ibfk_1` FOREIGN KEY (`Product_ID`) REFERENCES `product` (`Product_ID`),
   ADD CONSTRAINT `order_details_ibfk_2` FOREIGN KEY (`Order_ID`) REFERENCES `orders` (`Order_ID`),
-  ADD CONSTRAINT `order_details_ibfk_3` FOREIGN KEY (`Size_ID`) REFERENCES `product_size` (`Size_ID`);
+  ADD CONSTRAINT `order_details_ibfk_3` FOREIGN KEY (`Size_ID`) REFERENCES `size` (`Size_ID`);
 
 --
 -- Constraints for table `payment`
 --
 ALTER TABLE `payment`
   ADD CONSTRAINT `payment_ibfk_1` FOREIGN KEY (`Order_ID`) REFERENCES `orders` (`Order_ID`);
+
+--
+-- Constraints for table `product`
+--
+ALTER TABLE `product`
+  ADD CONSTRAINT `fk_product_status` FOREIGN KEY (`Product_Status_ID`) REFERENCES `product_status` (`Product_Status_ID`);
 
 --
 -- Constraints for table `users`
