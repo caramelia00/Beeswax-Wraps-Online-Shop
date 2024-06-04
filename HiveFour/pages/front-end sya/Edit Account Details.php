@@ -73,7 +73,7 @@
 				</a>
 			</th>
 			<th>
-				<a href=".html">
+				<a href="About Us.html">
 				ABOUT US
 				</a>
 			</th>
