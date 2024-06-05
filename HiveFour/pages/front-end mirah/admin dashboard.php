@@ -247,7 +247,7 @@
 					</tr>
 					<tr>
 						<td colspan=2 style="vertical-align: top;">
-							<table id=ord border="0">
+							<table id=ord border="1">
 								<tr>
 									<td style="padding-right:20px; padding: 15px; border-width:2px;">Order ID</td>
 									<td style="padding-right:20px; padding: 15px; border-width:2px;">Products</td>
@@ -322,9 +322,9 @@ function getOrdersDashboard() {
 	$sql = "SELECT *
 	FROM orders
 	JOIN order_details ON order_details.Order_ID = orders.Order_ID
-	JOIN product_size on product_size.Product_Size_ID = order_details.Product_Size_ID
-	JOIN product ON product.Product_ID = product_size.Product_ID
-	JOIN users ON users.User_ID = orders.User_ID
+	JOIN size on size.Size_ID = order_details.Size_ID
+	JOIN users on users.User_Id = orders.User_ID
+	JOIN product ON product.Product_ID = order_details.Product_ID
 	JOIN status ON status.Status_ID = orders.Status_ID
 	ORDER BY orders.Order_Date DESC";
 
@@ -375,7 +375,7 @@ function dispOrdersDashboard($ordersId,$productName,$size,$quantity,$usersName,$
   function getUsersDetailsDashboard() {
 	require '../../config/dbconn.php';
   
-	$sql = "SELECT User_ID, User_Name, User_Email, Profile_Pic
+	$sql = "SELECT *
 	FROM users";
 	$result = mysqli_query($dbconn, $sql);
 	return $result;

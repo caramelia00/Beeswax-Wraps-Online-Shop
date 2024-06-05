@@ -67,14 +67,14 @@
             font-size: 20px;
             color: #E6DAD1;
         }
-        /* #myButton{
+        /*#myButton{
             background-color: #8AB49C;
             border: 1px solid #8AB49C;
             color: #E6DAD1;
             font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
             font-size: 20px;
             text-align: left;
-        } */
+        }*/
         #header{
             width:100%;
             background-image: url('header bg pattern.png');
@@ -167,42 +167,9 @@
     <?php
         $result = getProduct();
         while ($row = mysqli_fetch_assoc($result)) {
-        $resultStck = getProductStock($row['Product_ID']);
-        $productStock = mysqli_fetch_array($resultStck);
-        displayProduct($row['Product_Name'], $row['Product_Image'], $productStock[0], $row['Product_ID']);
+        displayProduct($row['Product_Name'], $row['Product_Image'], $row['Product_Status_ID'], $row['Product_ID']);
         }
     ?>
-
-    <!-- <table id="list"border="0">
-        <tr >
-            <td rowspan=2 style="width: 54px; padding-right: 10px;"><img src="set.png"></td>
-            <td style="width: 150px;">product name</td>
-            <td colspan="2">3-in-1 Beeswax Wraps</td>
-            <td style="width: 120px; padding-left:10px;">
-                <a href="admin update product.php">
-                    <b>update</b>
-                </a>
-            </td>
-        </tr>
-        <tr>
-            <td style="width: 150px;">stock available</td>
-            <td style="width: 60px;">453</td>
-            <td>units</td>
-            <td><button id="myButton"><b>Out of stock</b></button></td>
-        </tr>
-    </table> -->
-    <script>
-        document.getElementById('myButton').addEventListener('click', function() {
-        document.getElementById('myParagraph').style.display = 'block';
-    });
-    </script>
-    <script>
-        function handleSearch() {
-            const query = document.getElementById('searchInput').value;
-            const searchLink = document.getElementById('searchLink');
-            searchLink.href = `search.php?query=${encodeURIComponent(query)}`;
-        }
-    </script>
 </body>
 </html>
 
@@ -212,17 +179,6 @@
 Else
 {	## if the session username is no admin, redirect the page to the login page 
 header("Location: admin login.php");
-}
-
-//get product from database
-function getProductStock($productId){
-    include '../../config/dbconn.php';
-  
-	$sql = "SELECT SUM(Size_Stock)
-	FROM product_size
-    WHERE Product_ID='$productId'";
-	$result = mysqli_query($dbconn, $sql);
-	return $result;
 }
 
 // get products from database
@@ -236,38 +192,36 @@ function getProduct(){
 }
 
 // display product
-function displayProduct($productName, $productPic, $productStock, $productId){
-    $product = '
+function displayProduct($productName, $productPic, $prodStatus, $productId){
+    echo'
         <br>
         <form id="updateForm" action="" method="GET">
         <table id="list" border="0">
-        <tr>
+        ';
+        if($prodStatus == 'PDS2'){ // checking if product status is unavailable, the unavailable will be displayed
+            echo '
+            <tr>
             <td colspan=5>
-                <p id="myParagraph" style="display:none; color: red; font-size: 25px; text-align: center;">OUT OF STOCK</p>
+            <p style="text-align: center;">
+                <span style="display: inline-block; padding: 10px 20px; background-color: red; color: white; border-radius: 10px; font-size: 18px;">UNAVAILABLE</span>
+            </p>
             </td>
-        </tr>
+            </tr>';
+        }
+        echo'
         <tr>
-            <td rowspan=2 style="width: 54px; padding-right: 10px;"><img src="'.$productPic.'" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover; overflow: hidden;"></td>
+            <td style="width: 54px; padding-right: 10px;"><img src="'.$productPic.'" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover; overflow: hidden;"></td>
             <td style="width: 150px;">product name</td>
-            <td colspan=2>'.$productName.'</td>
-            <td style="width: 120px; padding-left:10px;">
+            <td>'.$productName.'</td>
+            <td rowspan=2 style="width: 120px; padding-left:25px;">
                 <!-- link to specific product details -->
                 <a href="admin update product.php?productId='.$productId.'">
                     <b>update</b>
-                </a>
-                
+                </a> 
             </td>
-        </tr>
-        <tr>
-            <td style="width: 150px;">stock available</td>
-            <td style="width: 60px;">'.$productStock.'</td>
-            <td>units</td>
-            <td><button id="myButton"><b>Out of stock</b></button></td>
         </tr>
         </table>
         </form>
     ';
-    echo $product;
 }
-
 ?>
