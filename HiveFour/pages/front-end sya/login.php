@@ -32,8 +32,8 @@ if (isset ($_POST['submit']))
         var_dump($_SESSION);
         echo "<?pre>";
 
-      //  header ("Location: dashboard.php")
-        exit();
+        header ("Location: home.php");
+    exit();
     }
 }
 mysqli_close($dbconn);
