@@ -252,22 +252,25 @@ function getOrders(){
                             <td>" . $rOrd['Order_ID'] . "</td>
                         </tr>
                         <tr>
-                            <td colspan='2'>
-                                <table id='order_details' border='0'>";
+                            ";
 
             while($rOrdDetails = mysqli_fetch_assoc($result1)){
-                echo "<tr>
-                            <td id='img' rowspan='2'><img src='" . $rOrdDetails['Product_Image'] . "' style='width: 100px;'></td>
-                            <td id='name'>" . $rOrdDetails['Product_Name'] . "</td>
-                            <td rowspan='2'>x" . $rOrdDetails['Quantity'] . "</td>
-                            <td rowspan='2'>RM" . $rOrdDetails['Size_Price'] . "</td>
-                          </tr>
-                          <tr>
-                            <td style='vertical-align: text-top;'>Size:" . $rOrdDetails['Size_ID'] . "</td>
-                          </tr>";
+                echo " 
+                            <td colspan='2'> 
+                            <table id='order_details' border='0'>
+                                <tr>
+                                    <td id='img' rowspan='2'><img src='" . $rOrdDetails['Product_Image'] . "' style='width: 100px;'></td>
+                                    <td id='name'>" . $rOrdDetails['Product_Name'] . "</td>
+                                    <td rowspan='2'>x" . $rOrdDetails['Quantity'] . "</td>
+                                    <td rowspan='2'>RM" . $rOrdDetails['Size_Price'] . "</td>
+                                </tr>
+                                <tr>
+                                    <td style='vertical-align: text-top;'>Size:" . $rOrdDetails['Size_ID'] . "</td>
+                                </tr>
+                            </table>
+                            </td>";
             }
-            echo "          </table>
-                            </td>
+            echo "
                             <td rowspan='2'>
                                 <b>" . $rOrd['Status_Name'] . "</b>
                                 <br>Total Payment

@@ -115,35 +115,21 @@
                     <input type="text" name="pName" placeholder="Insert Product Name">
                 </td>
             </tr>
-            <tr><td>Pricing</td></tr>
-            <tr>
-                <td>Small</td>
-                <td>RM</td>
-                <td>
-                    <input type="text" name="pSmall" placeholder="Insert Price">
-                </td>
-            </tr>
-            <tr>
-                <td>Medium</td>
-                <td>RM</td>
-                <td>
-                    <input type="text" name="pMed" placeholder="Insert Price">
-                </td>
-            </tr>
-            <tr>
-                <td>Large</td>
-                <td>RM</td>
-                <td>
-                    <input type="text" name="pLarge" placeholder="Insert Price">
-                </td>
-            </tr>
             <tr>
                 <td>Image</td>
                 <td colspan="2">
                     <input type="file" name="image" accept="image/*">
-                    <span style="font-size: 15px; font-style: italic;"> File type: .jpg, .jpeg, & .png only & max 10MB </span>
+                    <span style="font-size: 13px; font-style: italic;"> File type: .jpg, .jpeg, & .png only & max 10MB </span>
                 </td>
             </tr>
+			<td>Status</td>
+                <td colspan="5">
+                    <input type="hidden" name="productId" value="<?php echo $productId; ?>">
+                    <select name="newStatus" class="mySelect">
+                        <option value="PDS1">Available</option>
+                        <option value="PDS2">Unavailable</option>
+                    </select>
+                </td>
             <tr>
                 <td colspan=3 style="padding-top:10px; text-align: center;">
                     <button type="submit" name="update" style="background: none; border: none; padding: 0; cursor: pointer;">

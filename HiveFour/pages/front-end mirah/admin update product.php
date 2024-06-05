@@ -12,31 +12,11 @@ if (isset($_GET['productId'])) {
     } else {
         $rProduct = mysqli_fetch_assoc($product);
 
-        $rProdSizeS = mysqli_fetch_assoc(getProductSize($updateProductId, 'S'));
-        $rProdSizeM = mysqli_fetch_assoc(getProductSize($updateProductId, 'M'));
-        $rProdSizeL = mysqli_fetch_assoc(getProductSize($updateProductId, 'L'));
-
         $pId = $rProduct['Product_ID'];
         $pName = $rProduct['Product_Name'];
         $pImage = $rProduct['Product_Image'];
-        $priceS = $rProdSizeS['Size_Price'];
-        $priceM = $rProdSizeM['Size_Price'];
-        $priceL = $rProdSizeL['Size_Price'];
-        $qtyS = $rProdSizeS['Size_Stock'];
-        $qtyM = $rProdSizeM['Size_Stock'];
-        $qtyL = $rProdSizeL['Size_Stock'];
+        $pStatus = $rProduct['Product_Status_ID'];
     }
-}
-
-function getProductSize($productId, $sizeId)
-{
-    global $dbconn;
-    $sql = "SELECT Size_Price, Size_Stock
-            FROM product_size
-            WHERE Product_ID='$productId'
-            AND Size_ID='$sizeId'";
-    $result = mysqli_query($dbconn, $sql);
-    return $result;
 }
 
 function getProduct($productId)
@@ -149,7 +129,7 @@ function getProduct($productId)
     <form action="update product details process.php" method="POST" enctype="multipart/form-data">
         <table id="acc" border="0">
             <tr>
-                <th colspan=5 style="font-size:40px">UPDATE PRODUCT DETAILS</th>
+                <th colspan=5 style="font-size:40px">UPDATE PRODUCT DETAILS </th>
             </tr>
             <tr>
                 <td>Product Name</td>
@@ -158,62 +138,31 @@ function getProduct($productId)
                 </td>
             </tr>
             <tr>
-                <td>Pricing</td>
-            </tr>
-            <tr>
-                <td>Small</td>
-                <td>RM</td>
-                <td>
-                    <input type="number" name="pSmall" value="<?php echo $priceS; ?>">
-                </td>
-                <td>Quantity</td>
-                <td>
-                    <input type="number" name="pSmallQty" value="<?php echo $qtyS; ?>">
-                </td>
-            </tr>
-            <tr>
-                <td>Medium</td>
-                <td>RM</td>
-                <td>
-                    <input type="number" name="pMed" value="<?php echo $priceM; ?>">
-                </td>
-                <td>Quantity</td>
-                <td>
-                    <input type="number" name="pMedQty" value="<?php echo $qtyM; ?>">
-                </td>
-            </tr>
-            <tr>
-                <td>Large</td>
-                <td>RM</td>
-                <td>
-                    <input type="number" name="pLarge" value="<?php echo $priceL; ?>">
-                </td>
-                <td>Quantity</td>
-                <td>
-                    <input type="number" name="pLargeQty" value="<?php echo $qtyL; ?>">
-                </td>
-            </tr>
-            <tr>
                 <td>Image</td>
                 <td colspan="4">
                     <input type="file" name="image" accept="image/*">
-                    <span style="font-size: 15px; font-style: italic;"> File type: .jpg, .jpeg, & .png only & max 10MB </span>
+                    <span style="font-size: 13px; font-style: italic;"> File type: .jpg, .jpeg, & .png only & max 10MB </span>
+                </td>
+            </tr>
+            <tr>
+                <td>Status</td>
+                <td colspan="5">
+                    <input type="hidden" name="productId" value="<?php echo $productId; ?>">
+                    <select name="newStatus" class="mySelect">
+                        <option value="PDS1"<?php echo ($pStatus == 'PDS1' ? ' selected' : ''); ?>>Available</option>
+                        <option value="PDS2"<?php echo ($pStatus == 'PDS2' ? ' selected' : ''); ?>>Unavailable</option>
+                    </select>
                 </td>
             </tr>
             <input type="hidden" name="pId" value="<?php echo $pId; ?>">
             <tr>
-                <td colspan="5">
+                <td colspan="6">
                     <table id="button" border="0">
                         <tr>
                             <td>
                                 <button type="submit" name="update" style="background: none; border: none; padding: 0; cursor: pointer;">
                                     <img src="publish.png" alt="Submit" value="update" style="display: inline-block;">
                                 </button>
-                            </td>
-                            <td>
-                                <a href="admin product list.php">
-                                    <input type="image" src="out of stock.png" alt="out of stock">
-                                </a>
                             </td>
                         </tr>
                     </table>

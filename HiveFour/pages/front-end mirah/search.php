@@ -165,9 +165,7 @@
 
             if($queryResult > 0) {
             while($row = mysqli_fetch_assoc($result)) {
-                $resultStck = getProductStock($row['Product_ID']);
-                $productStock = mysqli_fetch_array($resultStck);
-                displayProduct($row['Product_Name'], $row['Product_Image'], $productStock[0], $row['Product_ID']);
+                displayProduct($row['Product_Name'], $row['Product_Image'], $row['Product_Status_ID'], $row['Product_ID']);
             }
             }
             else {
@@ -309,38 +307,37 @@ function displayProductSearchBar(){
 }
 
 // display product
-function displayProduct($productName, $productPic, $productStock, $productId){
-    $product = '
+function displayProduct($productName, $productPic, $prodStatus, $productId){
+    echo'
         <br>
         <form id="updateForm" action="" method="GET">
         <table id="list" border="0">
-        <tr>
+        ';
+        if($prodStatus == 'PDS2'){ // checking if product status is unavailable, the unavailable will be displayed
+            echo '
+            <tr>
             <td colspan=5>
-                <p id="myParagraph" style="display:none; color: red; font-size: 25px; text-align: center;">OUT OF STOCK</p>
+            <p style="text-align: center;">
+                <span style="display: inline-block; padding: 10px 20px; background-color: red; color: white; border-radius: 10px; font-size: 18px;">UNAVAILABLE</span>
+            </p>
             </td>
-        </tr>
+            </tr>';
+        }
+        echo'
         <tr>
-            <td rowspan=2 style="width: 54px; padding-right: 10px;"><img src="'.$productPic.'" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover; overflow: hidden;"></td>
+            <td style="width: 54px; padding-right: 10px;"><img src="'.$productPic.'" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover; overflow: hidden;"></td>
             <td style="width: 150px;">product name</td>
-            <td colspan=2>'.$productName.'</td>
-            <td style="width: 120px; padding-left:10px;">
+            <td>'.$productName.'</td>
+            <td rowspan=2 style="width: 120px; padding-left:25px;">
                 <!-- link to specific product details -->
                 <a href="admin update product.php?productId='.$productId.'">
                     <b>update</b>
-                </a>
-                
+                </a> 
             </td>
-        </tr>
-        <tr>
-            <td style="width: 150px;">stock available</td>
-            <td style="width: 60px;">'.$productStock.'</td>
-            <td>units</td>
-            <td><button id="myButton"><b>Out of stock</b></button></td>
         </tr>
         </table>
         </form>
     ';
-    echo $product;
 }
 ?>
 

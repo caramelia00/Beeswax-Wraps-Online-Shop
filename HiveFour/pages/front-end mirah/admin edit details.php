@@ -13,7 +13,7 @@
 	if($row == 0){
 		echo "No record found";
 	}
-	else{ 
+	else{
 		$r = mysqli_fetch_assoc($query);
 		$uId= $r['User_ID']; 
 		$uName= $r['User_Name']; 
