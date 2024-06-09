@@ -1,3 +1,56 @@
+<?php
+include '../../config/dbconn.php';
+
+
+if (isset($_GET['orderId'])) {
+    $updateOrderId = $_GET['orderId'];
+
+    $order = getOrders($updateOrderId);
+    $rowOrder = mysqli_num_rows($order);
+
+    if ($rowOrder == 0) {
+        echo "No record found";
+    } else {
+        $rOrder = mysqli_fetch_assoc($order);
+
+        $oId = $rOrder['Order_ID'];
+        $oStatus = $rOrder['Status_ID'];
+        $uFullName = $rOrder['User_Full_Name'];
+        $uAddress1 = $rOrder['Address1'];
+        $uAddress2 = $rOrder['Address2'];
+        $postcode = $rOrder['Postcode'];
+        $state = $rOrder['State'];
+        $city = $rOrder['City'];
+    }
+}
+
+function getOrders($orderId)
+{
+    global $dbconn;
+    $sql = "SELECT *
+            FROM orders
+            JOIN order_details on order_details.Order_ID = orders.Order_ID
+            JOIN status on status.Status_ID = orders.Status_ID
+            JOIN users on users.User_ID = orders.User_ID
+            JOIN user_details on user_details.User_ID = users.User_ID
+            WHERE orders.Order_ID='$orderId'";
+    $result = mysqli_query($dbconn, $sql);
+    return $result;
+}
+
+function getOrderDetails($orderId){
+    global $dbconn;
+    $sql = "SELECT *
+            FROM order_details
+            JOIN orders on orders.Order_ID = order_details.Order_ID
+            JOIN product on product.Product_ID = order_details.Product_ID
+            JOIN size on size.Size_ID = order_details.Size_ID
+            WHERE orders.Order_ID='$orderId'";
+    $result = mysqli_query($dbconn, $sql);
+    return $result;
+}
+?>
+
 <!DOCTYPE html>
 <html>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,8 +70,8 @@
                 margin-right: auto;
                 
             }
-            #status{
-                width: 790px;
+            #status, #payment_receipt{
+                width: 390px;
                 height: 100px;
                 border: 1px solid #E6DAD1;
                 border-radius: 30px;
@@ -30,7 +83,7 @@
                 border: 1px solid #E6DAD1;
                 border-radius: 30px;
                 padding: 10px;
-                font-size:24px;
+                font-size: 24px;
             }
             .mySelect{
                 background-color: #C7D8CF;
@@ -138,30 +191,20 @@
 			</tr>
 		</table>
 		<br><br>
-        <form action="update order details process.php" method="post">
+        <form action="update order details process.php" method="POST">
             <table id="one" border="0">
                 <tr>
-                    <td colspan="2">
+                    <td>
                         <table id="status" border="0">
                             <tr>
-                                <th colspan="4" style="font-size: 30px; text-align: left;">STATUS</th>
+                                <td><th colspan="3" style="font-size: 30px; text-align: left;">STATUS</th></td>
                             </tr>
                             <tr>
-                                <td>Order placed</td>
                                 <td>Preparing to ship</td>
                                 <td>Out for delivery</td>
                                 <td>Completed</td>
                             </tr>
                             <tr>
-                                <td>
-                                    <select class="mySelect">
-                                        <option value="default">Select Status</option>
-                                        <option value="true">Yes</option>
-                                        <option value="false">No</option>
-                                    </select>
-                                    <input type="hidden" name="statusImg" class="order-status-input">
-                                    <img class="myImage" style="display: none;" alt="Image">
-                                </td>
                                 <td>
                                     <select class="mySelect">
                                         <option value="default">Select Status</option>
@@ -192,6 +235,23 @@
                                 </td>
                             </tr>
                         </table>
+                    </td>
+                    <td>
+                    <table id="payment_receipt" border="0">
+                        <tr>
+                            <th style="font-size: 30px; text-align: center;">PAYMENT RECEIPT</th>
+                        </tr>
+                        <tr>
+                            <td style="text-align: center;">
+                                <form action="update price.php" method="POST">
+                                    <button type="submit" name="update" style="display: inline-block; padding: 7px 12px; background-color: white; color: #8AB49C; border-radius: 10px; font-size: 12px; border: none; cursor: pointer;">PRINT</button>
+                                </form>
+                                <?php 
+                                    // if payment receipt exists, print payment receipt, if not display no payment made
+                                ?>
+                            </td>
+                        </tr>
+                    </table>
                     </td>
                 </tr>
                 <tr>
@@ -263,36 +323,26 @@
                             </tr>
                             <tr>
                                 <td colspan="2">
+                                    FULL NAME
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    <?php echo $uFullName; ?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
                                     ADDRESS
                                 </td>
                             </tr>
                             <tr>
                                 <td colspan="2">
-                                    Menara TM,<br>
-                                    Jalan Pantai Baharu, <br>
-                                    50672 Kuala Lumpur <br>
-                                    Malaysia
+                                    <?php echo $uAddress1; ?>,<br>
+                                    <?php if($uAddress2 != 'NULL') echo $uAddress2 . ',<br>'; ?>
+                                    <?php echo $postcode; ?> <?php echo $city; ?>, <br>
+                                    <?php echo $state; ?>
                                 </td>
-                            </tr>
-                            <tr>
-                                <td colspan="2">
-                                    ESTIMATED DELIVERY DATE
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <label for="start date">Start Date:</label>
-                                    <br>
-                                    <label for="end date">End Date:</label>
-                                </td>
-                                </td>
-                                <td>
-                                    <!-- ni untuk letak estimated delivery date -->
-                                    <input type="date" id="start date" name="startDate">
-                                    <br>
-                                    <input type="date" id="end date" name="endDate">
-                                    <input type="submit" value="Change Date">
-                                </td>                     
                             </tr>
                             <tr>
                                 <td colspan="2">
@@ -312,7 +362,7 @@
                         <table id="save" border="0">
                             <tr>
                                 <td>
-                                        <button type="submit" class="sve">SAVE CHANGES</button>
+                                    <button type="submit" class="sve">SAVE CHANGES</button>
                                 </td>
                             </tr>
                     </td>

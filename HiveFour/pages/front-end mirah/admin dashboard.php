@@ -217,10 +217,20 @@
 						<?php
                 
 						require '../../config/dbconn.php';
-						$sql = "SELECT SUM(Order_Price) FROM orders";
-						$result = mysqli_query($dbconn,$sql);
-						$row = mysqli_fetch_array($result);
-						echo 'RM '.$row[0];
+						$sql = "
+						SELECT SUM(size.Size_Price * order_details.Quantity) AS total_sales
+						FROM orders
+						JOIN order_details ON order_details.Order_ID = orders.Order_ID
+						JOIN size ON size.Size_ID = order_details.Size_ID
+						";
+
+						$result = mysqli_query($dbconn, $sql);
+						if ($result) {
+							$row = mysqli_fetch_assoc($result);
+							echo 'RM ' . number_format($row['total_sales'], 2);
+						} else {
+							echo "Error: " . mysqli_error($dbconn);
+						}
 		
 						?>
 						</td>
@@ -332,45 +342,37 @@ function getOrdersDashboard() {
 	return $result;
   }
 
-function dispOrdersDashboard($ordersId,$productName,$size,$quantity,$usersName,$status) {
-	$color = '';
-	if($status == 'Pending') {
-	  $color = 'color:#ffbb33';
-	  $colors = 'orange';
-	}
-	else if($status == 'Preparing') {
-	  $color = 'color:#51BBE3';
-	  $colors = 'light blue';
-	}
-	else if($status == 'Delivered') {
-	  $color = 'color:#47A3C6';
-	  $colors = 'dark blue';
-	}
-	else if($status == 'Completed') {
-	  $color = 'color:#41BB12';
-	  $colors = 'green';
-	}
-	
-	$element = '
-  
-	<tbody>
-	  <tr>
-		<td style="padding-right:20px; padding: 15px; border-width:2px;">'.$ordersId.'</td>
-		<td style="padding-right:20px; padding: 15px; border-width:2px;">'.$productName.'</td>
-		<td style="padding-right:20px; padding: 15px; border-width:2px;">'.$size.'</td>
-		<td style="padding-right:20px; padding: 15px; border-width:2px;">'.$quantity.'</td>
-		<td style="padding-right:20px; padding: 15px; border-width:2px;">'.$usersName.'</td>
-		<td style="padding-right:20px; padding: 15px; border-width:2px; '.$color.';">
-			<span class="status '.$colors.'"></span>'.$status.'
-		</td>
-	  </tr>
-	</tbody>
-  
-	';
-	echo $element;
-  }
+  function dispOrdersDashboard($ordersId, $productName, $size, $quantity, $usersName, $status) {
+    $color = '';
+    if ($status == 'Pending') {
+        $color = '#ffbb33';
+    } else if ($status == 'Preparing') {
+        $color = '#51BBE3';
+    } else if ($status == 'Delivered') {
+        $color = '#47A3C6';
+    } else if ($status == 'Completed') {
+        $color = '#41BB12';
+    }
 
-  //--- USERS ---
+    $element = '
+    <tbody>
+      <tr>
+        <td style="padding-right:20px; padding: 15px; border-width:2px;">'.$ordersId.'</td>
+        <td style="padding-right:20px; padding: 15px; border-width:2px;">'.$productName.'</td>
+        <td style="padding-right:20px; padding: 15px; border-width:2px;">'.$size.'</td>
+        <td style="padding-right:20px; padding: 15px; border-width:2px;">'.$quantity.'</td>
+        <td style="padding-right:20px; padding: 15px; border-width:2px;">'.$usersName.'</td>
+        <td style="padding-right:20px; padding: 15px; border-width:2px;">
+            <span style="display: inline-block; padding: 3px 8px; background-color: '.$color.'; color: white; border-radius: 10px;">'.$status.'</span>
+        </td>
+      </tr>
+    </tbody>
+    ';
+    echo $element;
+}
+
+
+  //--- USERS --- <span class="status '.$colors.'"></span>'.$status.'
 
   function getUsersDetailsDashboard() {
 	require '../../config/dbconn.php';

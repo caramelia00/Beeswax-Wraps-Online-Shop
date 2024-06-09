@@ -120,7 +120,7 @@
 		</tr>
 	</table>
 	<br><br>
-	<form id="editForm" action="update account proccess.php" method="POST">
+	<form id="editForm" action="update account proccess.php" method="POST" enctype="multipart/form-data">
 		<table id=acc border="0">
 			<tr>
 				<th colspan=3 style="font-size:40px">ACCOUNT DETAILS</th>
@@ -139,19 +139,21 @@
 				<td><input type="password" id="pw" name="pw" value="<?php echo $pw ?>"></td>
 			</tr>
 			<tr>
-                <td style="text-align:center; font-size:30px"><?php echo $uName; ?></td>
+				<td><input type="file" name="image" accept="image/*"></td>
 				<td style="padding:10px;">Confirm Password</td>
 				<td><input type="password" id="pw" name="confirmPw" value="<?php echo $pw ?>"></td>
+			</tr>
+			<tr>
+				<td><span style="color: white; font-size: 13px; font-style: italic;"> File type: .jpg, .jpeg, & .png only & max 10MB </span></td>
+			</tr>
+			<tr>
+                <td style="text-align:center; font-size:30px"><?php echo $uName; ?></td>
 			</tr>
 			<tr>
                 <td style="text-align:center"><?php echo $uId; ?></td>
 			</tr>
 			<tr>
 				<td colspan="3" style="padding-top:10px; text-align:center;">
-					<!-- <a href="admin view account.php">
-						<img src="save details.png" >
-					</a> -->
-					<!---<input type="image" src="save details.png" alt="Submit" value="update"> --->
 					<button type="submit" name="update" style="background: none; border: none; padding: 0; cursor: pointer;">
 						<img src="save details.png" alt="Submit" value="update" style="display: inline-block;">
 					</button>	
@@ -159,40 +161,4 @@
 			</tr>
 		</table>
 	</form>
-	<!---
-	<script>
-		// Function to handle form submission
-		function submitForm() {
-		// Get form data
-		const fullname = document.getElementById('fullname').value;
-		const email = document.getElementById('email').value;
-		const pw = document.getElementById('pw').value;
-
-		// Create a new FormData object
-		const formData = new FormData();
-		formData.append('fullname', fullname);
-		formData.append('email', email);
-		formData.append('pw', pw);
-
-		// Send the form data to the server
-		fetch('admin view account.php', {
-			method: 'POST',
-			body: formData
-		})
-		.then(response => {
-			if (response.ok) {
-			// Handle success response
-			console.log('Form data submitted successfully');
-			} else {
-			// Handle error response
-			console.log('Error submitting form data');
-			}
-		})
-		.catch(error => {
-			// Handle network error
-			console.log('Network error:', error);
-		});
-		}
-	</script>
-	--->
 </html>

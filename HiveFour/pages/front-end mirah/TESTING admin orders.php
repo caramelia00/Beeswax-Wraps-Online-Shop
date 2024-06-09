@@ -39,7 +39,17 @@
                 border-radius: 40px;
                 color: #E6DAD1;
             }
-            #orderid{
+            .order-container {
+                width: 100%;
+                color: #E6DAD1;
+                font-size: 20px;
+                border-radius: 40px;
+                border: 2px solid #8AB49C;
+                padding: 10px;
+                margin-bottom: 20px;
+                background-color: #8AB49C;
+            }
+            #orderid, #order_details{
                 width: 100%;
                 color:#E6DAD1;
                 font-size: 24px;
@@ -127,7 +137,7 @@
                 background-color: #8AB49C;
                 border: 1px solid #8AB49C;
 				color: #E6DAD1;
-                font-size: 24px;
+                font-size: 22px;
 				text-decoration: none;
 			}
 			button:hover{
@@ -142,6 +152,7 @@
 			}
 		</style>
 	</head>
+    <body>
 	<table id=header  border="0">
 		<tr>
 			<th style="padding-left: 20px;">
@@ -174,14 +185,14 @@
 	</table>
 	<br><br>
 	<h1 style="text-align: center; color: #8AB49C;">SEARCH ORDER</h1>
-    <table id="one" style=" border-spacing: 5px;" border="0">
+    <table id="one" style="border-spacing: 5px;" border="0">
         <tr>
             <td>
                 <table id="bar" border="0">
                     <form action="search.php" method="get">
                         <tr>
                             <td style="text-align: center;">
-                                    <input type="text" name="query" placeholder="Insert product name" class="searchbar">
+                                <input type="text" name="query" placeholder="Insert product name" class="searchbar">
                             </td>
                             <td style="text-align: right;">
                                 <button type="submit" class="sIcon"><img src="search.png" style="width: 22px; height: 22px;"></button>
@@ -198,6 +209,7 @@
         </tr>
         <?php displayOrders(); ?>
     </table>
+</body>
 </html>
 <?php
 } 
@@ -207,48 +219,42 @@ else {
     exit;
 }
 
+function getOrderDetails($orderId){
+    include '../../config/dbconn.php';
+
+    $sql = "SELECT *
+    FROM order_details
+    JOIN product ON product.Product_ID = order_details.Product_ID
+    JOIN size ON size.Size_ID = order_details.Size_ID
+    WHERE order_details.Order_ID='$orderId'";
+    $result = mysqli_query($dbconn, $sql);
+    return $result;
+}
+
+function getOrders(){
+    include '../../config/dbconn.php';
+
+    $query = "SELECT * 
+    FROM orders
+    JOIN status on status.Status_ID = orders.Status_ID
+    ORDER BY orders.Order_Date DESC";
+    $result = mysqli_query($dbconn, $query);
+
+    return $result;
+}
+
 /*
-function getOrderDetails($orderId){
+function getOrderDetails($orderId) {
     include '../../config/dbconn.php';
 
     $sql = "SELECT *
-    FROM order_details
-    JOIN product ON product.Product_ID = order_details.Product_ID
-    JOIN size ON size.Size_ID = order_details.Size_ID
-    WHERE order_details.Order_ID='$orderId'";
-    echo $sql;
-    $result = mysqli_query($dbconn, $sql);
-    return $result;
-}
-
-function getOrders(){
-    include '../../config/dbconn.php';
-
-    $query = "SELECT * 
-    FROM orders
-    JOIN status on status.Status_ID = orders.Status_ID
-    ORDER BY orders.Order_Date DESC";
-    $result = mysqli_query($dbconn, $query);
-
-    return $result;
-}
-*/
-
-function getOrderDetails($orderId){
-    include '../../config/dbconn.php';
-
-    $sql = "SELECT *
-    FROM order_details
-    JOIN product ON product.Product_ID = order_details.Product_ID
-    JOIN size ON size.Size_ID = order_details.Size_ID
-    WHERE order_details.Order_ID='$orderId'";
-    
-    // Echo SQL query for debugging
-    echo "SQL: $sql <br>";
+            FROM order_details
+            JOIN product ON product.Product_ID = order_details.Product_ID
+            JOIN size ON size.Size_ID = order_details.Size_ID
+            WHERE order_details.Order_ID='$orderId'";
 
     $result = mysqli_query($dbconn, $sql);
 
-    // Check for errors
     if (!$result) {
         echo "Error: " . mysqli_error($dbconn);
     }
@@ -256,110 +262,96 @@ function getOrderDetails($orderId){
     return $result;
 }
 
-function getOrders(){
+function getOrders() {
     include '../../config/dbconn.php';
 
     $query = "SELECT * 
-    FROM orders
-    JOIN status on status.Status_ID = orders.Status_ID
-    ORDER BY orders.Order_Date DESC";
-
-    // Echo SQL query for debugging
-    echo "SQL: $query <br>";
+              FROM orders
+              JOIN status on status.Status_ID = orders.Status_ID
+              ORDER BY orders.Order_Date DESC";
 
     $result = mysqli_query($dbconn, $query);
 
-    // Check for errors
     if (!$result) {
         echo "Error: " . mysqli_error($dbconn);
     }
 
     return $result;
-}
+}*/
 
-// function displayOrders(){
-//     echo "<title> testing </title>";
-// }
-function displayOrders(){
-    $order = getOrders();
-    if(mysqli_num_rows($order) > 0){
+function generateOrderDetailsHtml($orderId) {
+    $orderDetails = getOrderDetails($orderId);
+    $detailsHtml = '';
 
-        while($rOrd = mysqli_fetch_assoc($order)){
-            echo "
-            <tr>
-                <td colspan='2'><table id='orderid' border='1'>
-                    <tr>
-                        <td style='width: 150px; padding-left: 10px;'>Order ID:</td>
-                        <td>" . $rOrd['Order_ID'] . "</td>
-                    </tr>
-                    <tr>
-                    <td colspan='2'>";
-            $orderId = $rOrd['Order_ID'];
-            $orderDetails = getOrderDetails($orderId);
-            if(mysqli_num_rows($orderDetails) > 0){
-                while($rOrdDetails = mysqli_fetch_assoc($orderDetails)){
-                    echo "
-                            <table id='order_details' border='2'>
-                            <tr>
-                                <td id='img' rowspan='2'><img src='" . $rOrdDetails['Product_Image'] . "' style='width: 100px;'></td>
-                                <td id='name'>test</td>
-                                <td rowspan='2'>x" . $rOrdDetails['Quantity'] . "</td>
-                                <td rowspan='2'>RM" . $rOrdDetails['Size_Price'] . "</td>
-                            </tr>
-                            <tr>
-                                <td style='vertical-align: text-top;'>Size:" . $rOrdDetails['Size_ID'] . "</td>
-                            </tr>
-                            </table>
-                            ";
-                }
-             }
-            echo "  
-                        <td rowspan='2'>
-                            <b>" . $rOrd['Status_Name'] . "</b>
-                            <br>Total Payment
-                            <br>RM" . $rOrd['Order_Price'] . "
-                        </td>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan='2'>
-                            <table id='five' border='0'>
-                                <tr>
-                                    <td style='padding-bottom: 4px;'>
-                                        <a id='button' href='admin order details.php?orderId=" . $rOrd['Order_ID'] . "'>
-                                            <b>VIEW</b>
-                                        </a>                                        
-                                    </td>
-                                    <td>
-                                        <button onclick=\"deleteOrder('" . $rOrd['Order_ID'] . "')\">
-                                            <b>DELETE</b>
-                                        </button>
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
-                </table>
-            </td>
-        </tr>";
+    if (mysqli_num_rows($orderDetails) > 0) {
+        while ($rOrdDetails = mysqli_fetch_assoc($orderDetails)) {
+            $detailsHtml .= '
+            <table id="three" border="0">
+                <tr>
+                    <td id="img" rowspan="2"><img src="' . htmlspecialchars($rOrdDetails['Product_Image']) . '" style="width: 100px;"></td>
+                    <td id="name">' . htmlspecialchars($rOrdDetails['Product_Name']) . '</td>
+                    <td rowspan="2">x' . htmlspecialchars($rOrdDetails['Quantity']) . '</td>
+                    <td rowspan="2">RM' . htmlspecialchars($rOrdDetails['Size_Price']) . '</td>
+                </tr>
+                <tr>
+                    <td style="vertical-align: text-top;">Size: ' . htmlspecialchars($rOrdDetails['Size_ID']) . '</td>
+                </tr>
+            </table>';
         }
     } else {
-        echo "<tr><td colspan='7'>No orders found.</td></tr>";
+        $detailsHtml .= '<tr><td colspan="4">No order details found.</td></tr>';
+    }
+
+    return $detailsHtml;
+}
+
+function displayOrders() {
+    $order = getOrders();
+    if (mysqli_num_rows($order) > 0) {
+        while ($rOrd = mysqli_fetch_assoc($order)) {
+            $orderDetailsHtml = generateOrderDetailsHtml($rOrd['Order_ID']);
+            echo '
+            <tr>
+                <td colspan="2">
+                    <table class="order-container" border="1">
+                        <tr>
+                            <td style="width: 150px; padding-left: 10px;">Order ID:</td>
+                            <td>' . htmlspecialchars($rOrd['Order_ID']) . '</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">' . $orderDetailsHtml . '</td>
+                            <td rowspan="2">
+                                <b>' . htmlspecialchars($rOrd['Status_Name']) . '</b><br>
+                                Total Payment<br>
+                                RM' . htmlspecialchars($rOrd['Order_Price']) . '
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <table id="five" border="0">
+                                    <tr>
+                                        <td style="padding-bottom: 4px;">
+                                            <a id=button href="admin order details.php?orderId=' . htmlspecialchars($rOrd['Order_ID']) . '">
+                                                <b>VIEW</b>
+                                            </a>                                        
+                                        </td>
+                                        <td style="padding-bottom: 4px;">
+                                            <button id=button onclick="deleteOrder(\'' . htmlspecialchars($rOrd['Order_ID']) . '\')">
+                                                <b>DELETE</b>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>';
+        }
+    } else {
+        echo '<tr><td colspan="7">No orders found.</td></tr>';
     }
 }
 
-function displayOrderDetails($pImage, $pName, $qty, $price, $size){
-    echo '
-    <tr>
-        <td id="img" rowspan="2"><img src="' . $pImage . '" style="width: 100px;"></td>
-        <td id="name">' . $pName . '</td>
-        <td rowspan="2">x' . $qty . '</td>
-        <td rowspan="2">RM' . $price . '</td>
-    </tr>
-    <tr>
-        <td style="vertical-align: text-top;">Size:' . $size . '</td>
-    </tr>
-    ';
-}
 
 ?>

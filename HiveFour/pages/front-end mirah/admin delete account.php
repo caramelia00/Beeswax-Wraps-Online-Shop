@@ -100,8 +100,11 @@
     </tr>
     <tr>
         <td id="btn">
-            <form action="delete account process.php" method="post">
-                <input type="image" name="delete" src="delete account.png" alt="Delete Account">
+            <form action="delete account process.php" method="POST">
+                <button type="delete" name="delete" style="background: none; border: none; padding: 0; cursor: pointer;">
+						<img src="delete account.png" alt="Delete Account" value="update" style="display: inline-block;">
+				</button>
+
             </form>
         </td>
         <td>

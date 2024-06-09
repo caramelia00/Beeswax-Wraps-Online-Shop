@@ -128,54 +128,70 @@
 		</tr>
 	</table>
 
-
-    <!--- CUSTOMER --->
     <?php
+        include '../../config/dbconn.php';
+        //--- CUSTOMER ---
         if(isset($_POST['submitCustomer'])) {
-            //displays search bar customer
             displayCustomerSearchBar();
 
-            include '../../config/dbconn.php';
             $search = mysqli_real_escape_string($dbconn, $_POST['query']);
             $result = getCustomer($search);
             $queryResult = mysqli_num_rows($result);
 
             if($queryResult > 0) {
-            while($row = mysqli_fetch_assoc($result)) {
-                displayCustomer($row['User_ID'], $row['User_Name'], $row['Profile_Pic']);
-            }
+                while($row = mysqli_fetch_assoc($result)) {
+                    displayCustomer($row['User_ID'], $row['User_Name'], $row['Profile_Pic']);
+                }
             }
             else {
             echo "<br>";
             echo "<center>There is no result matching your search!</center>";
             }
-        }
-    ?>
-
-    <!--- PRODUCT --->
-    <?php
-        if(isset($_POST['submitProduct'])) {
-            //displays search bar product
+        } //--- PRODUCT ---
+        else if(isset($_POST['submitProduct'])) {
             displayProductSearchBar();
 
-            include '../../config/dbconn.php';
             $search = mysqli_real_escape_string($dbconn, $_POST['query']);
             $result = getProduct($search);
             $queryResult = mysqli_num_rows($result);
 
             if($queryResult > 0) {
-            while($row = mysqli_fetch_assoc($result)) {
-                displayProduct($row['Product_Name'], $row['Product_Image'], $row['Product_Status_ID'], $row['Product_ID']);
-            }
+                while($row = mysqli_fetch_assoc($result)) {
+                    displayProduct($row['Product_Name'], $row['Product_Image'], $row['Product_Status_ID'], $row['Product_ID']);
+                }
             }
             else {
             echo "<br>";
             echo "<center>There is no result matching your search!</center>";
             }
-        }
+        } //--- ORDER ---
+        else if (isset($_POST['submitOrder'])) {
+            displayOrderSearchBar();
+        
+            $search = mysqli_real_escape_string($dbconn, $_POST['query']);
+            $result = getOrders($search);
+            
+            if ($result) { // Check if the query was successful
+                $queryResult = mysqli_num_rows($result);
+        
+                if ($queryResult > 0) {
+                    while ($row = mysqli_fetch_assoc($result)) {
+                        $orderDetails = generateOrderDetailsHtml($row['Order_ID']);
+                        $orderDetailsHtml = $orderDetails['html'];
+                        $shipPrice = 5;
+                        $orderTotalPrice = $orderDetails['total_price'] + $shipPrice;
+        
+                        displayOrders($row['Order_ID'], $row['Status_Name'], $row['Size_Price'], $orderTotalPrice, $orderDetailsHtml);
+                    }
+                } else {
+                    echo "<br>";
+                    echo "<center>There is no result matching your search!</center>";
+                }
+            } else {
+                echo "Error: " . mysqli_error($dbconn); // Output the error message if the query fails
+            }
+        } 
     ?>
-
-
 </body>
 </html>
 
@@ -254,7 +270,7 @@ function displayCustomer($userId, $userName, $profilePic){
 //get product from database
 function getProductStock($productId){
     include '../../config/dbconn.php';
-  
+
 	$sql = "SELECT SUM(Size_Stock)
 	FROM product_size
     WHERE Product_ID='$productId'";
@@ -313,7 +329,7 @@ function displayProduct($productName, $productPic, $prodStatus, $productId){
         <form id="updateForm" action="" method="GET">
         <table id="list" border="0">
         ';
-        if($prodStatus == 'PDS2'){ // checking if product status is unavailable, the unavailable will be displayed
+        if($prodStatus == 'PDS2'){ // checking if product status is unavailable
             echo '
             <tr>
             <td colspan=5>
@@ -325,11 +341,10 @@ function displayProduct($productName, $productPic, $prodStatus, $productId){
         }
         echo'
         <tr>
-            <td style="width: 54px; padding-right: 10px;"><img src="'.$productPic.'" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover; overflow: hidden;"></td>
+            <td style="width: 54px; padding-right: 10px;"><img src="'.$productPic.'" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; overflow: hidden;"></td>
             <td style="width: 150px;">product name</td>
             <td>'.$productName.'</td>
             <td rowspan=2 style="width: 120px; padding-left:25px;">
-                <!-- link to specific product details -->
                 <a href="admin update product.php?productId='.$productId.'">
                     <b>update</b>
                 </a> 
@@ -339,5 +354,137 @@ function displayProduct($productName, $productPic, $prodStatus, $productId){
         </form>
     ';
 }
+
+//--- ORDER ---
+
+//get order details from database
+function getOrderDetails($orderId){
+    include '../../config/dbconn.php';
+
+    $sql = "SELECT *
+    FROM order_details
+    JOIN product ON product.Product_ID = order_details.Product_ID
+    JOIN size ON size.Size_ID = order_details.Size_ID
+    WHERE order_details.Order_ID='$orderId'";
+    $result = mysqli_query($dbconn, $sql);
+    echo $sql;
+    return $result;
+}
+//get order/product based on name/id from database
+function getOrders($search){
+    include '../../config/dbconn.php';
+
+    $query = "SELECT * 
+    FROM orders
+    JOIN status on status.Status_ID = orders.Status_ID
+    JOIN order_details on order_details.Order_ID = orders.Order_ID
+    JOIN product on product.Product_ID = order_details.Product_ID
+    WHERE orders.Order_ID LIKE '%$search%' OR product.Product_Name LIKE '%$search%'";
+    $result = mysqli_query($dbconn, $query);
+    echo $query;
+    return $result;
+}
+
+//display order search bar
+function displayOrderSearchBar(){
+    echo '
+	<h1 style="text-align: center; color: #8AB49C;">SEARCH ORDER</h1>
+    <table id="one" style="border-spacing: 5px;" border="0">
+        <tr>
+            <td>
+                <table id="bar" border="0">
+                    <form action="search.php" method="POST">
+                        <tr>
+                            <td style="text-align: center;">
+                                <input type="text" name="query" placeholder="Insert product name" class="searchbar">
+                            </td>
+                            <td style="text-align: right;">
+                                <button type="submit" name="submitOrder" class="sIcon" style="width: 22px; height: 22px; background: none; border: none; padding: 0; cursor: pointer;">
+                                    <img src="search.png" alt="Submit" style="display: inline-block;">
+                                </button>
+                            </td>
+                        </tr>
+                    </form>
+                </table>
+            </td>
+            <td style="width: 183px;">
+                <a href="admin order invoice.php">
+                    <img src="invoice.png">
+                </a>
+            </td>
+        </tr>
+    </table>
+    ';
+}
+
+//generate order details for HTML
+function generateOrderDetailsHtml($orderId) {
+    $orderDetails = getOrderDetails($orderId);
+    $detailsHtml = '';
+    $totPrice=0;
+
+    if (mysqli_num_rows($orderDetails) > 0) {
+        while ($rOrdDetails = mysqli_fetch_assoc($orderDetails)) {
+            $itemTotalPrice = $rOrdDetails['Size_Price'] * $rOrdDetails['Quantity'];
+            $totPrice += $itemTotalPrice;
+            $detailsHtml .= '
+            <table id="three" border="0">
+                <tr>
+                    <td id="img" rowspan="2"><img src="' . htmlspecialchars($rOrdDetails['Product_Image']) . '" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; overflow: hidden;"></td>
+                    <td id="name">' . htmlspecialchars($rOrdDetails['Product_Name']) . '</td>
+                    <td rowspan="2">x' . htmlspecialchars($rOrdDetails['Quantity']) . '</td>
+                    <td rowspan="2">RM' . htmlspecialchars($rOrdDetails['Size_Price']) . '</td>
+                </tr>
+                <tr>
+                    <td style="vertical-align: text-top;">Size: ' . htmlspecialchars($rOrdDetails['Size_ID']) . '</td>
+                </tr>
+            </table>';
+        }
+    } else {
+        $detailsHtml .= '<tr><td colspan="4">No order details found.</td></tr>';
+    }
+    return ['html' => $detailsHtml, 'total_price' => $totPrice];
+}
+
+// display order
+function displayOrders($orderId, $orderStatus, $orderPrice, $orderTotalPrice, $orderDetailsHtml) {
+            echo '
+            <tr>
+                <td colspan="2">
+                    <table class="order-container" border="0">
+                        <tr>
+                            <td style="width: 150px; padding-left: 10px;">Order ID:</td>
+                            <td>' . htmlspecialchars($orderId) . '</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">' . $orderDetailsHtml . '</td>
+                            <td rowspan="2">
+                                <b>' . htmlspecialchars($orderStatus) . '</b><br>
+                                Total Payment<br>
+                                RM' . htmlspecialchars($orderTotalPrice) . '
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">
+                                <table id="five" border="0">
+                                    <tr>
+                                        <td style="padding-bottom: 4px;">
+                                            <a id=button href="admin order details.php?orderId=' . htmlspecialchars($orderId) . '">
+                                                <b>VIEW</b>
+                                            </a>                                        
+                                        </td>
+                                        <td style="padding-bottom: 4px;">
+                                        <button onclick="confirmDeletion('. htmlspecialchars($orderId) .')" id="button">
+                                            <b>DELETE</b>
+                                        </button>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>';
+        }
 ?>
 

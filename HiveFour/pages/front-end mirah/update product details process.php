@@ -56,10 +56,8 @@ if(isset($_POST['update'])){
             </script>";  
         }
     }
-
     $sqlUpdate = "UPDATE product SET Product_Name = '$pName',  Product_Status_ID = '$pStatus' WHERE Product_ID = '$pId'";
     mysqli_query($dbconn, $sqlUpdate) or die ("Error: " . mysqli_error($dbconn));
-
 
     /* display a message */
     echo "<script>

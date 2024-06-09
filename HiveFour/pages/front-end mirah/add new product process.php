@@ -3,12 +3,7 @@
 
     $pId = createProductId();
     $pName= $_REQUEST['pName']; 
-    $priceS= $_REQUEST['pSmall']; 
-    $priceM= $_REQUEST['pMed']; 
-    $priceL= $_REQUEST['pLarge'];
-    $psIdS = $pId . 'S';
-    $psIdM = $pId . 'M';
-    $psIdL = $pId . 'L';
+    $pStatusId = $_REQUEST['newStatus'];
 
     if($pName == ""){ //checking if product name is empty
         // Display the alert
@@ -42,20 +37,14 @@
                         move_uploaded_file($fileTmpName, $fileDestination); //to upload file to a specific folder
 
                         //insert new product into product
-                        $sqlInsertProd = "INSERT INTO product VALUES(
+                        $sqlInsertProd = "INSERT INTO product (Product_ID, Product_Name, Product_Image, Product_Status_ID) VALUES(
                             '" . $pId . "',
                             '" . $pName . "',
-                            '" . $fileDestination . "')";
+                            '" . $fileDestination . "',
+                            '" . $pStatusId . "')";
                             //echo $sqlInsertProd;
                             mysqli_query($dbconn, $sqlInsertProd) or die ("Error: " . mysqli_error($dbconn));
-                        
-                        //insert the product price for each size into product size
-                        $sqlInsertProdSize = "INSERT INTO product_size (Product_Size_ID, Product_ID, Size_ID, Size_Price) VALUES 
-                        ('$psIdS', '$pId', 'S', '$priceS'),
-                        ('$psIdM', '$pId', 'M', '$priceM'),
-                        ('$psIdL', '$pId', 'L', '$priceL')";
-                        mysqli_query($dbconn, $sqlInsertProdSize) or die ("Error: " . mysqli_error($dbconn));
-
+                    
                         // Display the alert
                         echo "<script>alert('The new product has been recorded in the DB'); 
                             window.location.href = 'admin product list.php';

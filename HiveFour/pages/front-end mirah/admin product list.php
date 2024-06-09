@@ -127,7 +127,7 @@
 				</a>
 			</th>
 			<td>
-				<a href="admin update account.php">
+				<a href="admin view account.php">
 					<img src="user.png" style="width:71px; height:40px;" class="user">
 				</a>
 			</td>
@@ -136,10 +136,10 @@
 
     <!--- SEARCH PRODUCT --->
     <h1 style="text-align: center; color: #8AB49C;">SEARCH PRODUCT</h1>
-    <form action="search.php" method="POST">
         <table style="width: 800px; border-spacing: 5px;" border="0">
             <tr>
                 <td>
+                <form action="search.php" method="POST">
                     <table id="bar" border="0">
                         <tr>
                             <td style="text-align: center;">
@@ -152,6 +152,7 @@
                             </td>
                         </tr>
                     </table>
+                </form>
                 </td>
     <!--- ADD PRODUCT --->
                 <td style="width: 48px;">
@@ -159,10 +160,16 @@
                         <img src="add new.png">
                     </a>
                 </td>
-
-            </tr>
+    <!--- UPDATE PRICE --->
+                <td style="width: 48px;">
+                    <form action="update price.php" method="POST">
+                        <p style="text-align: center;">
+                            <button type="submit" name="update" style="display: inline-block; padding: 10px 20px; background-color: #8AB49C; color: white; border-radius: 10px; font-size: 13px; border: none; cursor: pointer;">UPDATE PRICE</button>
+                        </p>
+                    </form>
+                </td>
+            </tr>        
         </table>
-    </form>
     <!--- PRODUCT LIST --->
     <?php
         $result = getProduct();
@@ -210,7 +217,7 @@ function displayProduct($productName, $productPic, $prodStatus, $productId){
         }
         echo'
         <tr>
-            <td style="width: 54px; padding-right: 10px;"><img src="'.$productPic.'" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover; overflow: hidden;"></td>
+            <td style="width: 54px; padding-right: 10px;"><img src="'.$productPic.'" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; overflow: hidden;"></td>
             <td style="width: 150px;">product name</td>
             <td>'.$productName.'</td>
             <td rowspan=2 style="width: 120px; padding-left:25px;">
