@@ -177,9 +177,6 @@ mysqli_close($dbconn);
 				<td style="text-align: center; color: #E6DAD1; padding: 20px;">
 					<b style=" font-family: 'Times New Roman'; font-size: 30px;">LOGIN</b>
 					<table id="acc" border="0">
-			<tr>
-				<td style="text-align: center; color: #E6DAD1; padding: 20px;">
-					<b style="font-family: 'Times New Roman'; font-size: 30px;">LOGIN</b>
 					<form action="" method="POST" style="width: 300px; margin: 0 auto;">
 						<div class="container">
 							<label for="email">Email:</label>
@@ -196,7 +193,7 @@ mysqli_close($dbconn);
 				</td>
 			</tr>
     </table>
-		  Don't have an account yet? REGISTER
+		  Don't have an account yet? <a href ="register1.php">REGISTER</a>
 		  </td>
 		  </tr>
 	</table>
