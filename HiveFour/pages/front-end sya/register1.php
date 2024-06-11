@@ -6,78 +6,60 @@
   <script language="javascript">
     function checkEmptyFields()
     {
-      var username = document.form1.username.value;
-      var email = document.form1.email.value;
-      var password = document.form1.password.value;
-      var fullName = document.form1.fullName.value;
-      var phoneNumber = document.form1.phoneNumber.value;
-      var address1 = document.form1.address1.value;
-      var address2 = document.form1.address2.value;
-      var postcode = document.form1.postcode.value;
-      var city = document.form1.city.value;
-      var state = document.form1.state.value;
+      var username = document.forms["registerForm"]["username"].value;
+        var email = document.forms["registerForm"]["email"].value;
+        var password = document.forms["registerForm"]["password"].value;
+        var fullName = document.forms["registerForm"]["fullName"].value;
+        var phoneNumber = document.forms["registerForm"]["phoneNumber"].value;
+        var address1 = document.forms["registerForm"]["address1"].value;
+        var address2 = document.forms["registerForm"]["address2"].value;
+        var postcode = document.forms["registerForm"]["postcode"].value;
+        var city = document.forms["registerForm"]["city"].value;
+        var state = document.forms["registerForm"]["state"].value;
 
-      if(username == "")
-      {
-        alert("Please enter username!");
-        return false;
-      }
-      else if(email == "")
-      {
-        alert("Please enter email!");
-        return false;
-      }
-      else if(email.indexOf("@") == -1)
-      {
-        alert("Please enter email!");
-        return false;
-      }
-      else if(password == "")
-      {
-        alert("Please enter password!");
-        return false;
-      }
-      else if(fullName == "")
-      {
-        alert("Please enter full name!");
-        return false;
-      }
-      else if(phoneNumber == "")
-      {
-        alert("Please enter phone number!");
-        return false;
-      }
-      else if(address1 == "")
-      {
-        alert("Please enter address1!");
-        return false;
-      }
-      else if(address2 == "")
-      {
-        alert("Please enter address2!");
-        return false;
-      }
-      else if(postcode == "")
-      {
-        alert("Please enter postcode!");
-        return false;
-      }
-      else if(city == "")
-      {
-        alert("Please enter city!");
-        return false;
-      }
-      else if(state == "")
-      {
-        alert("Please enter state!");
-        return false;
-      }
-      else
-        return true;
+        if (username == "") {
+            alert("Please enter username!");
+            return false;
+        } else if (email == "") {
+            alert("Please enter email!");
+            return false;
+        } else if (email.indexOf("@") == -1) {
+            alert("Please enter a valid email!");
+            return false;
+        } else if (password == "") {
+            alert("Please enter password!");
+            return false;
+        } else if (fullName == "") {
+            alert("Please enter full name!");
+            return false;
+        } else if (phoneNumber == "") {
+            alert("Please enter phone number!");
+            return false;
+        } else if (address1 == "") {
+            alert("Please enter address1!");
+            return false;
+        } else if (address2 == "") {
+            alert("Please enter address2!");
+            return false;
+        } else if (postcode == "") {
+            alert("Please enter postcode!");
+            return false;
+        } else if (city == "") {
+            alert("Please enter city!");
+            return false;
+        } else if (state == "") {
+            alert("Please enter state!");
+            return false;
+        } else {
+            return true;
+        }
     }
     </script>
 	<head>
 		<style>
+      body{
+        margin:0;
+      }
 			body{
 				background-image: url(loginbg.png);
         background-repeat: no-repeat;
@@ -198,70 +180,48 @@
 		</tr>
 	</table>
 	<br><br>
-  <form action="register.php" method="post">
+  <form name="registerForm" action="register.php" method="POST" onsubmit="return checkEmptyFields()">
 	<table id=acc border="0">
 			<tr>
 			  <td style="text-align: center; color: #E6DAD1; padding: 20px;">
           <b style="font-family: 'Times New Roman'; font-size: 30px;">REGISTER</b>
           <table style="width:300px; margin: 0 auto;">
             <tr>
-              <td>
-                <div class="container">
-                  <form style="background-color: #C7D8CF; border-radius: 20px;">
-                    <label for="email">Email:</label>
-                    <input type="email" id="email" name="email">
-                  </form>
-                  <br>
-                  <form style="background-color: #C7D8CF; border-radius: 20px;">
-                    <label for="username">Username:</label>
-                    <input type="text" id="username" name="username">
-                  </form>
-                  <br>
-                  <form style="background-color: #C7D8CF; border-radius: 20px;">
-                    <label for="fullName">Full Name:</label>
-                    <input type="text" id="fullName" name="fullName">
-                  </form>
-                  <br>
-                  <form style="background-color: #C7D8CF; border-radius: 20px;">
-                    <label for="password">Password:</label>
-                    <input type="password" id="password" name="password">
-                  </form>
-                  <br>
-                  <form style="background-color: #C7D8CF; border-radius: 20px;">
-                    <label for="phoneNumber">Phone Number:</label>
-                    <input type="tel" id="phoneNumber" name="phoneNumber">
-                  </form>
-                  <br>
-                </div>
+            <td>
+              <div class="container">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email">
+
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username">
+
+                <label for="fullName">Full Name:</label>
+                <input type="text" id="fullName" name="fullName">
+
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password">
+
+                <label for="phoneNumber">Phone Number:</label>
+                <input type="tel" id="phoneNumber" name="phoneNumber">
+              </div>
             </td>
             <td>
               <div class="container">
-                <form style="background-color: #C7D8CF; border-radius: 20px;">
-                  <label for="address1">Address 1:</label>
-                  <input type="text" id="address1" name="address1">
-                </form>
-                <br>
-                <form style="background-color: #C7D8CF; border-radius: 20px;">
-                  <label for="address2">Address 2:</label>
-                  <input type="text" id="address2" name="address2">
-                </form>
-                <br>
-                <form style="background-color: #C7D8CF; border-radius: 20px;">
-                  <label for="postcode">Postcode:</label>
-                  <input type="text" id="postcode" name="postcode">
-                </form>
-                <br>
-                <form style="background-color: #C7D8CF; border-radius: 20px;">
-                  <label for="city">City:</label>
-                  <input type="text" id="city" name="city">
-                </form>
-                <br>
-                <form style="background-color: #C7D8CF; border-radius: 20px;">
-                  <label for="state">State:</label>
-                  <input type="text" id="state" name="state">
-                </form>
-                <br>
-              </div>
+                <label for="address1">Address 1:</label>
+                <input type="text" id="address1" name="address1">
+
+                <label for="address2">Address 2:</label>
+                <input type="text" id="address2" name="address2">
+
+                <label for="postcode">Postcode:</label>
+                <input type="text" id="postcode" name="postcode">
+
+                <label for="city">City:</label>
+                <input type="text" id="city" name="city">
+
+                <label for="state">State:</label>
+                <input type="text" id="state" name="state">
+              <div>
             </td>
           </tr>
           <tr>

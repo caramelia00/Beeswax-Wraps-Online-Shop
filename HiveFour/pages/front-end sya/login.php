@@ -41,6 +41,9 @@ mysqli_close($dbconn);
 	<head>
 		<style>
 			body{
+        		margin:0;
+      		}
+			body{
 				background-image: url(loginbg.png);
 			}
 			#acc{
