@@ -15,6 +15,7 @@ if (isset($_GET['orderId'])) {
 
         $oId = $rOrder['Order_ID'];
         $oStatus = $rOrder['Status_ID'];
+        $oReceipt = $rOrder['Payment_Receipt'];
         $uFullName = $rOrder['User_Full_Name'];
         $uAddress1 = $rOrder['Address1'];
         $uAddress2 = $rOrder['Address2'];
@@ -191,47 +192,24 @@ function getOrderDetails($orderId){
 			</tr>
 		</table>
 		<br><br>
-        <form action="update order details process.php" method="POST">
+        <form action="update order process.php" method="POST">
             <table id="one" border="0">
                 <tr>
                     <td>
                         <table id="status" border="0">
                             <tr>
-                                <td><th colspan="3" style="font-size: 30px; text-align: left;">STATUS</th></td>
+                                <th style="font-size: 30px; text-align: center;">STATUS</th>
                             </tr>
                             <tr>
-                                <td>Preparing to ship</td>
-                                <td>Out for delivery</td>
-                                <td>Completed</td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <select class="mySelect">
-                                        <option value="default">Select Status</option>
-                                        <option value="true">Yes</option>
-                                        <option value="false">No</option>
-                                    </select>
-                                    <input type="hidden" name="statusImg" class="order-status-input">
-
-                                    <img class="myImage" style="display: none;" alt="Image">
-                                </td>
-                                <td>
-                                    <select class="mySelect">
-                                        <option value="default">Select Status</option>
-                                        <option value="true">Yes</option>
-                                        <option value="false">No</option>
-                                    </select>
-                                    <input type="hidden" name="statusImg" class="order-status-input">
-                                    <img class="myImage" style="display: none;" alt="Image">
-                                </td>
-                                <td>
-                                    <select class="mySelect">
-                                        <option value="default">Select Status</option>
-                                        <option value="true">Yes</option>
-                                        <option value="false">No</option>
-                                    </select>
-                                    <input type="hidden" name="statusImg" class="order-status-input">
-                                    <img class="myImage" style="display: none;" alt="Image">
+                                <td style="text-align: center;">
+                                <input type="hidden" name="orderId" value="<?php echo $oStatus; ?>">
+                                <select name="newStatus" class="mySelect">
+                                    <option value="S01"<?php echo ($oStatus == 'S01' ? ' selected' : ''); ?>>Pending</option>
+                                    <option value="S02"<?php echo ($oStatus == 'S02' ? ' selected' : ''); ?>>Preparing to ship</option>
+                                    <option value="S03"<?php echo ($oStatus == 'S03' ? ' selected' : ''); ?>>Out for delivery</option>
+                                    <option value="S04"<?php echo ($oStatus == 'S04' ? ' selected' : ''); ?>>Completed</option>
+                                    <!--<option value="S05"<?php //echo ($pStatus == 'S05' ? ' selected' : ''); ?>>Failed</option>-->
+                                </select>
                                 </td>
                             </tr>
                         </table>
@@ -243,12 +221,9 @@ function getOrderDetails($orderId){
                         </tr>
                         <tr>
                             <td style="text-align: center;">
-                                <form action="update price.php" method="POST">
-                                    <button type="submit" name="update" style="display: inline-block; padding: 7px 12px; background-color: white; color: #8AB49C; border-radius: 10px; font-size: 12px; border: none; cursor: pointer;">PRINT</button>
-                                </form>
-                                <?php 
-                                    // if payment receipt exists, print payment receipt, if not display no payment made
-                                ?>
+                                <a href="<?php echo $oReceipt; ?>" target="_blank" style="display: inline-block; padding: 7px 12px; background-color: white; color: #8AB49C; border-radius: 10px; font-size: 12px; border: none; cursor: pointer;">
+                                    DOWNLOAD
+                                </a>
                             </td>
                         </tr>
                     </table>
@@ -267,33 +242,51 @@ function getOrderDetails($orderId){
                                     ITEMS ORDERED
                                 </td>
                             </tr>
-                            <tr>
-                                <td rowspan="3">
-                                    <img src="wrap 3.png" style="width: 130px; height: 130px;">
-                                </td>
-                                <td colspan="2">
-                                    Earth & Sun Beeswax Wraps
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colspan="2">
-                                    Size: L
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    X2
-                                </td>
-                                <td style="text-align: right;">
-                                    RM30.00
-                                </td>
-                            </tr>
+
+                            <?php 
+                                $orderDetails = getOrderDetails($oId);
+                                $detailsHtml = '';
+                                $totPrice=0;
+                            
+                                if (mysqli_num_rows($orderDetails) > 0) {
+                                    while ($rOrdDetails = mysqli_fetch_assoc($orderDetails)) {
+                                        $itemTotalPrice = $rOrdDetails['Size_Price'] * $rOrdDetails['Quantity'];
+                                        $totPrice += $itemTotalPrice;
+                                        $detailsHtml .= '
+                                        <tr>
+                                        <td rowspan="3">
+                                            <img src="' . $rOrdDetails['Product_Image'] . '" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; overflow: hidden;">
+                                        </td>
+                                        <td colspan="2">
+                                            ' . htmlspecialchars($rOrdDetails['Product_Name']) . '
+                                        </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2">
+                                                Size: ' . htmlspecialchars($rOrdDetails['Size_ID']) . '
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                X' . htmlspecialchars($rOrdDetails['Quantity']) . '
+                                            </td>
+                                            <td style="text-align: right;">
+                                                RM' . number_format(htmlspecialchars($rOrdDetails['Size_Price']), 2) . '
+                                            </td>
+                                        </tr>
+                                        ';
+                                    }
+                                } else {
+                                    $detailsHtml .= '<tr><td colspan="4">No order details found.</td></tr>';
+                                }
+                                echo $detailsHtml
+                            ?>
                             <tr>
                                 <td>
                                     Items Subtotal
                                 </td>
                                 <td colspan="2">
-                                    RM60.00
+                                    RM<?php echo number_format($totPrice, 2); ?>
                                 </td>
                             </tr>
                             <tr>
@@ -309,7 +302,7 @@ function getOrderDetails($orderId){
                                     Total Payment
                                 </td>
                                 <td colspan="2" style="font-size: 30px;">
-                                    RM65.00
+                                    RM<?php echo number_format(($totPrice + 5), 2);?>
                                 </td>
                             </tr>
                         </table>
@@ -323,21 +316,13 @@ function getOrderDetails($orderId){
                             </tr>
                             <tr>
                                 <td colspan="2">
-                                    FULL NAME
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colspan="2">
+                                    FULL NAME<br>
                                     <?php echo $uFullName; ?>
                                 </td>
                             </tr>
                             <tr>
                                 <td colspan="2">
-                                    ADDRESS
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colspan="2">
+                                    ADDRESS<br>
                                     <?php echo $uAddress1; ?>,<br>
                                     <?php if($uAddress2 != 'NULL') echo $uAddress2 . ',<br>'; ?>
                                     <?php echo $postcode; ?> <?php echo $city; ?>, <br>
@@ -346,12 +331,9 @@ function getOrderDetails($orderId){
                             </tr>
                             <tr>
                                 <td colspan="2">
-                                    ORDER ID
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colspan="2">
-                                    1024
+                                    ORDER ID <br>
+                                    <input type="hidden" name="oId" value="<?php echo $oId; ?>">
+                                    <?php echo $oId; ?>
                                 </td>
                             </tr>
                         </table>
@@ -362,13 +344,12 @@ function getOrderDetails($orderId){
                         <table id="save" border="0">
                             <tr>
                                 <td>
-                                    <button type="submit" class="sve">SAVE CHANGES</button>
+                                    <button type="submit" name="update" class="sve" style="cursor: pointer;">SAVE CHANGES</button>
                                 </td>
                             </tr>
                     </td>
                 </tr>
             </table>
         </form>
-        <script src="updOrd.js"></script>
 	</body>
 </html>
