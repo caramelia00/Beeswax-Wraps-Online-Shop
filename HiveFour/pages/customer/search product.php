@@ -145,7 +145,7 @@
                 </td>
         </tr>
     </table>
-
+<?php
     }
     include '../../config/dbconn.php';
 
