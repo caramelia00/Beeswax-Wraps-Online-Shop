@@ -118,7 +118,7 @@
                 </a>
             </td>
             <td>
-                <a href="view account details.php">
+                <a href="VIEW ACCOUNT DETAILS.php">
                     <img src="user.png" style="width:71px; height:40px;" class="user">
                 </a>
             </td>
@@ -132,7 +132,7 @@
                     <table id="bar" border="0">
                         <tr>
                             <td style="text-align: center;">
-                                    <input type="text" name="query" placeholder="Insert product name or ID" class="searchbar">
+                                <input type="text" name="query" placeholder="Insert product name or ID" class="searchbar">
                             </td>
                             <td style="text-align: right;">
                                 <button type="submit" name="submitProduct" class="sIcon" style="width: 22px; height: 22px; background: none; border: none; padding: 0; cursor: pointer;">
@@ -145,7 +145,15 @@
                 </td>
         </tr>
     </table>
-
+    <?php
+        $result = getProduct();
+        while ($row = mysqli_fetch_assoc($result)) {
+        displayProduct($row['Product_Name'], $row['Product_Image'], $row['Product_Status_ID'], $row['Product_ID']);
+        }
+    ?>
+</body>
+</html>
+<?php
     }
     include '../../config/dbconn.php';
 
@@ -188,4 +196,3 @@
         ';
     }
 ?>
-
