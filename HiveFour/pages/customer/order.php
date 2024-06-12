@@ -3,7 +3,7 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8">
-    <title>Hive4 products</title>
+    <title>Hive4 Order</title>
     <style>
         body{
             margin:0;
@@ -54,8 +54,8 @@
             padding-right: 50px;
             padding-left: 50px;
             background-color:#8AB49C;
-            border-radius: 50px;   
-            width: 800px;   
+            border-radius: 70px;   
+            width: 70%;   
             text-align: left; 
             font-size: 20px;
             color: #E6DAD1;
@@ -91,39 +91,39 @@
 	<table id=header  border="0">
 		<tr>
 			<th style="padding-left: 20px;">
-				<a href="HOME.html">
+				<a href="HOME.php">
 					HOME
 				</a>
 			</th>
 			<th>
-				<a href="search product.html">
+				<a href="search product.php">
 					PRODUCTS
 				</a>
 			</th>
 			<th>
-				<a href="About Us.html">
+				<a href="About Us.php">
 				ABOUT US
 				</a>
 			</th>
 			<td colspan=2><img src="design 1.png"  style="width:80px; height:80px; padding-right: 30px;"></td>
 			<td>
-				<a href="order.html">
+				<a href="order.php">
 					<img src="order.png" style="width: 50px;height: 50px;" class="user">
 				</a>
 			</td>
 			<td>
-				<a href="cart.html">
+				<a href="cart.php">
 					<img src="cart.png" style="width: 50px;height: 50px;" class="user">
 				</a>
 			</td>
 			<td>
-				<a href="VIEW ACCOUNT DETAILS.html">
+				<a href="VIEW ACCOUNT DETAILS.php">
 					<img src="user.png" style="width:71px; height:40px;" class="user">
 				</a>
 			</td>
 		</tr>
 	</table>
-    <h1 style="text-align: center; color: #8AB49C;">SEARCH PRODUCT</h1>
+    <br>
     <form action="search.php" method="get">
         <table style="width: 800px; border-spacing: 5px;" border="0">
             <tr>
@@ -131,7 +131,7 @@
                     <table id="bar" border="0">
                         <tr>
                             <td style="text-align: center;">
-                                    <input type="text" name="query" placeholder="Insert product name" class="searchbar">
+                                    <input type="text" name="query" placeholder="Insert order ID" class="searchbar">
                             </td>
                             <td style="text-align: right;">
                                 <button type="submit" class="sIcon"><img src="search.png" style="width: 22px; height: 22px;"></button>
@@ -144,75 +144,62 @@
     </form>
     <br>    
     <table id="list" border="0">
+        <tr>
+            <td colspan="2">
+                <b>ORDER ID:</b> 1025
+            </td>
+        </tr>
         <tr >
-            <td rowspan=2 style="width: 54px; padding-right: 10px;"><img src="earth.png"></td>
-            <td style="width: 150px;">product name</td>
-            <td colspan=2>Earth & Sun Beeswax Wraps</td>
-            <td rowspan=2 style="width: 120px;">
+            <td style="width: 54px; padding-right: 10px;"><img src="earth.png"></td>
+            <td style="width: 150px;">Earth & Sun Beeswax Wraps<br>Size:L</td>
+            <td>x1</td>
+            <td>RM 30.00</td>
+            <td style="width: 150px;"><b>PREPARING TO SHIP</b></td>
+        </tr>
+        <tr >
+            <td style="width: 54px; padding-right: 10px;"><img src="gummy.png"></td>
+            <td style="width: 150px;">Gummy Bear Beeswax Wraps<br>Size:M</td>
+            <td>x1</td>
+            <td>RM 20.00</td>
+            <td style="width: 150px;">Total Payment<br>RM50</td>
+        </tr>
+        <tr>
+            <td colspan="5" style="text-align: center;">
                 <!-- link to specific product details -->
-                <a href="view product.php">
+                <a href="status.php">
                     <b>view</b>
                 </a>
             </td>
-        </tr>
-        <tr>
-            <td style="width: 150px;">stock available</td>
-            <td style="width: 60px;">1000</td>
-            <td>units</td>
-        </tr>
-    </table>
-    <br>
-    <table id="list"border="0">
-        <tr >
-            <td rowspan=2 style="width: 54px; padding-right: 10px;"><img src="gummy.png"></td>
-            <td style="width: 150px;">product name</td>
-            <td colspan="2">Gummy Bears Beeswax Wraps</td>
-            <td rowspan=2 style="width: 120px;">
-                <a href="view product.php">
-                    <b>view</b>
-                </a>
-            </td>
-        </tr>
-        <tr>
-            <td style="width: 150px;">stock available</td>
-            <td style="width: 60px;">950</td>
-            <td>units</td>
         </tr>
     </table>
     <br>
     <table id="list" border="0">
+        <tr>
+            <td colspan="2">
+                <b>ORDER ID:</b> 1019
+            </td>
+        </tr>
         <tr >
-            <td rowspan=2 style="width: 54px; padding-right: 10px;"><img src="dried.png"></td>
-            <td style="width: 150px;">product name</td>
-            <td colspan="2">Dried Caesalpinia Flower Beeswax Wraps</td>
-            <td rowspan=2 style="width: 120px;">
-                <a href="view product.php">
+            <td style="width: 54px; padding-right: 10px;"><img src="earth.png"></td>
+            <td style="width: 150px;">Dried Caesalpinia Flower Beeswax Wraps<br>Size:S</td>
+            <td>X2</td>
+            <td>RM 30.00</td>
+            <td style="width: 150px;"><b>COMPLETED</b></td>
+        </tr>
+        <tr >
+            <td style="width: 54px; padding-right: 10px;"><img src="gummy.png"></td>
+            <td style="width: 150px;">Gummy Bear Beeswax Wraps<br>Size:L</td>
+            <td>x1</td>
+            <td>RM 30.00</td>
+            <td style="width: 150px;">Total Payment<br>RM60</td>
+        </tr>
+        <tr>
+            <td colspan="5" style="text-align: center;">
+                <!-- link to specific product details -->
+                <a href="status.php">
                     <b>view</b>
                 </a>
             </td>
-        </tr>
-        <tr>
-            <td style="width: 150px;">stock available</td>
-            <td style="width: 60px;">965</td>
-            <td>units</td>
-        </tr>
-    </table>
-    <br>
-    <table id="list"border="0">
-        <tr >
-            <td rowspan=2 style="width: 54px; padding-right: 10px;"><img src="set.png"></td>
-            <td style="width: 150px;">product name</td>
-            <td colspan="2">3-in-1 Beeswax Wraps</td>
-            <td rowspan=2 style="width: 120px;">
-                <a href="view product.php">
-                    <b>view</b>
-                </a>
-            </td>
-        </tr>
-        <tr>
-            <td style="width: 150px;">stock available</td>
-            <td style="width: 60px;">453</td>
-            <td>units</td>
         </tr>
     </table>
 </body>

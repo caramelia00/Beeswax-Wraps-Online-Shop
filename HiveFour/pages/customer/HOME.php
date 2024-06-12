@@ -57,17 +57,17 @@
 	<table id=header  border="0">
 		<tr>
 			<th style="padding-left: 20px;">
-				<a href="HOME.html">
+				<a href="HOME.php">
 					HOME
 				</a>
 			</th>
 			<th>
-				<a href="search product.html">
+				<a href="search product.php">
 					PRODUCTS
 				</a>
 			</th>
 			<th>
-				<a href="About Us.html">
+				<a href="About Us.php">
 				ABOUT US
 				</a>
 			</th>
