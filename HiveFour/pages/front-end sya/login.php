@@ -4,32 +4,45 @@ session_start();
 include '../../config/dbconn.php';
 
 if(isset($_POST['submit'])){
-    // Retrieve and sanitize user inputs
-    $email = mysqli_real_escape_string($dbconn, $_POST['email']);
-    $password = mysqli_real_escape_string($dbconn, $_POST['password']);
+   // Retrieve and sanitize user inputs
+	$email = mysqli_real_escape_string($dbconn, $_POST['email']);
+	$password = mysqli_real_escape_string($dbconn, $_POST['pass']);
 
-    $sql= "SELECT * FROM users WHERE Type_ID='UT02' AND User_Email = '$email' AND User_Password = '$password'";
-    $query = mysqli_query($dbconn, $sql) or die("Error: " . mysqli_error($dbconn));
-    $row = mysqli_num_rows($query);
+	$sql= "SELECT * FROM users WHERE User_Email = '$email' AND User_Password = '$password'";
+	$query = mysqli_query($dbconn, $sql) or die("Error: " . mysqli_error($dbconn));
+	$row = mysqli_num_rows($query);
 
-    if($row == 0){  
-        echo "<script>
-            alert('Incorrect email or password.');
-            window.location.href = 'login.php';
-          </script>";
-    }else{
-        $r = mysqli_fetch_assoc($query);
-        
-        $_SESSION['username'] = "Administrator";
-		$_SESSION['User_ID'] = $r['User_ID'];
-    
-        echo "<pre>";
-		var_dump($_SESSION);
-		echo "</pre>";
+	if($row == 0){  
+		echo "<script>
+			alert('Incorrect email or password.');
+			window.location.href = 'login.php';
+			</script>";
+	}
+	else{
+		$r = mysqli_fetch_assoc($query);
+		if($r['Type_ID']=='UT02'){
+			$_SESSION['username'] = "Administrator";
+			$_SESSION['User_ID'] = $r['User_ID'];
+		
+			echo "<pre>";
+			var_dump($_SESSION);
+			echo "</pre>";
 
-        header("Location: HOME.html");
-        exit();
-    }
+			header("Location: ../../pages/front-end mirah/admin dashboard.php");
+			exit();
+		}
+		else{       
+			$_SESSION['username'] = "Customer";
+			$_SESSION['User_ID'] = $r['User_ID'];
+		
+			echo "<pre>";
+			var_dump($_SESSION);
+			echo "</pre>";
+
+			header("Location: search product.html");
+		exit();
+		}
+	}
 }
 mysqli_close($dbconn);
 ?> 
@@ -158,45 +171,29 @@ mysqli_close($dbconn);
 			</th>
 		</tr>
 	</table>
-	<br><br>
-	<table id=acc border="0">
-			<tr>
-			  <td style="text-align: center; color: #E6DAD1; padding: 20px;">
-				<b style=" font-family: 'Times New Roman'; font-size: 30px;">LOGIN</b>
-		  <table style="width:300px; margin: 0 auto;">
-			<tr>
-			  <td>
-				<div class="container">
-				  <form style="background-color: #C7D8CF; border-radius: 20px;">
-					<label for="email">Email:</label>
-					<input type="email" id="email" name="email">
-				  </form>
-				</div>
-			</td>
-		  </tr>
-		  <tr>
-			  <td>
-				  <div class="container">
-					<form style="background-color: #C7D8CF; border-radius: 20px;">
-					  <label for="password">Password:</label>
-					  <input type="password" id="password" name="password">
+		<br><br>
+		<table id=acc border="0">
+				<tr>
+				<td style="text-align: center; color: #E6DAD1; padding: 20px;">
+					<b style=" font-family: 'Times New Roman'; font-size: 30px;">LOGIN</b>
+					<table id="acc" border="0">
+					<form action="" method="POST" style="width: 300px; margin: 0 auto;">
+						<div class="container">
+							<label for="email">Email:</label>
+							<input type="email" id="email" name="email">
+						</div>
+						<div class="container">
+							<label for="password">Password:</label>
+							<input type="password" id="password" name="pass">
+						</div>
+						<div style="width: 300px; margin: 0 auto;">
+							<input type="submit" name="submit" value="LOGIN">
+						</div>
 					</form>
-				  </div>
-			  </td>
-		  </tr>
-		  <tr>
-			<td colspan="2">
-			  <div style="width: 300px; margin:0 auto;">
-				<form>
-				  <input type="submit" value="LOGIN">
-				</form>
-			  </div>
-			</td>
-			<td>
-			</td>
-		  </tr>
-		  </table>
-		  Don't have an account yet? REGISTER
+				</td>
+			</tr>
+    </table>
+		  Don't have an account yet? <a href ="register1.php">REGISTER</a>
 		  </td>
 		  </tr>
 	</table>
