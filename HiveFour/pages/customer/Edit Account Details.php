@@ -92,7 +92,7 @@
 				</a>
 			</td>
 			<td>
-				<a href="VIEW ACCOUNT DETAILS.php">
+				<a href="view account details.php">
 					<img src="user.png" style="width:71px; height:40px;" class="user">
 				</a>
 			</td>
@@ -151,7 +151,7 @@
 				<th colspan=3 style="font-size:40px">EDIT ACCOUNT DETAILS</th>
 			</tr>
 			<tr>
-				<td rowspan=3 style="text-align:center"><img src="yawnzzn big.png" style="width:150px;height:150px;"></td>
+				<td rowspan=2 style="text-align:center"><img src="yawnzzn big.png" style="width:150px;height:150px;"></td>
 				<td style="padding:10px;">Full Name</td>
 				<td><input type="text" id="fullname" name="fullname"></td>
 			</tr>
@@ -160,6 +160,9 @@
 				<td><input type="text" id="email" name="email"></td>
 			</tr>
 			<tr>
+				<p style="text-align:center;">
+                    Upload photo
+                </p>
                 <td style="padding:10px;">Password</td>
 				<td><input type="text" id="pw" name="pw"></td>
 			</tr>

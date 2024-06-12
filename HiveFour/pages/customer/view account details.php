@@ -124,7 +124,7 @@ $password_asterisks = str_repeat('*', $password_length);
 				</a>
 			</td>
 			<td>
-				<a href="VIEW ACCOUNT DETAILS.php">
+				<a href="view account details.php">
 					<img src="user.png" style="width:71px; height:40px;" class="user">
 				</a>
 			</td>
