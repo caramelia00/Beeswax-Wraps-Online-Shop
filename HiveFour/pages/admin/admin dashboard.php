@@ -222,6 +222,7 @@
 						FROM orders
 						JOIN order_details ON order_details.Order_ID = orders.Order_ID
 						JOIN size ON size.Size_ID = order_details.Size_ID
+						WHERE orders.Payment_Receipt <> ''
 						";
 
 						$result = mysqli_query($dbconn, $sql);
@@ -302,7 +303,7 @@
 											while ($row = mysqli_fetch_assoc($result)) {
 												users($row['User_Name'], $row['Profile_Pic'], $row['User_Email']);
 											}
-											
+									
 											?>
 										</table>
 									</td>
@@ -371,9 +372,7 @@ function getOrdersDashboard() {
     ';
     echo $element;
 }
-
-
-  //--- USERS --- <span class="status '.$colors.'"></span>'.$status.'
+  //--- USERS --- 
 
   function getUsersDetailsDashboard() {
 	require '../../config/dbconn.php';
