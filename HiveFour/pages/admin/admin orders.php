@@ -215,6 +215,11 @@
                     </form>
                 </table>
             </td>
+            <td style="width: 183px;">
+                <a href="admin order invoice.php">
+                    <img src="invoice.png">
+                </a>
+            </td>
         </tr>
     </table>
     <?php displayOrders(); ?>
@@ -224,7 +229,7 @@
 } 
 else {
     // If the session username is not admin, redirect the page to the login page 
-    header("Location: ../../pages/customer/login.php");
+    header("Location: login.php");
     exit;
 }
 
@@ -297,11 +302,6 @@ function displayOrders() {
                         <tr>
                             <td style="width: 150px; padding-left: 10px;">Order ID:</td>
                             <td>' . htmlspecialchars($rOrd['Order_ID']) . '</td>
-                            <td style="text-align: center;">
-                                <a href="invoice.php?orderId=' . htmlspecialchars($rOrd['Order_ID']) . '" style="display: inline-block; padding: 7px 12px; background-color: white; color: #8AB49C; border-radius: 10px; font-size: 12px; border: none; cursor: pointer;">
-                                    INVOICE
-                                </a>
-                            </td>
                         </tr>
                         <tr>
                             <td colspan="2">' . $orderDetailsHtml . '</td>

@@ -66,33 +66,33 @@
 	<table id=header  border="0">
 		<tr>
         <th style="padding-left: 20px;">
-				<a href="HOME.html">
+				<a href="HOME.php">
 					HOME
 				</a>
 			</th>
 			<th>
-				<a href="search product.html">
+				<a href="search product.php">
 					PRODUCTS
 				</a>
 			</th>
 			<th>
-				<a href="About Us.html">
+				<a href="About Us.php">
 				ABOUT US
 				</a>
 			</th>
 			<td colspan=2><img src="design 1.png"  style="width:80px; height:80px; padding-right: 30px;"></td>
 			<td>
-				<a href="order.html">
+				<a href="order.php">
 					<img src="order.png" style="width: 50px;height: 50px;" class="user">
 				</a>
 			</td>
 			<td>
-				<a href="cart.html">
+				<a href="cart.php">
 					<img src="cart.png" style="width: 50px;height: 50px;" class="user">
 				</a>
 			</td>
 			<td>
-				<a href="VIEW ACCOUNT DETAILS.html">
+				<a href="VIEW ACCOUNT DETAILS.php">
 					<img src="user.png" style="width:71px; height:40px;" class="user">
 				</a>
 			</td>
@@ -145,7 +145,7 @@
 		  }
 		</script>
 	<br><br>
-	<form id="editForm" action="VIEW ACCOUNT DETAILS.html" method="post">
+	<form id="editForm" action="VIEW ACCOUNT DETAILS.php" method="post">
 		<table id=acc border="0">
 			<tr>
 				<th colspan=3 style="font-size:40px">EDIT ACCOUNT DETAILS</th>

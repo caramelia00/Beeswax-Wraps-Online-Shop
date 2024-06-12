@@ -185,7 +185,7 @@
 } 
 Else
 {	## if the session username is no admin, redirect the page to the login page 
-header("Location: ../../pages/customer/login.php");
+header("Location: login.php");
 }
 
 // get products from database

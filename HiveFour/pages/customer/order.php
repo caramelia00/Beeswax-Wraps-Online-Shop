@@ -91,33 +91,33 @@
 	<table id=header  border="0">
 		<tr>
 			<th style="padding-left: 20px;">
-				<a href="HOME.html">
+				<a href="HOME.php">
 					HOME
 				</a>
 			</th>
 			<th>
-				<a href="search product.html">
+				<a href="search product.php">
 					PRODUCTS
 				</a>
 			</th>
 			<th>
-				<a href="About Us.html">
+				<a href="About Us.php">
 				ABOUT US
 				</a>
 			</th>
 			<td colspan=2><img src="design 1.png"  style="width:80px; height:80px; padding-right: 30px;"></td>
 			<td>
-				<a href="order.html">
+				<a href="order.php">
 					<img src="order.png" style="width: 50px;height: 50px;" class="user">
 				</a>
 			</td>
 			<td>
-				<a href="cart.html">
+				<a href="cart.php">
 					<img src="cart.png" style="width: 50px;height: 50px;" class="user">
 				</a>
 			</td>
 			<td>
-				<a href="VIEW ACCOUNT DETAILS.html">
+				<a href="VIEW ACCOUNT DETAILS.php">
 					<img src="user.png" style="width:71px; height:40px;" class="user">
 				</a>
 			</td>
@@ -142,65 +142,96 @@
             </tr>
         </table>
     </form>
-    <br>    
-    <table id="list" border="0">
-        <tr>
-            <td colspan="2">
-                <b>ORDER ID:</b> 1025
-            </td>
-        </tr>
-        <tr >
-            <td style="width: 54px; padding-right: 10px;"><img src="earth.png"></td>
-            <td style="width: 150px;">Earth & Sun Beeswax Wraps<br>Size:L</td>
-            <td>x1</td>
-            <td>RM 30.00</td>
-            <td style="width: 150px;"><b>PREPARING TO SHIP</b></td>
-        </tr>
-        <tr >
-            <td style="width: 54px; padding-right: 10px;"><img src="gummy.png"></td>
-            <td style="width: 150px;">Gummy Bear Beeswax Wraps<br>Size:M</td>
-            <td>x1</td>
-            <td>RM 20.00</td>
-            <td style="width: 150px;">Total Payment<br>RM50</td>
-        </tr>
-        <tr>
-            <td colspan="5" style="text-align: center;">
-                <!-- link to specific product details -->
-                <a href="status.html">
-                    <b>view</b>
-                </a>
-            </td>
-        </tr>
-    </table>
-    <br>
-    <table id="list" border="0">
-        <tr>
-            <td colspan="2">
-                <b>ORDER ID:</b> 1019
-            </td>
-        </tr>
-        <tr >
-            <td style="width: 54px; padding-right: 10px;"><img src="earth.png"></td>
-            <td style="width: 150px;">Dried Caesalpinia Flower Beeswax Wraps<br>Size:S</td>
-            <td>X2</td>
-            <td>RM 30.00</td>
-            <td style="width: 150px;"><b>COMPLETED</b></td>
-        </tr>
-        <tr >
-            <td style="width: 54px; padding-right: 10px;"><img src="gummy.png"></td>
-            <td style="width: 150px;">Gummy Bear Beeswax Wraps<br>Size:L</td>
-            <td>x1</td>
-            <td>RM 30.00</td>
-            <td style="width: 150px;">Total Payment<br>RM60</td>
-        </tr>
-        <tr>
-            <td colspan="5" style="text-align: center;">
-                <!-- link to specific product details -->
-                <a href="status.html">
-                    <b>view</b>
-                </a>
-            </td>
-        </tr>
-    </table>
+    <br> 
 </body>
 </html>
+<?php
+        $result = getOrders();
+        while ($row = mysqli_fetch_assoc($result)) {
+        displayOrders($row['Order_ID'], $row['Order_Date'], $row['Order_Time'], $row['Status_ID'], $row['User_ID'], $row['Payment_Receipt']);
+        }
+    ?>
+</body>
+</html>
+<?php
+    function getOrders(){
+        include '../../config/dbconn.php';
+      
+        $sql = "SELECT *
+        FROM orders";
+        $result = mysqli_query($dbconn, $sql);
+        return $result;
+    }
+    function displayOrders($orderId, $orderStatus, $orderPrice, $orderTotalPrice, $orderDetailsHtml) {
+        echo '
+        <br>
+        <tr>
+            <td colspan="2">
+                <table id="list" border="1">
+                    <tr>
+                        <td style="width: 150px; padding-left: 10px;">Order ID:</td>
+                        <td>' . htmlspecialchars($orderId) . '</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">' . $orderDetailsHtml . '</td>
+                        <td rowspan="2">
+                            <b>' . htmlspecialchars($orderStatus) . '</b><br>
+                            Total Payment<br>
+                            RM' . htmlspecialchars($orderTotalPrice) . '
+                        </td>
+                        <td rowspan=2 style="width:120px; padding-left: 25px;">
+                            <a id=button href="admin order details.php' . htmlspecialchars($orderId) . '">
+                                <b>VIEW</b>
+                            </a>                                        
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>';
+        
+    }
+    if(isset($_POST['submitProduct'])) {
+        displayProductSearchBar();
+
+        $search = mysqli_real_escape_string($dbconn, $_POST['query']);
+        $result = getProduct($search);
+        $queryResult = mysqli_num_rows($result);
+
+        if($queryResult > 0) {
+            while($row = mysqli_fetch_assoc($result)) {
+                displayProduct($row['Product_Name'], $row['Product_Image'], $row['Product_Status_ID'], $row['Product_ID']);
+            }
+        }
+        else {
+        echo "<br>";
+        echo "<center>There is no result matching your search!</center>";
+        }
+    } //--- ORDER ---
+    else if (isset($_POST['submitOrder'])) {
+        displayOrderSearchBar();
+    
+        $search = mysqli_real_escape_string($dbconn, $_POST['query']);
+        $result = getOrders($search);
+        
+        if ($result) { // Check if the query was successful
+            $queryResult = mysqli_num_rows($result);
+    
+            if ($queryResult > 0) {
+                while ($row = mysqli_fetch_assoc($result)) {
+                    $orderDetails = generateOrderDetailsHtml($row['Order_ID']);
+                    $orderDetailsHtml = $orderDetails['html'];
+                    $shipPrice = 5;
+                    $orderTotalPrice = $orderDetails['total_price'] + $shipPrice;
+    
+                    displayOrders($row['Order_ID'], $row['Status_Name'], $row['Size_Price'], $orderTotalPrice, $orderDetailsHtml);
+                }
+            } else {
+                echo "<br>";
+                echo "<center>There is no result matching your search!</center>";
+            }
+        } else {
+            echo "Error: " . mysqli_error($dbconn); // Output the error message if the query fails
+        }
+    } 
+
+?>

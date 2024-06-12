@@ -8,39 +8,27 @@ if(isset($_POST['submit'])){
     $email = mysqli_real_escape_string($dbconn, $_POST['email']);
     $password = mysqli_real_escape_string($dbconn, $_POST['pass']);
 
-    $sql= "SELECT * FROM users User_Email = '$email' AND User_Password = '$password'";
+    $sql= "SELECT * FROM users WHERE Type_ID='UT02' AND User_Email = '$email' AND User_Password = '$password'";
     $query = mysqli_query($dbconn, $sql) or die("Error: " . mysqli_error($dbconn));
     $row = mysqli_num_rows($query);
 
     if($row == 0){  
         echo "<script>
             alert('Incorrect email or password.');
-            window.location.href = '../../pages/customer/login.php';
+            window.location.href = 'login.php';
           </script>";
     }else{
-		$r = mysqli_fetch_assoc($query);
-		if($row['User_Type']=='UT02'){
-			$_SESSION['username'] = "Administrator";
-			$_SESSION['User_ID'] = $r['User_ID'];
-		
-			echo "<pre>";
-			var_dump($_SESSION);
-			echo "</pre>";
+        $r = mysqli_fetch_assoc($query);
+        
+        $_SESSION['username'] = "Administrator";
+		$_SESSION['User_ID'] = $r['User_ID'];
+    
+        echo "<pre>";
+		var_dump($_SESSION);
+		echo "</pre>";
 
-			header("Location: admin dashboard.php");
-			exit();
-		}
-		else{       
-			$_SESSION['username'] = "Customer";
-			$_SESSION['User_ID'] = $r['User_ID'];
-		
-			echo "<pre>";
-			var_dump($_SESSION);
-			echo "</pre>";
-
-			header("Location: blank");
+        header("Location: admin dashboard.php");
         exit();
-		}
     }
 }
 mysqli_close($dbconn);
