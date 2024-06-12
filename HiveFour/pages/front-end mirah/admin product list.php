@@ -143,7 +143,7 @@
                     <table id="bar" border="0">
                         <tr>
                             <td style="text-align: center;">
-                                    <input type="text" name="query" placeholder="Insert product name" class="searchbar">
+                                    <input type="text" name="query" placeholder="Insert product name or ID" class="searchbar">
                             </td>
                             <td style="text-align: right;">
                                 <button type="submit" name="submitProduct" class="sIcon" style="width: 22px; height: 22px; background: none; border: none; padding: 0; cursor: pointer;">

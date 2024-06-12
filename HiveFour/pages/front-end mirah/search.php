@@ -18,6 +18,14 @@
             margin: 0;
 			padding: 0;    
         }
+        #one{
+            width: 800px;
+            font: 24px;
+            }
+        #five{
+            margin-left: auto;
+            margin-right: auto;
+        }
         #bar{
             width: 100%;
             background-color: #C7D8CF;
@@ -54,6 +62,13 @@
         .sIcon:hover {
             opacity: 0.8;
         }
+        #three{
+                width: 100%;
+                padding: 10px;
+                background-color:#8AB49C;
+                border-radius: 40px;
+                color: #E6DAD1;
+            }
         #list{
             margin-left: auto;
             margin-right: auto;
@@ -65,6 +80,15 @@
             color: #E6DAD1;
             font-size: 20px;
             text-align: left; 
+        }
+        #button{
+            text-align: center;
+            background-color: #8AB49C;
+            border: 1px solid #8AB49C;
+            color: #E6DAD1;
+            font-size: 24px;
+            text-decoration: none;
+            cursor: pointer;
         }
         #header{
             width:100%;
@@ -95,6 +119,14 @@
             object-fit: cover; /* Ensures the image covers the entire container */
         }
     </style>
+    <script>
+        function confirmDeletion(orderId) {
+            var userConfirmation = confirm("Are you sure you want to delete this order?");
+            if (userConfirmation) {
+                window.location.href = 'delete order process.php?orderId=' + orderId;
+            }
+        }
+        </script>
 </head>
 <body>
 	<table id="header" border="0">
@@ -267,17 +299,6 @@ function displayCustomer($userId, $userName, $profilePic){
 }
 
 //--- PRODUCT ---
-//get product from database
-function getProductStock($productId){
-    include '../../config/dbconn.php';
-
-	$sql = "SELECT SUM(Size_Stock)
-	FROM product_size
-    WHERE Product_ID='$productId'";
-	$result = mysqli_query($dbconn, $sql);
-	return $result;
-}
-
 ///get product based on name/id from database
 function getProduct($search){
     include '../../config/dbconn.php';
@@ -300,7 +321,7 @@ function displayProductSearchBar(){
                     <table id="bar" border="0">
                         <tr>
                             <td style="text-align: center;">
-                                    <input type="text" name="query" placeholder="Insert product name" class="searchbar">
+                                    <input type="text" name="query" placeholder="Insert product name or ID" class="searchbar">
                             </td>
                             <td style="text-align: right;">
                                 <button type="submit" name="submitProduct" class="sIcon" style="width: 22px; height: 22px; background: none; border: none; padding: 0; cursor: pointer;">
@@ -367,7 +388,6 @@ function getOrderDetails($orderId){
     JOIN size ON size.Size_ID = order_details.Size_ID
     WHERE order_details.Order_ID='$orderId'";
     $result = mysqli_query($dbconn, $sql);
-    echo $sql;
     return $result;
 }
 //get order/product based on name/id from database
@@ -377,11 +397,14 @@ function getOrders($search){
     $query = "SELECT * 
     FROM orders
     JOIN status on status.Status_ID = orders.Status_ID
+    JOIN users on users.User_ID = orders.User_ID
     JOIN order_details on order_details.Order_ID = orders.Order_ID
     JOIN product on product.Product_ID = order_details.Product_ID
-    WHERE orders.Order_ID LIKE '%$search%' OR product.Product_Name LIKE '%$search%'";
+    JOIN size on size.Size_ID = order_details.Size_ID
+    WHERE orders.Payment_Receipt <> ''
+    AND (orders.Order_ID LIKE '%$search%' OR product.Product_Name LIKE '%$search%' 
+    OR users.User_Full_Name LIKE '%$search%')";
     $result = mysqli_query($dbconn, $query);
-    echo $query;
     return $result;
 }
 
@@ -396,7 +419,7 @@ function displayOrderSearchBar(){
                     <form action="search.php" method="POST">
                         <tr>
                             <td style="text-align: center;">
-                                <input type="text" name="query" placeholder="Insert product name" class="searchbar">
+                                <input type="text" name="query" placeholder="Insert order ID or customer and product name" class="searchbar">
                             </td>
                             <td style="text-align: right;">
                                 <button type="submit" name="submitOrder" class="sIcon" style="width: 22px; height: 22px; background: none; border: none; padding: 0; cursor: pointer;">
@@ -449,9 +472,10 @@ function generateOrderDetailsHtml($orderId) {
 // display order
 function displayOrders($orderId, $orderStatus, $orderPrice, $orderTotalPrice, $orderDetailsHtml) {
             echo '
+            <br>
             <tr>
                 <td colspan="2">
-                    <table class="order-container" border="0">
+                    <table id="list" border="0">
                         <tr>
                             <td style="width: 150px; padding-left: 10px;">Order ID:</td>
                             <td>' . htmlspecialchars($orderId) . '</td>
@@ -474,7 +498,7 @@ function displayOrders($orderId, $orderStatus, $orderPrice, $orderTotalPrice, $o
                                             </a>                                        
                                         </td>
                                         <td style="padding-bottom: 4px;">
-                                        <button onclick="confirmDeletion('. htmlspecialchars($orderId) .')" id="button">
+                                        <button onclick="confirmDeletion(\'' . htmlspecialchars($orderId) . '\')" id="button">
                                             <b>DELETE</b>
                                         </button>
                                         </td>

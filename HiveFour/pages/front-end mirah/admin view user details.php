@@ -130,7 +130,7 @@
 								<td>'.$row['Address2'].'</td>
 							</tr>
 							<tr>
-								<td rowspan="5" style="text-align:center; vertical-align: top;">123456</td>
+								<td rowspan="5" style="text-align:center; vertical-align: top;">'.$row['User_ID'].'</td>
 								<td style="padding:20px;">Postcode</td>
 								<td>'.$row['Postcode'].'</td>
 							</tr>

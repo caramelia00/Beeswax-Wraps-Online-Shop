@@ -175,7 +175,7 @@
 						<?php
 							
 						require '../../config/dbconn.php';
-						$sql = "SELECT COUNT(Order_ID) FROM orders";
+						$sql = "SELECT COUNT(Order_ID) FROM orders WHERE orders.Payment_Receipt <> ''";
 						$result = mysqli_query($dbconn,$sql);
 						$row = mysqli_fetch_array($result);
 						echo $row[0];
@@ -336,6 +336,7 @@ function getOrdersDashboard() {
 	JOIN users on users.User_Id = orders.User_ID
 	JOIN product ON product.Product_ID = order_details.Product_ID
 	JOIN status ON status.Status_ID = orders.Status_ID
+	WHERE orders.Payment_Receipt <> ''
 	ORDER BY orders.Order_Date DESC";
 
 	$result = mysqli_query($dbconn, $sql);

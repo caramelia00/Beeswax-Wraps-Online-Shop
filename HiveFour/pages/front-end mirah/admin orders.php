@@ -133,6 +133,7 @@
 				color: #E6DAD1;
                 font-size: 24px;
 				text-decoration: none;
+                cursor: pointer;
             }
             button{
 				text-align: center;
@@ -157,14 +158,14 @@
         function confirmDeletion(orderId) {
             var userConfirmation = confirm("Are you sure you want to delete this order?");
             if (userConfirmation) {
-                window.location.href = 'delete_order.php?orderId=' + orderId;
+                window.location.href = 'delete order process.php?orderId=' + orderId;
             }
         }
         </script>
 
 	</head>
     <body>
-	<table id=header  border="0">
+	<table id=header border="0">
 		<tr>
 			<th style="padding-left: 20px;">
 				<a href="admin users list.php">
@@ -203,7 +204,7 @@
                     <form action="search.php" method="POST">
                         <tr>
                             <td style="text-align: center;">
-                                <input type="text" name="query" placeholder="Insert product name" class="searchbar">
+                                <input type="text" name="query" placeholder="Insert order ID or customer and product name" class="searchbar">
                             </td>
                             <td style="text-align: right;">
                                 <button type="submit" name="submitOrder" class="sIcon" style="width: 22px; height: 22px; background: none; border: none; padding: 0; cursor: pointer;">
@@ -250,6 +251,7 @@ function getOrders(){
     $query = "SELECT * 
     FROM orders
     JOIN status on status.Status_ID = orders.Status_ID
+    WHERE orders.Payment_Receipt <> ''
     ORDER BY orders.Order_Date DESC";
     $result = mysqli_query($dbconn, $query);
     return $result;
@@ -319,7 +321,7 @@ function displayOrders() {
                                             </a>                                        
                                         </td>
                                         <td style="padding-bottom: 4px;">
-                                        <button onclick="confirmDeletion('. htmlspecialchars($rOrd['Order_ID']) .')" id="button">
+                                        <button onclick="confirmDeletion(\'' . htmlspecialchars($rOrd['Order_ID']) . '\')" id="button">
                                             <b>DELETE</b>
                                         </button>
                                         </td>

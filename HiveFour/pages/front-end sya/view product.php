@@ -6,6 +6,9 @@
 	<head>
 		<style>
 			body{
+        		margin:0;
+      		}
+			body{
 				background-color:#E6DAD1;
 				font-size:24px;
 			}
