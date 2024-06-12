@@ -142,23 +142,23 @@
 	<table id=header  border="0">
 		<tr>
 		<th style="padding-left: 20px;">
-                    <a href="HOME.php">
+                    <a href="HOME.html">
                         HOME
                     </a>
                 </th>
                 <th>
-                    <a href="search product.php">
+                    <a href="search product.html">
                         PRODUCTS
                     </a>
                 </th>
                 <th>
-                    <a href="About Us.php">
+                    <a href="About Us.html">
                     ABOUT US
                     </a>
                 </th>
                 <td colspan=2><img src="design 1.png"  style="width:80px; height:80px; padding-right: 30px;"></td>
                 <td>
-                    <a href="order.php">
+                    <a href="order.html">
                         <img src="order.png" style="width: 50px;height: 50px;" class="user">
                     </a>
                 </td>
@@ -168,7 +168,7 @@
                     </a>
                 </td>
                 <td>
-                    <a href="view account details.php">
+                    <a href="VIEW ACCOUNT DETAILS.php">
                         <img src="user.png" style="width:71px; height:40px;" class="user">
                     </a>
                 </td>
@@ -215,14 +215,9 @@
 						</td>
 					</tr>
 					<tr>
-						<td style="font-size: 15px;">
-							Stock Available: 123
-						</td>
-					</tr>
-					<tr>
 						<td>
 							<a href="cart.php">
-							<input type="submit" value="ADD TO CART"></a> <a href="checkout.php"><input type="submit" value="BUY NOW"></a>
+							<input type="submit" value="ADD TO CART"></a> <a href="checkout.php"></a>
 						</td>
 					</tr>
 				</table>

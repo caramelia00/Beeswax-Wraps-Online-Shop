@@ -110,6 +110,7 @@
         border-radius: 20px;
         background-color:#8AB49C;
         color: #9D5A4D;
+        text-align: center;
       }
       label {
         display: block;
@@ -131,6 +132,7 @@
         border-radius: 10px;
         box-sizing: border-box;
         margin-bottom: 10px;
+        text-align: center;
       }
 
       input[type="submit"] {
@@ -142,6 +144,7 @@
         border-radius: 30px;
         cursor: pointer;
         font-weight: bold;
+        text-align: center;
       }
 
       input[type="submit"]:hover {
@@ -152,17 +155,17 @@
 	<table id=header  border="0">
 		<tr>
 			<th style="padding-left: 20px;">
-				<a href="HOME.php">
+				<a href="HOME.html">
 					HOME
 				</a>
 			</th>
 			<th>
-				<a href="search product.php">
+				<a href="search product.html">
 					PRODUCTS
 				</a>
 			</th>
 			<th>
-				<a href="About Us.php">
+				<a href="About Us.html">
 				ABOUT US
 				</a>
 			</th>
@@ -225,14 +228,23 @@
             </td>
           </tr>
           <tr>
-            <td colspan="2">
-              <div style="width: 300px; margin:0 auto;">
+            </td>
+            <td>
+          </tr>
+        <td colspan="2">
+              <form action="register.php" method="post" enctype="multipart/form-data">
+              Select image to upload:
+        <input type="file" name="image" id="image">
+        <div style="width: 300px; margin:0 auto;">
+                  <input type="submit" name="Submit" value="UPLOAD IMAGE">
+        </div>
+        </td>
+    </form>
+    <td colspan="0.5">
+              <div style="width: 300px; margin:0px;">
                   <input type="submit" name="Submit" value="REGISTER">
               </div>
             </td>
-            <td>
-            </td>
-          </tr>
           </table>
           Already have an account? <a href="login.php">Login</a>
 		  </td>
