@@ -2,36 +2,33 @@
 <html>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8">
-	<title>Hive4 Status Order</title>
+	<title>Hive4 Checkout</title>
 	<head>
 		<style>
             body{
                 margin:0;
             }
             #one{
-                width: 80%;
+                width: 70%;
                 background-color: #E6DAD1;
                 border-radius: 40px;
-                border-spacing: 5px;
                 padding: 5px;
                 color: #8AB49C;
-                margin-left: auto;
-                margin-right: auto;
+                margin: 0 auto;
             }
-            #status{
-                width: 100%;
-                border: 1px solid #8AB49C;
-                border-radius: 30px;
-                padding: 10px;
-                padding-left: 40px;
-            }
-            #summary, #delivery{
-                width: 100%;
+            #summary{
+                width: 90%;
                 height: 310px;
                 border: 1px solid #8AB49C;
                 border-radius: 30px;
                 padding: 10px;
-                padding-left: 40px;
+            } 
+            #pay{
+                width: 90%;
+                height: 250px;
+                border: 1px solid #8AB49C;
+                border-radius: 30px;
+                padding: 10px;
             }
             .mySelect{
                 background-color: #C7D8CF;
@@ -77,17 +74,14 @@
 			}
             button{
 				text-align: center;
-                background-color: white;
-                border: 1px solid #E6DAD1;
-				color: #8AB49C;
-                font-size: 12px;
-                font-weight: bold;
+                background-color: #8AB49C;
+                border: 1px solid #8AB49C;
+				color: #E6DAD1;
+                font-size: 24px;
 				text-decoration: none;
-                border-radius: 40px;
-                padding: 10px;
 			}
 			button:hover{
-				background-color: #E6DAD1;
+				color: #5e7b6a;
 			}
 			.user:hover {
 				opacity: 0.8;
@@ -96,6 +90,20 @@
 			.user:hover + p {
 				display: block;
 			}
+            input[type="submit"] {
+                width: 100%;
+                padding: 10px;
+                background-color: white;
+                color: #9D5A4D;
+                border: none;
+                border-radius: 30px;
+                cursor: pointer;
+                font-weight: bold;
+            }
+
+            input[type="submit"]:hover {
+                background-color: #E6DAD1;
+            }
 		</style>
 	</head>
 	<body>
@@ -107,7 +115,7 @@
                     </a>
                 </th>
                 <th>
-                    <a href="search product.php">
+                    <a href="search product.html">
                         PRODUCTS
                     </a>
                 </th>
@@ -118,17 +126,17 @@
                 </th>
                 <td colspan=2><img src="design 1.png"  style="width:80px; height:80px; padding-right: 30px;"></td>
                 <td>
-                    <a href="order.php">
+                    <a href="order.html">
                         <img src="order.png" style="width: 50px;height: 50px;" class="user">
                     </a>
                 </td>
                 <td>
-                    <a href="cart.php">
+                    <a href="cart.html">
                         <img src="cart.png" style="width: 50px;height: 50px;" class="user">
                     </a>
                 </td>
                 <td>
-                    <a href="VIEW ACCOUNT DETAILS.php">
+                    <a href="VIEW ACCOUNT DETAILS.html">
                         <img src="user.png" style="width:71px; height:40px;" class="user">
                     </a>
                 </td>
@@ -137,29 +145,27 @@
 		<br><br>
         <table id="one">
             <tr>
-                <td colspan="2">
-                    <table id="status" border="0">
+                <td colspan="4" style="width: 100%;">
+                    <table border="0" style="width: 100%;">
                         <tr>
-                            <td colspan="4" style="font-size: 30px; text-align: left;">STATUS</td>
-                        </tr>
-                        <tr>
-                            <td><b>Order placed</b></td>
-                            <td><b>Preparing to ship</b></td>
-                            <td><b>Out for delivery</b></td>
-                            <td><b>Completed</b></td>
-                        </tr>
-                        <tr>
-                            <td><img src="done.png" width="40px" height="40px"></td>
-                            <td><img src="done.png" width="40px" height="40px"></td>
-                            <td><img src="done.png" width="40px" height="40px"></td>
-                            <td><img src="default.png" width="40px" height="40px"></td>
+                            <td style="text-align: right; margin: 0 auto;">
+                                <img src="preparing.png" width="60px" height="60px">
+                            </td>
+                            <td style="text-align: center; margin: 0 auto;">
+                                <img src="shipped.png" width="140px" height="100px">
+                            </td>
+                            <td style="text-align: left; margin: 0 auto;">
+                                <img src="done payment.png" width="80px" height="45px">
+                            </td>
                         </tr>
                     </table>
                 </td>
             </tr>
             <tr>
+                <td style="padding-right: 20px; padding-left: 10px;">
+                </td>
                 <td>
-                    <table id="summary" border="0">
+                    <table id="summary" border="0" style="padding-left: 40px;">
                         <tr>
                             <td colspan="3" style="font-size: 30px;">
                                 ORDER SUMMARY
@@ -215,42 +221,48 @@
                                 RM65.00
                             </td>
                         </tr>
-                    </table>
-                </td>
-                <td>
-                    <table id="delivery" border="0">
                         <tr>
-                            <td colspan="2" style="font-size: 30px;">
-                                DELIVERY DETAILS
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="Name">
-                               NAME
-                                <br>
-                                Daniel Choi <br>
-                        </tr>
-                        <tr>
-                            <td colspan="2">
+                            <td>
                                 ADDRESS
-                                <br>
+                            </td>
+                            <td colspan="2">
                                 Menara TM,<br>
                                 Jalan Pantai Baharu, <br>
                                 50672 Kuala Lumpur <br>
                                 Malaysia
                             </td>
+                        </tr>
                     </table>
                 </td>
-            </tr>
-            <tr>
-            <div class="container">
-                <h1>Order Details</h1>
-                <p>Order ID: 12345</p>
-                <form method="post" action="">
-                <input type="hidden" name="Status_ID" value="12345">
-                <button type="submit" name="order_received">Order Received</button>
-            </form>
-            </div>
+                <td>
+                    <table id="pay" border="0">
+                        <tr>
+                            <td colspan="2" style="font-size: 30px; text-align: center;">
+                                SCAN QR TO PAY
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: center;">
+                                <img src="qr.png" style="width: 200px; height: 200px;"><br>12345678912345
+                            </td>
+                        </tr>
+                    </table>
+                    <table>
+                        <tr>
+                            <td>
+                                <input type="submit" value="UPLOAD RECEIPT">
+                            </td>
+                            <td>
+                                <input type="submit" value="SUBMIT ORDER">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <input type="submit" value="PRINT INVOICE">
+                            </td>
+                        </tr>
+                    </table>
+                </td>
             </tr>
         </table>
         <script>
@@ -283,6 +295,7 @@
                     }
                 });
             });
+            //change date
         </script>
 	</body>
 </html>

@@ -1,3 +1,34 @@
+<?php
+	session_start();
+
+	include '../../config/dbconn.php';
+	
+	if (!isset($_SESSION['User_ID'])) {
+		die("User is not logged in.");
+	}
+
+	$userId = $_SESSION['User_ID'];
+
+	$sql = "SELECT * FROM users WHERE User_ID = ?";
+	$stmt = $dbconn->prepare($sql);
+	$stmt->bind_param("i", $userId);
+	$stmt->execute();
+	$result = $stmt->get_result();
+
+	if ($result->num_rows === 0) {
+		echo "No record found";
+	} else {
+		$r = $result->fetch_assoc();
+		$uId = $r['User_ID'];
+		$uName = $r['User_Name'];
+		$uFullName = $r['User_Full_Name'];
+		$uEmail = $r['User_Email'];
+		$profPic = $r['Profile_Pic'];
+		$pw = $r['User_Password'];
+	}
+$stmt->close();
+$dbconn->close();
+?>
 <!DOCTYPE html>
 <html>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -61,7 +92,16 @@
 			.user:hover + p {
 				display: block;
 			}
-		</style>
+
+			.container {
+			width: 400px;
+			margin: 0 auto;
+			border-radius: 20px;
+			background-color:#8AB49C;
+			color: #9D5A4D;
+			text-align: center;
+		}
+			</style>
 	</head>
 	<table id=header  border="0">
 		<tr>
@@ -76,7 +116,7 @@
 				</a>
 			</th>
 			<th>
-				<a href="About Us.php">
+				<a href="About Us.html">
 				ABOUT US
 				</a>
 			</th>
@@ -92,7 +132,7 @@
 				</a>
 			</td>
 			<td>
-				<a href="view account details.php">
+				<a href="VIEW ACCOUNT DETAILS.php">
 					<img src="user.png" style="width:71px; height:40px;" class="user">
 				</a>
 			</td>
@@ -143,15 +183,16 @@
 			  console.log('Network error:', error);
 			});
 		  }
+
 		</script>
 	<br><br>
-	<form id="editForm" action="VIEW ACCOUNT DETAILS.php" method="post">
+	<form id="editForm" action="VIEW ACCOUNT DETAILS.html" method="post">
 		<table id=acc border="0">
 			<tr>
 				<th colspan=3 style="font-size:40px">EDIT ACCOUNT DETAILS</th>
 			</tr>
 			<tr>
-				<td rowspan=2 style="text-align:center"><img src="yawnzzn big.png" style="width:150px;height:150px;"></td>
+				<td rowspan=3 style="text-align:center"><img src="yawnzzn big.png" style="width:150px;height:150px;"></td>
 				<td style="padding:10px;">Full Name</td>
 				<td><input type="text" id="fullname" name="fullname"></td>
 			</tr>
@@ -160,9 +201,6 @@
 				<td><input type="text" id="email" name="email"></td>
 			</tr>
 			<tr>
-				<p style="text-align:center;">
-                    Upload photo
-                </p>
                 <td style="padding:10px;">Password</td>
 				<td><input type="text" id="pw" name="pw"></td>
 			</tr>
@@ -197,6 +235,16 @@
 				<td style="padding:10px;">Phone Number</td>
 				<td><input type="text" id="pn" name="pn"></td>
 			</tr>
+
+			<td colspan="2">
+            <form action="register.php" method="post" enctype="multipart/form-data">
+            Select image to upload:
+		<input type="file" name="image" id="image">
+		<div style="width: 300px; margin:0 auto;">
+					<input type="submit" name="Submit" value="UPLOAD IMAGE">
+		</div>
+		</td>
 		</table>
-	</form>
+		</form>
 </html>
+?>

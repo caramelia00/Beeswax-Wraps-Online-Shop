@@ -39,7 +39,7 @@ if(isset($_POST['submit'])){
 			var_dump($_SESSION);
 			echo "</pre>";
 
-			header("Location: search product.php");
+			header("Location: VIEW ACCOUNT DETAILS.php");
 		exit();
 		}
 	}
@@ -144,7 +144,7 @@ mysqli_close($dbconn);
 	<table id=header  border="0">
 		<tr>
 			<th style="padding-left: 20px;">
-				<a href="HOME.php">
+				<a href="HOME.html">
 					HOME
 				</a>
 			</th>
@@ -154,7 +154,7 @@ mysqli_close($dbconn);
 				</a>
 			</th>
 			<th>
-				<a href="About Us.php">
+				<a href="About Us.html">
 				ABOUT US
 				</a>
 			</th>
