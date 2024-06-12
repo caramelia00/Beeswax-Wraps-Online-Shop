@@ -8,7 +8,7 @@ if (!isset($_SESSION['User_ID'])) {
 }
 
 // Include database connection file if needed (uncomment the line below if you need database access)
-include "../../../config/dbconn.php";
+include "../../config/dbconn.php";
 
 $user_id = $_SESSION['User_ID'];
 
