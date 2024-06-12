@@ -145,15 +145,7 @@
                 </td>
         </tr>
     </table>
-    <?php
-        $result = getProduct();
-        while ($row = mysqli_fetch_assoc($result)) {
-        displayProduct($row['Product_Name'], $row['Product_Image'], $row['Product_Status_ID'], $row['Product_ID']);
-        }
-    ?>
-</body>
-</html>
-<?php
+
     }
     include '../../config/dbconn.php';
 

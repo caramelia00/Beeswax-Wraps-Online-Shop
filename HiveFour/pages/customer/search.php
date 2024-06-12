@@ -212,6 +212,12 @@ function displayProduct($productName, $productPic, $prodStatus, $productId){
             <td style="width: 54px; padding-right: 10px;"><img src="'.$productPic.'" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; overflow: hidden;"></td>
             <td style="width: 150px;">product name</td>
             <td>'.$productName.'</td>
+            <td rowspan=2 style="width: 120px; padding-left:25px;">
+                <!-- link to specific product details -->
+                <a href="view product.php?productId='.$productId.'">
+                    <b>view</b>
+                </a> 
+            </td>
         </tr>
         </table>
         </form>
