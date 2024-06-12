@@ -54,7 +54,7 @@ if (isset($_POST['delete'])) {
     // Display a success message
     echo "<script>
         alert('Account has been deleted successfully.');
-        window.location.href = 'admin login.php';
+        window.location.href = 'login.php';
     </script>";
     exit();
 }

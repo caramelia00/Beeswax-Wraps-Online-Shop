@@ -15,7 +15,7 @@ if(isset($_POST['submit'])){
     if($row == 0){  
         echo "<script>
             alert('Incorrect email or password.');
-            window.location.href = 'admin login.php';
+            window.location.href = 'login.php';
           </script>";
     }else{
         $r = mysqli_fetch_assoc($query);

@@ -144,6 +144,6 @@
 <?php
 }else
 {	## if the session username is no admin, redirect the page to the login page 
-header("Location: admin login.php");
+header("Location: login.php");
 }
 ?>
