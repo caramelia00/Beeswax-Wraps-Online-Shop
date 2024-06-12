@@ -230,7 +230,7 @@
 <?php
 }else
 {	## if the session username is no admin, redirect the page to the login page 
-header("Location: login.php");
+header("Location: ../../pages/customer/login.php");
 }
 
 //--- CUSTOMER ---
@@ -430,11 +430,6 @@ function displayOrderSearchBar(){
                     </form>
                 </table>
             </td>
-            <td style="width: 183px;">
-                <a href="admin order invoice.php">
-                    <img src="invoice.png">
-                </a>
-            </td>
         </tr>
     </table>
     ';
@@ -479,6 +474,11 @@ function displayOrders($orderId, $orderStatus, $orderPrice, $orderTotalPrice, $o
                         <tr>
                             <td style="width: 150px; padding-left: 10px;">Order ID:</td>
                             <td>' . htmlspecialchars($orderId) . '</td>
+                            <td style="text-align: center;">
+                                <a href="invoice.php?orderId=' . htmlspecialchars($orderId) . '" target="_blank" style="display: inline-block; padding: 7px 12px; background-color: white; color: #8AB49C; border-radius: 10px; font-size: 12px; border: none; cursor: pointer;">
+                                    INVOICE
+                                </a>
+                            </td>
                         </tr>
                         <tr>
                             <td colspan="2">' . $orderDetailsHtml . '</td>
@@ -511,4 +511,3 @@ function displayOrders($orderId, $orderStatus, $orderPrice, $orderTotalPrice, $o
             </tr>';
         }
 ?>
-

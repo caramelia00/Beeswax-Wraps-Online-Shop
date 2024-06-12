@@ -152,31 +152,13 @@
         displayCustomer($row['User_ID'], $row['User_Name'], $row['Profile_Pic']);
         }
     ?>
-    <!---
-    <script>
-        document.getElementById('searchForm').addEventListener('submit', function(event) {
-        event.preventDefault(); // Prevent default form submission
-
-        const query = document.getElementById('searchInput').value;
-
-        // Make an AJAX request to fetch search results
-        fetch('search.php?q=' + query)
-            .then(response => response.json())
-            .then(data => {
-                // Display search results in the 'searchResults' div
-                document.getElementById('searchResults').innerHTML = data;
-            })
-            .catch(error => console.error('Error:', error));
-        });
-    </script>
-    --->
 </body>
 </html>
 
 <?php
 }else
 {	## if the session username is no admin, redirect the page to the login page 
-header("Location: login.php");
+header("Location: ../../pages/customer/login.php");
 }
 
 // get customers from database
@@ -216,4 +198,3 @@ function displayCustomer($userId, $userName, $profilePic){
     echo $user;
 }
 ?>
-

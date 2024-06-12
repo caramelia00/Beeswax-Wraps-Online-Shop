@@ -29,7 +29,7 @@ if(isset($_POST['update'])){
     /* display a message */
     echo "<script>
             alert('Data has been updated');
-            window.location.href = 'admin view account.php';
+            window.location.href = 'admin product list.php';
         </script>";
         
 }
