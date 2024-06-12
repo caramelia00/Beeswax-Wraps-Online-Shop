@@ -322,7 +322,7 @@
 } 
 Else
 {	## if the session username is no admin, redirect the page to the login page 
-header("Location: login.php");
+header("Location: ../../pages/customer/login.php");
 }
 
 //--- RECENT ORDERS ---
