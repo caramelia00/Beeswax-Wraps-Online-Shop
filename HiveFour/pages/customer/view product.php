@@ -221,8 +221,9 @@
 					</tr>
 					<tr>
 						<td>
-							<a href="cart.php">
-							<input type="submit" value="ADD TO CART"></a> <a href="checkout.php"><input type="submit" value="BUY NOW"></a>
+							<a href="cart.php"><input type="submit" value="ADD TO CART"></a> 
+							<a href="checkout.php"><input type="submit" value="BUY NOW"></a>
+							<a href="search product.php"><input type="submit" value="BACK"></a>
 						</td>
 					</tr>
 				</table>

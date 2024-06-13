@@ -136,7 +136,7 @@ $password_asterisks = str_repeat('*', $password_length);
 			<th colspan=3 style="font-size:40px">ACCOUNT DETAILS</th>
 		</tr>
 		<tr>
-			<td rowspan=6 style="text-align:center">
+			<td rowspan=7 style="text-align:center">
 				<img src="$Profile_Pic" style="width:150px;height:150px;">
 			<td style="padding:20px;">Full Name</td>
 			<td><?php echo htmlspecialchars($user_full_name); ?></td>
@@ -162,17 +162,14 @@ $password_asterisks = str_repeat('*', $password_length);
 			<td><?php echo htmlspecialchars($postcode); ?></td>
 		</tr>
 		<tr>
-			<td style="text-align:center; padding-top:10px;">
-				<a href="Edit Account Details.php">
-					<img src="edit details.png">
-				</a>
-			</td>
 			<td style="padding:20px;">City</td>
 			<td><?php echo htmlspecialchars($City); ?></td>
 		</tr>
 		<tr>
-			<td style="text-align:center">
-                
+			<td style="text-align:center; padding-top:10px;">
+				<a href="Edit Account Details.php">
+					<img src="edit details.png">
+				</a>
 			</td>
 			<td style="padding:20px;">State</td>
 			<td><?php echo htmlspecialchars($State); ?></td>
