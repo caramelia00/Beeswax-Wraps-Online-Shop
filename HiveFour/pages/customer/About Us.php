@@ -88,14 +88,23 @@
 	<table style="color: black; width: 100%; margin: 0 auto; text-align: center;">
 		<tr>
 			<td style="font-size: 100px; font-family: 'Times New Roman';">
-				BEESWAX<br>WRAPS<br>
+				About Us<br>
 			</td>
 		</tr>
 		<tr>
-			<td style="font-size: 40px; font-family:Verdana;">
-				Say goodbye to plastic and hello to
-				<br>sustainable freshness of our beeswax
-				<br>wrap, one wrap at a time.
+			<td style="font-size: 20px; font-family:Verdana; text-align: left;">
+			<p style="font-size: 30px; text-align: center;"><b>Introduction</b></p>
+			HiveFour is a website was created to create a user-friendly, informative and aesthetically pleasing digital storefront 
+			<br>that showcases our eco-friendly beewax wrap that promotes sustainable living by offering high-quality Bee wax wrap 
+			<br>as a reusable alternative compared to a single-use plastic wrap. Our website is not only focused as an e-commerce 
+			<br>platform but also as an educational resource, raising awareness about the environmental benefits of sustainable products.
+			<br> The team went big for the educational website that aims to attract and retain customers passionate about reducing their 
+			<br>environmental footprint. By promoting the use of our product, we also contribute to the global effort to decrease plastic 
+			<br>waste. HiveFour really took it seriously in action to take care of the environment and give the best product for everyone.
+			<p style="font-size: 30px; text-align: center;">
+				<b>The Developer</b>
+				<br><br>
+				<img src="organizational.png"></p>  
 			</td>
 		</tr>
 	</table>
