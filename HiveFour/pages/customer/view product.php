@@ -1,3 +1,55 @@
+<?php
+	include '../../config/dbconn.php';
+	if (isset($_GET['productId'])) {
+		$updateProductId = $_GET['productId'];
+		
+		function getProduct($updateProductId){
+			global $dbconn;
+			$sql = "SELECT *
+					FROM product
+					WHERE Product_ID = '$updateProductId'";
+			$result = mysqli_query($dbconn, $sql);
+			return $result;
+		}
+
+		function getSize(){
+			global $dbconn;
+			$sql = "SELECT *
+					FROM size";
+			$r = mysqli_query($dbconn, $sql);
+			return $r;
+		}
+		$product = getProduct($updateProductId);
+		$rowProduct = mysqli_num_rows($product);
+	
+		if ($rowProduct == 0) {
+			echo "No record found";
+		} else {
+			$rProduct = mysqli_fetch_assoc($product);
+	
+			$pId = $rProduct['Product_ID'];
+			$pName = $rProduct['Product_Name'];
+			$pImage = $rProduct['Product_Image'];
+			$pStatus = $rProduct['Product_Status_ID'];
+		}
+
+		$size = getSize();
+		$rowSize = mysqli_num_rows($size);
+
+		if($rowSize == 0){
+			echo "No record found";
+		}
+		else{
+			$rSize = mysqli_fetch_assoc($size);
+
+			$sId = $rSize['Size_ID'];
+			$sName = $rSize['Size_Name'];
+			$sDesc = $rSize['Size_Description'];
+			$sPrice = $rSize['Size_Price'];
+		}
+		
+	}
+?>
 <!DOCTYPE html>
 <html>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -181,10 +233,10 @@
 				<table id=b border="0">
 					<tr>
 						<td colspan=2>
-							<table id=ord border="1">
+							<table id=ord border="0">
 								<tr>
 									<td>
-										<img src="view.png">
+										<img src="<?php echo $pImage?>" style="width: 400px; height: 400px;">
 									</td>
 								</tr>
 							</table>
@@ -196,27 +248,22 @@
 			<td colspan=3>
 				<table id=c border="0">
 					<tr>
-						<td style="text-align:left; font-size:50px;">Dried Caesalpinia Flower Beeswax Wraps<br>RM 15.00 - RM 30.00</td>
+						<td style="text-align:left; font-size:50px;"><?php echo $pName?></td>
 					</tr>
 					<tr>
 						<td>
 							<b>SIZE</b>
-							<br><input type="checkbox" id="myCheckbox" name="myCheckbox">
-								<label for="myCheckbox">SMALL (7"X6")</label>
-							<br><input type="checkbox" id="myCheckbox" name="myCheckbox">
-								<label for="myCheckbox">MEDIUM (10"X11")</label>
-							<br><input type="checkbox" id="myCheckbox" name="myCheckbox">
-								<label for="myCheckbox">LARGE (13"X14")</label>
+							<?php
+								$size = getSize();
+								while ($r = mysqli_fetch_assoc($size)) {
+									displaySize($r['Size_ID'], $r['Size_Name'], $r['Size_Description'], $r['Size_Price']);
+								}
+							?>
 						</td>
 					</tr>
 					<tr>
 						<td><b>QUANTITY</b>
 							<br><input type="number" name="quantity" min="1" max="1000" value="1">
-						</td>
-					</tr>
-					<tr>
-						<td style="font-size: 15px;">
-							Stock Available: 123
 						</td>
 					</tr>
 					<tr>
@@ -230,4 +277,15 @@
 			</td>
 		</tr>
 	</table>
-</html>
+</html><?php
+	function displaySize($sId, $sName, $sDesc, $sPrice){
+		echo '
+			<br>
+			<input type="checkbox" id="size_' . htmlspecialchars($sId) . '" name="size[]" value="' . htmlspecialchars($sId) . '">
+			<label for="size_' . htmlspecialchars($sId) . '">
+				' . htmlspecialchars($sName) . ' - ' . htmlspecialchars($sDesc) . ' ($' . htmlspecialchars($sPrice) . ')
+			</label>
+			<br>';
+	}
+?>
+
