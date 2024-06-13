@@ -85,7 +85,7 @@
 		</tr>
 	</table>
 	<br>
-	<table style="color: black; width: 100%; margin: 0 auto; text-align: center;">
+	<table style="color: white; width: 100%; margin: 0 auto; text-align: center;">
 		<tr>
 			<td style="font-size: 100px; font-family: 'Times New Roman';">
 				About Us<br>
