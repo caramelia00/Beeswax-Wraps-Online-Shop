@@ -74,11 +74,14 @@
 			}
             button{
 				text-align: center;
-                background-color: #8AB49C;
-                border: 1px solid #8AB49C;
-				color: #E6DAD1;
-                font-size: 24px;
-				text-decoration: none;
+                width: 100%;
+                padding: 10px;
+                background-color: white;
+                color: #9D5A4D;
+                border: none;
+                border-radius: 30px;
+                cursor: pointer;
+                font-weight: bold;
 			}
 			button:hover{
 				color: #5e7b6a;
@@ -152,7 +155,7 @@
                                 <img src="preparing.png" width="60px" height="60px">
                             </td>
                             <td style="text-align: center; margin: 0 auto;">
-                                <img src="shipped.png" width="140px" height="100px">
+                                <img src="shipped.png" width="110px" height="50px">
                             </td>
                             <td style="text-align: left; margin: 0 auto;">
                                 <img src="done payment.png" width="80px" height="45px">
@@ -250,19 +253,17 @@
                     <table>
                         <tr>
                             <td>
-                                
-                                <form method="post" enctype="multipart/form-data" action="Upload Receipt.php"
+                                <form method="post" enctype="multipart/form-data" action="Upload Receipt.php">
                                 <button type="submit" name="UPLOAD RECEIPT">Upload Receipt</button>
                                 <input type="file" id="receipt" name="receipt" accept="image/*" required>
-                                <button type="submit" 
-                            </form>
-                        </td>
-                            <td>
-                                <input type="submit" value="SUBMIT ORDER">
+                                </form>
                             </td>
                         </tr>
                         <tr>
                             <td>
+                                <input type="submit" value="SUBMIT ORDER">
+                                <br>
+                                <br>
                                 <input type="submit" value="PRINT INVOICE">
                             </td>
                         </tr>
