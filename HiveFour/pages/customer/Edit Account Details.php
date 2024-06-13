@@ -160,7 +160,6 @@
 		</tr>
 	</table>
     <br><br>
-	<form name="EditForm" action="Edit Account.php" method="POST" onsubmit="return checkEmptyFields()">
 	<table id=acc border="0" style="width: 80%;">
 		<tr>
 			<th colspan=3 style="font-size:40px">ACCOUNT DETAILS</th>
@@ -196,9 +195,8 @@
 		</tr>
 		<tr>
 			<td rowspan =2 style="text-align:center; padding-top:10px;">
-				<a href="Edit Account Details.php">
-					<img src="save changes.png"  style="width: 180px; height: 50px;">
-				</a>
+			<button type="submit" style="background:none;border:none;">
+			<img src="save changes.png" style="width: 180px; height: 50px;">
 			</td>
 			<td style="padding:10px;">Postcode</td>
 			<td><input type="text"  name="postcode" value="<?php echo $postcode ?>"></td>

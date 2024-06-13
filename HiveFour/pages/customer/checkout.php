@@ -236,6 +236,8 @@
                             </td>
                         </tr>
                     </table>
+                    <br>
+                    <a href="cart.php" ><input type="submit" value="Back"></a>
                 </td>
                 <td>
                     <table id="pay" border="0">
@@ -254,8 +256,8 @@
                         <tr>
                             <td>
                                 <form method="post" enctype="multipart/form-data" action="Upload Receipt.php">
-                                <button type="submit" name="UPLOAD RECEIPT">Upload Receipt</button>
                                 <input type="file" id="receipt" name="receipt" accept="image/*" required>
+                                <button type="submit" name="UPLOAD RECEIPT">Upload Receipt</button>
                                 </form>
                             </td>
                         </tr>
