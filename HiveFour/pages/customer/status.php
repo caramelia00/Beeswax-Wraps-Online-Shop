@@ -1,3 +1,34 @@
+<?php
+ session_start();
+
+ include("dbconn.php");
+
+// Check if the form is submitted
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['order_received'])) {
+    $orderId = $_POST['Status_ID'];
+
+
+    // Check connection
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
+
+    // Update order status to "received"
+    $sql = "UPDATE order SET status = 'received' WHERE Status_ID = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param('i', $statusID);
+
+    if ($stmt->execute()) {
+        echo "<p>Order status updated successfully!</p>";
+    } else {
+        echo "<p>Error updating order status: " . $stmt->error . "</p>";
+    }
+
+    $stmt->close();
+    $conn->close();
+}
+?>
+
 <!DOCTYPE html>
 <html>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -225,6 +256,12 @@
                             </td>
                         </tr>
                         <tr>
+                            <td colspan="Name">
+                                NAME
+                                <br>
+                                Daniel Choi <br>
+                        </tr>
+                        <tr>
                             <td colspan="2">
                                 ADDRESS
                                 <br>
@@ -233,34 +270,18 @@
                                 50672 Kuala Lumpur <br>
                                 Malaysia
                             </td>
-                        </tr>
-                        <tr>
-                            <td colspan="2">
-                                ESTIMATED DELIVERY DATE
-                            </td>
-                        </tr>
-                        <tr> 
-                            <td style="font-size: 14px;">
-                                Apr 23 - Apr 30, 2023
-                            </td>                 
-                        </tr>
-                        <tr>
-                            <td colspan="2">
-                                ORDER ID
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="2">
-                                1024
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="2">
-                                <button>ORDER RECEIVED</button>
-                            </td>
-                        </tr>
                     </table>
                 </td>
+            </tr>
+            <tr>
+            <div class="container">
+                <h1>Order Details</h1>
+                <p>Order ID: 12345</p>
+                <form method="post" action="">
+                <input type="hidden" name="Status_ID" value="12345">
+                <button type="submit" name="order_received">Order Received</button>
+            </form>
+            </div>
             </tr>
         </table>
         <script>
@@ -293,10 +314,7 @@
                     }
                 });
             });
-            //change date
         </script>
 	</body>
 </html>
-	
-	
 	

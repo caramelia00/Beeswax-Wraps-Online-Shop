@@ -250,8 +250,13 @@
                     <table>
                         <tr>
                             <td>
-                                <input type="submit" value="UPLOAD RECEIPT">
-                            </td>
+                                
+                                <form method="post" enctype="multipart/form-data" action="Upload Receipt.php"
+                                <button type="submit" name="UPLOAD RECEIPT">Upload Receipt</button>
+                                <input type="file" id="receipt" name="receipt" accept="image/*" required>
+                                <button type="submit" 
+                            </form>
+                        </td>
                             <td>
                                 <input type="submit" value="SUBMIT ORDER">
                             </td>
@@ -265,6 +270,8 @@
                 </td>
             </tr>
         </table>
+
+
         <script>
             const selectElements = document.querySelectorAll('.mySelect');
             const imageElements = document.querySelectorAll('.myImage');

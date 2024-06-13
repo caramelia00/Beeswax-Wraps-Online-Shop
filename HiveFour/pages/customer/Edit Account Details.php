@@ -4,6 +4,43 @@
 		include '../../config/dbconn.php';
 		
 		$userId = $_SESSION['User_ID']; 
+
+		if ($_SERVER["REQUEST_METHOD"] == "POST") {
+			// Retrieve the form data
+			$uName = $_POST['username'];
+			$uFullName = $_POST['fullname'];
+			$uEmail = $_POST['email'];
+			$pw = $_POST['pw'];
+			$address1 = $_POST['address1'];
+			$address2 = $_POST['address2'];
+			$postcode = $_POST['postcode'];
+			$City = $_POST['city'];
+			$State = $_POST['state'];
+			$Phone_No = $_POST['phone_no'];
+
+			// Update the database
+			$sql = "UPDATE users
+			JOIN user_details ON user_details.User_ID = users.User_ID
+			SET 
+				users.User_Name = '$uName',
+				users.User_Full_Name = '$uFullName',
+				users.User_Email = '$uEmail',
+				users.User_Password = '$pw',
+				user_details.Address1 = '$address1',
+				user_details.Address2 = '$address2',
+				user_details.Postcode = '$postcode',
+				user_details.City = '$City',
+				user_details.State = '$State',
+				user_details.Phone_No = '$Phone_No',
+				users.Profile_Pic = '$profPic'
+			WHERE users.User_ID = '$userId'";
+	
+		if (mysqli_query($dbconn, $sql)) {
+			echo "Record updated successfully";
+		} else {
+			echo "Error updating record: " . mysqli_error($dbconn);
+		}
+	}
 	
 		$sql= "SELECT * 
 		FROM users 
@@ -123,12 +160,17 @@
 		</tr>
 	</table>
     <br><br>
-<table id=acc border="1" style="width: 80%;">
+	<form name="EditForm" action="Edit Account.php" method="POST" onsubmit="return checkEmptyFields()">
+	<table id=acc border="0" style="width: 80%;">
 		<tr>
 			<th colspan=3 style="font-size:40px">ACCOUNT DETAILS</th>
 		</tr>
 		<tr>
-			<td rowspan=3 style="text-align:center"><img src="<?php echo $profPic; ?>" style="width: 150px; height: 150px; border-radius: 50%; object-fit: cover; overflow: hidden;"></td>
+			<td rowspan=4 style="text-align:center"><img src="<?php echo $profPic; ?>" style="width: 150px; height: 150px; border-radius: 50%; object-fit: cover; overflow: hidden;"></td>
+			<td style="padding:10px;">Username</td>
+			<td><input type="text" id="username" name="username" value="<?php echo $uName; ?>"></td>
+		</tr>	
+		<tr>
 			<td style="padding:10px;">Full Name</td>
 			<td><input type="text" id="fullname" name="fullname" value="<?php echo $uFullName; ?>"></td>
 		</tr>
@@ -155,7 +197,7 @@
 		<tr>
 			<td rowspan =2 style="text-align:center; padding-top:10px;">
 				<a href="Edit Account Details.php">
-					<img src="edit details.png">
+					<img src="save changes.png"  style="width: 180px; height: 50px;">
 				</a>
 			</td>
 			<td style="padding:10px;">Postcode</td>
@@ -165,8 +207,8 @@
 		<td><input type="text" id="city" name="city" value="<?php echo $City ?>"></td>
 		<tr>
 			<td rowspan =2 style="text-align:center">
-				<a href="login.php">
-					<img src="log out.png">
+				<a href="view account details.php">
+					<img src="back.png">
 				</a>
 			</td>
 			<td style="padding:20px;">State</td>

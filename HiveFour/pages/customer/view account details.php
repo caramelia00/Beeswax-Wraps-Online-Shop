@@ -136,8 +136,10 @@ $password_asterisks = str_repeat('*', $password_length);
 			<th colspan=3 style="font-size:40px">ACCOUNT DETAILS</th>
 		</tr>
 		<tr>
-			<td rowspan=7 style="text-align:center">
-				<img src="$Profile_Pic" style="width:150px;height:150px;">
+			<td rowspan=5 style="text-align:center">
+				<img src="<?php echo $Profile_Pic; ?>" style="width: 150px; height: 150px; border-radius: 50%; object-fit: cover; overflow: hidden;">
+				<br><?php echo htmlspecialchars($user_name); ?>
+				<br><?php echo htmlspecialchars($user_id); ?>
 			<td style="padding:20px;">Full Name</td>
 			<td><?php echo htmlspecialchars($user_full_name); ?></td>
 		</tr>
@@ -158,6 +160,11 @@ $password_asterisks = str_repeat('*', $password_length);
 			<td><?php echo htmlspecialchars($address2); ?></td>
 		</tr>
 		<tr>
+			<td rowspan=2 style="text-align:center; padding-top:10px;">
+				<a href="Edit Account Details.php">
+					<img src="edit details.png">
+				</a>
+			</td>
 			<td style="padding:20px;">Postcode</td>
 			<td><?php echo htmlspecialchars($postcode); ?></td>
 		</tr>
@@ -166,20 +173,15 @@ $password_asterisks = str_repeat('*', $password_length);
 			<td><?php echo htmlspecialchars($City); ?></td>
 		</tr>
 		<tr>
-			<td style="text-align:center; padding-top:10px;">
-				<a href="Edit Account Details.php">
-					<img src="edit details.png">
+			<td rowspan=2 style="text-align:center">
+				<a href="Logout.php">
+					<img src="log out.png">
 				</a>
 			</td>
 			<td style="padding:20px;">State</td>
 			<td><?php echo htmlspecialchars($State); ?></td>
 		</tr>
 		<tr>
-			<td style="text-align:center">
-				<a href="Logout.php">
-					<img src="log out.png">
-				</a>
-			</td>
 			<td style="padding:20px;">Phone<br>Number</td>
 			<td><?php echo htmlspecialchars($Phone_No); ?></td>
 		</tr>
