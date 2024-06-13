@@ -179,7 +179,7 @@ $password_asterisks = str_repeat('*', $password_length);
 		</tr>
 		<tr>
 			<td style="text-align:center">
-				<a href="../login.php">
+				<a href="Logout.php">
 					<img src="log out.png">
 				</a>
 			</td>
