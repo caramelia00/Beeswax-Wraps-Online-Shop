@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 09, 2024 at 02:19 AM
+-- Generation Time: Jun 13, 2024 at 08:57 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.0.28
 
@@ -23,6 +23,7 @@ SET time_zone = "+00:00";
 DROP DATABASE IF EXISTS `hivefour`;
 CREATE DATABASE IF NOT EXISTS `hivefour` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 USE `hivefour`;
+
 -- --------------------------------------------------------
 
 --
@@ -32,7 +33,7 @@ USE `hivefour`;
 CREATE TABLE `orders` (
   `Order_ID` varchar(45) NOT NULL,
   `Order_Date` date NOT NULL,
-  `Order_Time` time(6) DEFAULT NULL,
+  `Order_Time` time(6) NOT NULL,
   `Status_ID` varchar(45) DEFAULT NULL,
   `User_ID` varchar(45) DEFAULT NULL,
   `Payment_Receipt` varchar(60) NOT NULL
@@ -43,9 +44,9 @@ CREATE TABLE `orders` (
 --
 
 INSERT INTO `orders` (`Order_ID`, `Order_Date`, `Order_Time`, `Status_ID`, `User_ID`, `Payment_Receipt`) VALUES
-('O01', '2024-05-01', '10:00:00.000000', 'S01', 'U01', ''),
-('O02', '2024-05-02', '11:15:00.000000', 'S02', 'U02', ''),
-('O03', '2024-05-03', '09:30:00.000000', 'S03', 'U03', '');
+('O01', '2024-05-01', '10:00:00.000000', 'S04', 'U01', '../../assets/payReceipt/O01.pdf'),
+('O02', '2024-05-02', '11:15:00.000000', 'S01', 'U02', '../../assets/payReceipt/O02.pdf'),
+('O03', '2024-05-03', '09:30:00.000000', 'S03', 'U03', '../../assets/payReceipt/O03.pdf');
 
 -- --------------------------------------------------------
 
@@ -177,7 +178,7 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`User_ID`, `User_Name`, `User_Full_Name`, `User_Email`, `User_Password`, `Profile_Pic`, `Type_ID`) VALUES
 ('U01', 'amzati2004', 'Amirah Izzati Binti Aminuddin', 'amirah@gmail.com', 'amirah123', '../../assets/userPic/amirah.jpg', 'UT01'),
-('U02', 'aalifCurang', 'Aliff Aziz Bin ', 'aaziz@gmail.com', 'alifaziz098', '../../assets/userPic/alif.jpg', 'UT01'),
+('U02', 'aalifAziz', 'Aliff Aziz Bin Alif Syukri', 'aaziz@gmail.com', 'alifaziz098', '../../assets/userPic/alif.jpg', 'UT01'),
 ('U03', 'syabat04', 'Nur Batrisyia Binti Norul Haizal', 'batrisyia@gmail.com', 'batrisyia123', '../../assets/userPic/batrisyia.jpg', 'UT01'),
 ('U04', 'aidandellion', 'Aida Syazwani Binti Samani', 'aidasyazwani04@gmail.com', 'aida', '../../assets/userPic/aida.jpg', 'UT02'),
 ('U05', 'a_alicafe23', 'Nurul Aliah Haifaa Binti Nasiruddin', 'aliah@gmail.com', 'aliah123', '../../assets/userPic/aliah.jpg', 'UT02');
