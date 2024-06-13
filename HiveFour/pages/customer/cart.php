@@ -142,6 +142,20 @@
         .checkout-button:hover{
             background-color: #8AB49C;
         }
+        .back-button {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 14px;
+            font-weight: bold;
+            color: #9D5A4D;
+            background-color: white;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+        }
+        .back-button:hover{
+            background-color: #8AB49C;
+        }
     </style>
 </head>
 <body>
@@ -287,6 +301,8 @@
             <td>
                 <a href="checkout.php">
                 <button type="button" class="checkout-button">Check Out</button></a>
+                <a href="view product.php">
+                <button type="button" class="back-button">Back</button></a>
             </td>
         </tr>
     </table>
