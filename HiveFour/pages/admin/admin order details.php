@@ -68,7 +68,6 @@ function getOrderDetails($orderId){
                 color: #E6DAD1;
                 margin-left: auto;
                 margin-right: auto;
-                
             }
             #status, #payment_receipt{
                 width: 390px;

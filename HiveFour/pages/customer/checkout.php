@@ -1,3 +1,14 @@
+<?php
+	include '../../config/dbconn.php';
+
+	session_start();
+	
+	$session = $_SESSION['User_ID'];
+	if (empty($session)) {
+		header("Location: login.php");
+		exit();
+	}
+?>
 <!DOCTYPE html>
 <html>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -64,6 +75,20 @@
 				font-size:30px;	
 				color:#E6DAD1;
 			}
+            #list{
+                margin-left: auto;
+                margin-right: auto;
+                padding-top: 10px;
+                padding-bottom: 10px;
+                padding-right: 50px;
+                padding-left: 50px;
+                background-color:#8AB49C;
+                border-radius: 50px;   
+                width: 800px;   
+                text-align: left; 
+                font-size: 20px;
+                color: #E6DAD1;
+            }
 			a{
 				text-align: center;
 				color: #E6DAD1;
@@ -169,6 +194,7 @@
                 </td>
                 <td>
                     <table id="summary" border="0" style="padding-left: 40px;">
+                    <form method="POST" enctype="multipart/form-data" action="checkout process.php">
                         <tr>
                             <td colspan="3" style="font-size: 30px;">
                                 ORDER SUMMARY
@@ -179,33 +205,47 @@
                                 ITEMS ORDERED
                             </td>
                         </tr>
-                        <tr>
-                            <td rowspan="3">
-                                <img src="earth.png" style="width: 90px; height: 90px;">
-                            </td>
-                            <td colspan="2">
-                                Earth & Sun Beeswax Wraps
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="2">
-                                Size: L
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                X2
-                            </td>
-                            <td style="text-align: right;">
-                                RM30.00
-                            </td>
-                        </tr>
+
+                        <?php
+                            $total = 0;
+                            if(!empty($_SESSION['cart'])) {
+                            foreach($_SESSION['cart'] as $keys => $value) {
+                                $total = $total + ($value['price'] * $value['quantity']);
+                        ?>
+                                <tr>
+                                    <td rowspan="3" style="width: 54px; padding-right: 10px;">
+                                        <img src="<?php echo $value['productImg'] ?>" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; overflow: hidden;">
+                                    </td>
+                                    <td colspan="2">
+                                        <input type="hidden" name="pId" value="<?php echo $value['productId']; ?>">
+                                        <?php echo $value['productName']; ?>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                        <input type="hidden" name="sId" value="<?php echo $value['sizeId']; ?>">
+                                        Size: <?php echo $value['sizeId']; ?>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input type="hidden" name="qty" value="<?php echo $value['quantity']; ?>">
+                                        X<?php echo $value['quantity']; ?>
+                                    </td>
+                                    <td style="text-align: right;">
+                                        RM<?php echo $value['price']; ?>
+                                    </td>
+                                </tr>
+                            <?php
+                            }
+                            }
+                            ?>   
                         <tr>
                             <td>
                                 Items Subtotal
                             </td>
                             <td colspan="2">
-                                RM60.00
+                                RM<?php echo $total; ?>
                             </td>
                         </tr>
                         <tr>
@@ -221,24 +261,33 @@
                                 Total Payment
                             </td>
                             <td colspan="2" style="font-size: 30px;">
-                                RM65.00
+                                RM<?php echo $total+5; ?>
                             </td>
                         </tr>
                         <tr>
                             <td>
                                 ADDRESS
                             </td>
+                            <?php 
+                                $uId = $_SESSION['User_ID'];
+                                $uDetails = getUserDetails($uId);
+                                $rUser = mysqli_fetch_assoc($uDetails);
+
+                                $uAddress1 = $rUser['Address1'];
+                                $uAddress2 = $rUser['Address2'];
+                                $postcode = $rUser['Postcode'];
+                                $state = $rUser['State'];
+                                $city = $rUser['City'];
+
+                            ?>
                             <td colspan="2">
-                                Menara TM,<br>
-                                Jalan Pantai Baharu, <br>
-                                50672 Kuala Lumpur <br>
-                                Malaysia
+                            <?php echo $uAddress1; ?>,<br>
+                            <?php if($uAddress2 != 'NULL') echo $uAddress2 . ',<br>'; ?>
+                            <?php echo $postcode; ?> <?php echo $city; ?>, <br>
+                            <?php echo $state; ?>
                             </td>
                         </tr>
                     </table>
-                    <br>
-                    <a href="cart.php" ><input type="submit" value="Back"></a>
-                </td>
                 <td>
                     <table id="pay" border="0">
                         <tr>
@@ -255,60 +304,36 @@
                     <table>
                         <tr>
                             <td>
-                                <form method="post" enctype="multipart/form-data" action="Upload Receipt.php">
                                 <input type="file" id="receipt" name="receipt" accept="image/*" required>
-                                <button type="submit" name="UPLOAD RECEIPT">Upload Receipt</button>
-                                </form>
                             </td>
                         </tr>
                         <tr>
                             <td>
-                                <input type="submit" value="SUBMIT ORDER">
-                                <br>
-                                <br>
-                                <input type="submit" value="PRINT INVOICE">
+                                <input type="submit" name="submitOrder" value="SUBMIT ORDER">
+                                <br><br>
+                                <input type="submit" name="printInvoice" value="PRINT INVOICE">
                             </td>
                         </tr>
                     </table>
                 </td>
             </tr>
         </table>
-
-
-        <script>
-            const selectElements = document.querySelectorAll('.mySelect');
-            const imageElements = document.querySelectorAll('.myImage');
-
-            selectElements.forEach((selectElement, index) => {
-                const imageElement = imageElements[index];
-
-                selectElement.addEventListener('change', function() {
-                    const selectedValue = this.value;
-
-                    if (selectedValue === 'default') {
-                        // Hide the image when the default option is selected
-                        imageElement.style.display = 'none';
-                    } else {
-                        // Show the image when an option other than the default is selected
-                        imageElement.style.display = 'block';
-
-                        const imageSrc = selectedValue === 'true' ? 'done.png' : 'default.png';
-                        imageElement.src = imageSrc;
-
-                        if (selectedValue === 'true') {
-                            imageElement.style.width = '40px';
-                            imageElement.style.height = '40px';
-                        } else {
-                            imageElement.style.width = '40px';
-                            imageElement.style.height = '40px';
-                        }
-                    }
-                });
-            });
-            //change date
-        </script>
+        </form>
+        <br>
 	</body>
 </html>
+<?php 
+    function getUserDetails($uId){
+        include '../../config/dbconn.php';
+      
+        $sql = "SELECT *
+        FROM users
+        JOIN user_details on user_details.User_ID = users.User_ID
+        WHERE users.User_ID='$uId'";
+        $result = mysqli_query($dbconn, $sql);
+        return $result;
+    }
+?>
 	
 	
 	

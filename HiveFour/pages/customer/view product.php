@@ -1,25 +1,18 @@
 <?php
 	include '../../config/dbconn.php';
-	if (isset($_GET['productId'])) {
-		$updateProductId = $_GET['productId'];
-		
-		function getProduct($updateProductId){
-			global $dbconn;
-			$sql = "SELECT *
-					FROM product
-					WHERE Product_ID = '$updateProductId'";
-			$result = mysqli_query($dbconn, $sql);
-			return $result;
-		}
 
-		function getSize(){
-			global $dbconn;
-			$sql = "SELECT *
-					FROM size";
-			$r = mysqli_query($dbconn, $sql);
-			return $r;
-		}
-		$product = getProduct($updateProductId);
+	session_start();
+	
+	$session = $_SESSION['User_ID'];
+	if (empty($session)) {
+		header("Location: login.php");
+		exit();
+	}
+	
+	if (isset($_GET['productId'])) {
+		$pId = $_GET['productId'];
+	
+		$product = getProduct($pId);
 		$rowProduct = mysqli_num_rows($product);
 	
 		if ($rowProduct == 0) {
@@ -27,27 +20,75 @@
 		} else {
 			$rProduct = mysqli_fetch_assoc($product);
 	
-			$pId = $rProduct['Product_ID'];
 			$pName = $rProduct['Product_Name'];
 			$pImage = $rProduct['Product_Image'];
 			$pStatus = $rProduct['Product_Status_ID'];
 		}
 
-		$size = getSize();
-		$rowSize = mysqli_num_rows($size);
+		if (isset($_POST['addToCart'])) {
+			if (isset($_SESSION['cart'])) {
+				$item_array_id = array_column($_SESSION['cart'], 'productId');
+		
+				if (in_array($pId, $item_array_id)) {
+					echo '
+						<script>
+							alert("Product is already added in cart!");
+							window.location.href = "cart.php";
+						</script> 
+					';
 
-		if($rowSize == 0){
-			echo "No record found";
-		}
-		else{
-			$rSize = mysqli_fetch_assoc($size);
-
-			$sId = $rSize['Size_ID'];
-			$sName = $rSize['Size_Name'];
-			$sDesc = $rSize['Size_Description'];
-			$sPrice = $rSize['Size_Price'];
+				} else {
+					echo 'ss';
+					$count = count($_SESSION['cart']);
+		
+					$sIdSelect = $_POST['sizeId'];
+					$sizeSelect = getSizeOnId($sIdSelect);
+					$rSize = mysqli_fetch_assoc($sizeSelect);
+					$sName = $rSize['Size_Name'];
+					$sPrice = $rSize['Size_Price'];
+		
+					$item_array = array(
+						'productId' => $pId,
+						'productName' => $pName,
+						'productImg' => $pImage,
+						'price' => $sPrice,
+						'sizeId' => $sIdSelect,
+						'sizeName' => $sName,
+						'quantity' => $_POST['quantity'],
+					);
+		
+					$_SESSION['cart'][$count] = $item_array;
+					header("Location: cart.php");
+				}
+			} else {
+				echo 'aaaa';
+				$sIdSelect = $_POST['sizeId'];
+				$sizeSelect = getSizeOnId($sIdSelect);
+				$rSize = mysqli_fetch_assoc($sizeSelect);
+				$sName = $rSize['Size_Name'];
+				$sPrice = $rSize['Size_Price'];
+		
+				$item_array = array(
+					'productId' => $pId,
+					'productName' => $pName,
+					'productImg' => $pImage,
+					'price' => $sPrice,
+					'sizeId' => $sIdSelect,
+					'sizeName' => $sName,
+					'quantity' => $_POST['quantity'],
+				);
+		
+				//Create new session variable
+				$_SESSION['cart'][0] = $item_array;
+				header("Location: cart.php");
+			}
 		}
 		
+		if (isset($_POST['unavailable'])) {
+			echo "<script>
+				alert('Product is unavailable!');
+			</script>"; 
+		}
 	}
 ?>
 <!DOCTYPE html>
@@ -191,42 +232,59 @@
             }
 		</style>
 	</head>
-	<table id=header  border="0">
+	<table id=header border="0">
 		<tr>
-		<th style="padding-left: 20px;">
-                    <a href="HOME.php">
-                        HOME
-                    </a>
-                </th>
-                <th>
-                    <a href="search product.php">
-                        PRODUCTS
-                    </a>
-                </th>
-                <th>
-                    <a href="About Us.php">
-                    ABOUT US
-                    </a>
-                </th>
-                <td colspan=2><img src="design 1.png"  style="width:80px; height:80px; padding-right: 30px;"></td>
-                <td>
-                    <a href="order.php">
-                        <img src="order.png" style="width: 50px;height: 50px;" class="user">
-                    </a>
-                </td>
-                <td>
-                    <a href="cart.php">
-                        <img src="cart.png" style="width: 50px;height: 50px;" class="user">
-                    </a>
-                </td>
-                <td>
-                    <a href="view account details.php">
-                        <img src="user.png" style="width:71px; height:40px;" class="user">
-                    </a>
-                </td>
+			<th style="padding-left: 20px;">
+				<a href="HOME.php">
+					HOME
+				</a>
+			</th>
+			<th>
+				<a href="search product.php">
+					PRODUCTS
+				</a>
+			</th>
+			<th>
+				<a href="About Us.php">
+				ABOUT US
+				</a>
+			</th>
+			<td colspan=2><img src="design 1.png"  style="width:80px; height:80px; padding-right: 30px;"></td>
+			<td>
+				<a href="order.php">
+					<img src="order.png" style="width: 50px;height: 50px;" class="user">
+				</a>
+			</td>
+			<td>
+				<a href="cart.php">
+					<img src="cart.png" style="width: 50px;height: 50px;" class="user">
+				</a>
+			</td>
+			<td>
+				<a href="view account details.php">
+					<img src="user.png" style="width:71px; height:40px;" class="user">
+				</a>
+			</td>
 		</tr>
 	</table>
-
+	<body>
+	<script>
+		// Ensure that at least one option is selected
+		document.getElementById('sizeForm').addEventListener('submit', function(e) {
+			let radios = document.getElementsByName('sizeId');
+			let selected = false;
+			for (let radio of radios) {
+				if (radio.checked) {
+					selected = true;
+					break;
+				}
+			}
+			if (!selected) {c
+				radios[0].checked = true;
+			}
+		});
+	</script>
+	<form action="" method="POST">
 	<table id=low border="0">
 		<tr>
 			<td colspan=3>
@@ -236,27 +294,34 @@
 							<table id=ord border="0">
 								<tr>
 									<td>
-										<img src="<?php echo $pImage?>" style="width: 400px; height: 400px;">
+										<img src="<?php echo $pImage?>" name="productImg" style="width: 400px; height: 400px;">
 									</td>
 								</tr>
 							</table>
 						</td>
 					</tr>
-
 				</table>
 			</td>
 			<td colspan=3>
 				<table id=c border="0">
 					<tr>
-						<td style="text-align:left; font-size:50px;"><?php echo $pName?></td>
-					</tr>
+                        <td>
+                            <input type="hidden" name="pId" value="<?php echo htmlspecialchars($pId); ?>">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td name="productName" style="text-align:left; font-size:50px;"><?php echo htmlspecialchars($pName); ?></td>
+                    </tr>
 					<tr>
 						<td>
 							<b>SIZE</b>
 							<?php
 								$size = getSize();
+								$isFirst = true; // Variable to track the first iteration
+
 								while ($r = mysqli_fetch_assoc($size)) {
-									displaySize($r['Size_ID'], $r['Size_Name'], $r['Size_Description'], $r['Size_Price']);
+									displaySize($r['Size_ID'], $r['Size_Name'], $r['Size_Description'], $r['Size_Price'], $isFirst);
+									$isFirst = false; // Set $isFirst to false after the first iteration
 								}
 							?>
 						</td>
@@ -268,8 +333,11 @@
 					</tr>
 					<tr>
 						<td>
-							<a href="cart.php"><input type="submit" value="ADD TO CART"></a> 
-							<a href="checkout.php"><input type="submit" value="BUY NOW"></a>
+							<?php if($pStatus =='PDS1'){ ?>
+								<input type="submit" name="addToCart" value="ADD TO CART">
+							<?php }else{ ?>
+								<input type="submit" name="unavailable" VALUE="UNAVAILABLE">
+							<?php }?>
 							<a href="search product.php"><input type="submit" value="BACK"></a>
 						</td>
 					</tr>
@@ -277,15 +345,43 @@
 			</td>
 		</tr>
 	</table>
+	</form>
+	</body>
 </html><?php
-	function displaySize($sId, $sName, $sDesc, $sPrice){
+	function displaySize($sId, $sName, $sDesc, $sPrice, $isSelected){
 		echo '
 			<br>
-			<input type="checkbox" id="size_' . htmlspecialchars($sId) . '" name="size[]" value="' . htmlspecialchars($sId) . '">
+			<input type="radio" id="size_' . htmlspecialchars($sId) . '" name="sizeId" value="' . htmlspecialchars($sId) . '"' . ($isSelected ? ' checked' : '') . '>
 			<label for="size_' . htmlspecialchars($sId) . '">
-				' . htmlspecialchars($sName) . ' - ' . htmlspecialchars($sDesc) . ' ($' . htmlspecialchars($sPrice) . ')
+				' . htmlspecialchars($sName) . ' - ' . htmlspecialchars($sDesc) . ' (RM' . htmlspecialchars($sPrice) . ')
 			</label>
 			<br>';
+	}
+	function getProduct($pId){
+		global $dbconn;
+		$sql = "SELECT *
+				FROM product
+				WHERE Product_ID = '$pId'";
+		$result = mysqli_query($dbconn, $sql);
+		return $result;
+	}
+
+	function getSize(){
+		global $dbconn;
+		$sql = "SELECT *
+				FROM size";
+		$r = mysqli_query($dbconn, $sql);
+		return $r;
+	}
+
+	function getSizeOnId($sizeId){
+		global $dbconn;
+		$sql = "SELECT *
+				FROM size
+				WHERE Size_ID ='$sizeId'";
+		echo $sql;
+		$r = mysqli_query($dbconn, $sql);
+		return $r;
 	}
 ?>
 

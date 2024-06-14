@@ -67,8 +67,7 @@
 			$City = $r['City'];
 			$State = $r['State'];
 			$Phone_No = $r['Phone_No'];
-		}
-		
+		}	
 	?>
 
 <!DOCTYPE html>

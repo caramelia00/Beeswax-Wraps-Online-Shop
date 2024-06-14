@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 13, 2024 at 08:57 AM
+-- Generation Time: Jun 14, 2024 at 04:28 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.0.28
 
@@ -20,9 +20,6 @@ SET time_zone = "+00:00";
 --
 -- Database: `hivefour`
 --
-DROP DATABASE IF EXISTS `hivefour`;
-CREATE DATABASE IF NOT EXISTS `hivefour` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-USE `hivefour`;
 
 -- --------------------------------------------------------
 
@@ -32,8 +29,8 @@ USE `hivefour`;
 
 CREATE TABLE `orders` (
   `Order_ID` varchar(45) NOT NULL,
-  `Order_Date` date NOT NULL,
-  `Order_Time` time(6) NOT NULL,
+  `Order_Date` varchar(45) NOT NULL,
+  `Order_Time` varchar(45) NOT NULL,
   `Status_ID` varchar(45) DEFAULT NULL,
   `User_ID` varchar(45) DEFAULT NULL,
   `Payment_Receipt` varchar(60) NOT NULL
@@ -69,8 +66,7 @@ CREATE TABLE `order_details` (
 INSERT INTO `order_details` (`Order_Details_ID`, `Quantity`, `Product_ID`, `Order_ID`, `Size_ID`) VALUES
 ('OD01', 2, 'PD1', 'O01', 'S'),
 ('OD02', 3, 'PD2', 'O02', 'L'),
-('OD03', 6, 'PD3', 'O03', 'M'),
-('ODO4', 3, 'PD3', 'O01', 'M');
+('OD03', 6, 'PD3', 'O03', 'M');
 
 -- --------------------------------------------------------
 
@@ -90,7 +86,7 @@ CREATE TABLE `product` (
 --
 
 INSERT INTO `product` (`Product_ID`, `Product_Name`, `Product_Image`, `Product_Status_ID`) VALUES
-('PD1', 'Earth & Sun Beeswax Wraps', '../../assets/prodPic/PD1.png', 'PDS2'),
+('PD1', 'Earth Beeswax Wraps', '../../assets/prodPic/PD1.png', 'PDS2'),
 ('PD2', 'Gummy Bears Beeswax Wraps', '../../assets/prodPic/PD2.png', 'PDS1'),
 ('PD3', 'Dried Caesalpinia Flower Beeswax Wraps', '../../assets/prodPic/PD3.png', 'PDS1');
 
@@ -180,7 +176,7 @@ INSERT INTO `users` (`User_ID`, `User_Name`, `User_Full_Name`, `User_Email`, `Us
 ('U01', 'amzati2004', 'Amirah Izzati Binti Aminuddin', 'amirah@gmail.com', 'amirah123', '../../assets/userPic/amirah.jpg', 'UT01'),
 ('U02', 'aalifAziz', 'Aliff Aziz Bin Alif Syukri', 'aaziz@gmail.com', 'alifaziz098', '../../assets/userPic/alif.jpg', 'UT01'),
 ('U03', 'syabat04', 'Nur Batrisyia Binti Norul Haizal', 'batrisyia@gmail.com', 'batrisyia123', '../../assets/userPic/batrisyia.jpg', 'UT01'),
-('U04', 'aidandellion', 'Aida Syazwani Binti Samani', 'aidasyazwani04@gmail.com', 'aida', '../../assets/userPic/aida.jpg', 'UT02'),
+('U04', 'aidandellion', 'Aida Shazwani Binti Samani', 'aidasyazwani04@gmail.com', 'aida', '../../assets/userPic/aida.jpg', 'UT02'),
 ('U05', 'a_alicafe23', 'Nurul Aliah Haifaa Binti Nasiruddin', 'aliah@gmail.com', 'aliah123', '../../assets/userPic/aliah.jpg', 'UT02');
 
 -- --------------------------------------------------------

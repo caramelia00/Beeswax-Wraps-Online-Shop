@@ -1,3 +1,25 @@
+<?php
+    session_start();
+    
+    $session = $_SESSION['User_ID'];
+    if (empty($session)) {
+    header("Location: login.php");
+    exit();
+    }
+
+    if(isset($_POST['remove'])) {
+        foreach($_SESSION['cart'] as $key => $value) {
+        if($value['productId'] == $_POST['productId']) {
+            unset($_SESSION['cart'][$key]);
+            echo'
+                <script>
+                    alert("Product has been removed from cart");
+                </script> ';
+        }
+        }
+    }
+?>
+
 <!DOCTYPE html> 
 <html>
 <head>
@@ -69,6 +91,18 @@
             padding-left:10px;	
             font-size:30px;	
             color:#E6DAD1;
+        }
+        #product_btns{
+            text-align: right; 
+            display: inline-block;
+            padding: 5px 10px;
+            font-size: 14px;
+            font-weight: bold;
+            color: #9D5A4D;
+            background-color: #C30D23;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
         }
         a{
             text-align: center;
@@ -159,6 +193,15 @@
     </style>
 </head>
 <body>
+<?php
+    if(isset($_GET['productremoved'])) {
+      echo '
+        <script>
+            alert("Product has been removed from cart.");
+        </script> 
+      ';
+    }
+    ?>
 	<table id=header  border="0">
 		<tr>
 			<th style="padding-left: 20px;">
@@ -199,112 +242,84 @@
     <table>
         <tr>
             <td style="text-align: left; padding-right: 400px;">
-                <input type="checkbox" id="myCheckbox" name="myCheckbox">
-	            <label for="myCheckbox"><b style="color: #8AB49C; font-size: 25px;">Select all</b></label>
+	            <label for="amount"><b style="color: #8AB49C; font-size: 25px;">
+                <?php
+                  if(isset($_SESSION['cart'])) {
+                    $count = count($_SESSION['cart']);
+                    echo '<b>( '.$count.' ) ITEMS</b>';
+                  }
+                  else {
+                    echo '<b>( 0 ) ITEMS</b>';
+                  }
+                  ?>
+                </b></label>
             </td>
             <td style="padding-left: 400px;">
             </td>
         </tr>
     </table>
-    <table style="width: 60%;">
+    <table id="list"style="width: 60%;">
         <tr>
             <td>
-    <input type="checkbox" id="myCheckbox" name="myCheckbox">
-	<label for="myCheckbox">
-    <table id="list" border="0">
-        <tr >
-            <td rowspan=2 style="width: 54px; padding-right: 10px;"><img src="earth.png"></td>
-            <td style="width: 150px;">product name</td>
-            <td colspan=2>Earth & Sun Beeswax Wraps</td>
-        </tr>
-        <tr>
-            <td style="width: 150px;">Quantity <input type="number" name="quantity" min="1" max="10" value="1"></td>
-            <td class="custom-select" style="width: 60px;"><label for="size">Size</label>
-                <select id="size" name="size">
-                  <option value="small">Small</option>
-                  <option value="medium">Medium</option>
-                  <option value="large">Large</option>
-                </select></td>
-            <td></td>
-        </tr>
-    </table>
-    </label>
-    <br>
-    <input type="checkbox" id="myCheckbox" name="myCheckbox">
-    <label for="myCheckbox">
-    <table id="list"border="0">
-        <tr >
-            <td rowspan=2 style="width: 54px; padding-right: 10px;"><img src="gummy.png"></td>
-            <td style="width: 150px;">product name</td>
-            <td colspan="2">Gummy Bears Beeswax Wraps</td>
-        </tr>
-        <tr>
-            <td style="width: 150px;">Quantity <input type="number" name="quantity" min="1" max="10" value="1"></td>
-            <td class="custom-select" style="width: 60px;"><label for="size">Size</label>
-                <select id="size" name="size">
-                  <option value="small">Small</option>
-                  <option value="medium">Medium</option>
-                  <option value="large">Large</option>
-                </select></td>
-            <td></td>
-        </tr>
-    </table>
-    </label>
-    <br>
-    <input type="checkbox" id="myCheckbox" name="myCheckbox">
-    <label for="myCheckbox">
-    <table id="list" border="0">
-        <tr >
-            <td rowspan=2 style="width: 54px; padding-right: 10px;"><img src="dried.png"></td>
-            <td style="width: 150px;">product name</td>
-            <td colspan="2">Dried Caesalpinia Flower Beeswax Wraps</td>
-        </tr>
-        <tr>
-            <td style="width: 150px;">Quantity <input type="number" name="quantity" min="1" max="10" value="1"></td>
-            <td class="custom-select" style="width: 60px;"><label for="size">Size</label>
-                <select id="size" name="size">
-                  <option value="small">Small</option>
-                  <option value="medium">Medium</option>
-                  <option value="large">Large</option>
-                </select></td>
-            <td></td>
-        </tr>
-    </table>
-    </label>
-    <br>
-    <input type="checkbox" id="myCheckbox" name="myCheckbox">
-    <label for="myCheckbox">
-    <table id="list"border="0">
-        <tr >
-            <td rowspan=2 style="width: 54px; padding-right: 10px;"><img src="set.png"></td>
-            <td style="width: 150px;">product name</td>
-            <td colspan="2">3-in-1 Beeswax Wraps</td>
-        </tr>
-        <tr>
-            <td style="width: 150px;">Quantity <input type="number" name="quantity" min="1" max="10" value="1"></td>
-            <td class="custom-select" style="width: 60px;"><label for="size">Size</label>
-                <select id="size" name="size">
-                  <option value="small">Small</option>
-                  <option value="medium">Medium</option>
-                  <option value="large">Large</option>
-                </select></td>
-            <td></td>
-        </tr>
-    </table>
-    </label>
-    </td>
+            <?php
+
+              $total = 0;
+              if(!empty($_SESSION['cart'])) {
+                foreach($_SESSION['cart'] as $keys => $value) {
+                  cartElement($value['productImg'],$value['productName'],$value['price'],$value['productId'],$value['sizeId'],$value['quantity']);
+                  $total = $total + ($value['price'] * $value['quantity']);
+                }
+              }
+              else {
+                echo '<div style="text-align: center;margin-top: 5rem;margin-bottom: 5rem">';
+                echo '<p>You have no item(s) in cart!</p>';
+                echo '<p>Back to <strong><a href="search product.php" style="color: #ff1111">Shop</a></strong></p>';
+                echo '</div>';
+              }
+
+              ?>
+        </td>
     </tr>
     </table>
     <br>
+    <?php if($total != 0){ ?>
     <table>
         <tr>
             <td>
                 <a href="checkout.php">
                 <button type="button" class="checkout-button">Check Out</button></a>
-                <a href="view product.php">
-                <button type="button" class="back-button">Back</button></a>
             </td>
         </tr>
     </table>
+    <?php } ?>
 </body>
 </html>
+<?php 
+    function cartElement($productImg, $productName, $price, $productId, $sizeId, $quantity) {
+        $element = '
+        <form action="" method="post" class="product_wrap">
+            <table id="list" border="0">
+                <tr>
+                    <td rowspan=3 style="width: 54px; padding-right: 10px;"><img src="'.$productImg.'" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; overflow: hidden;"></td>
+                    <td style="width: 150px;">Product Name</td>
+                    <td colspan=3>'.$productName.'</td>
+                    <input type="hidden" name="productId" value="'.$productId.'">
+                </tr>
+                <tr>
+                    <td style="width: 150px;">Quantity</td>
+                    <td>'.$quantity.'</td>
+                </tr> 
+                <tr>
+                    <td style="width: 60px;">Size</td>
+                    <td>'.$sizeId.'</td>
+                    <td style="text-align: right;">
+                        <button type="submit" name="remove" style="background-color: #C30D23; color: white; border: none; border-radius: 15px; cursor: pointer; padding: 5px 10px; font-size: 12px; font-weight: bold;">REMOVE</button>
+                    </td>
+                </tr>
+            </table>
+        </form>
+        <br>
+        ';
+        echo $element;
+      }
+?>
