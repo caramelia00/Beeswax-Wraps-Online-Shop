@@ -154,6 +154,12 @@
 </body>
 </html>
 <?php
+    }else
+    {	## if the session username is no admin, redirect the page to the login page 
+        echo "<script>
+                    alert('Log in first!');
+                    window.location.href = 'login.php';
+                </script>"; 
     }
     include '../../config/dbconn.php';
 

@@ -1,7 +1,6 @@
 <?php
 include '../../config/dbconn.php';
 
-
 if (isset($_GET['orderId'])) {
     $updateOrderId = $_GET['orderId'];
 
@@ -222,7 +221,7 @@ function getOrderDetails($orderId){
                         <tr>
                             <td style="text-align: center;">
                                 <a href="<?php echo $oReceipt; ?>" target="_blank" style="display: inline-block; padding: 7px 12px; background-color: white; color: #8AB49C; border-radius: 10px; font-size: 12px; border: none; cursor: pointer;">
-                                    DOWNLOAD
+                                    VIEW
                                 </a>
                             </td>
                         </tr>

@@ -167,7 +167,7 @@
         <br>
         <tr>
             <td colspan="2">
-                <table id="list" border="1">
+                <table id="list" border="0">
                     <tr>
                         <td style="width: 150px; padding-left: 10px;">Order ID:</td>
                         <td>' . htmlspecialchars($orderId) . '</td>
