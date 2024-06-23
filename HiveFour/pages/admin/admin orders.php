@@ -93,7 +93,6 @@
                 opacity: 0.8;
             }
             #list{
-
                 border-spacing: 10px;
                 padding-left: 50px;
                 background-color:#8AB49C;
@@ -262,7 +261,7 @@ function generateOrderDetailsHtml($orderId) {
             $itemTotalPrice = $rOrdDetails['Size_Price'] * $rOrdDetails['Quantity'];
             $totPrice += $itemTotalPrice;
             $detailsHtml .= '
-            <table id="three" border="0">
+            <table id="three" border="1">
                 <tr>
                     <td id="img" rowspan="2"><img src="' . htmlspecialchars($rOrdDetails['Product_Image']) . '" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; overflow: hidden;"></td>
                     <td id="name">' . htmlspecialchars($rOrdDetails['Product_Name']) . '</td>

@@ -8,14 +8,18 @@
     }
 
     if(isset($_POST['remove'])) {
+        $productIdToRemove = $_POST['productId'];
+        $sizeIdToRemove = $_POST['sizeId']; // Add this line to get the size ID
+
         foreach($_SESSION['cart'] as $key => $value) {
-        if($value['productId'] == $_POST['productId']) {
-            unset($_SESSION['cart'][$key]);
-            echo'
-                <script>
-                    alert("Product has been removed from cart");
-                </script> ';
-        }
+            if($value['productId'] == $productIdToRemove && $value['sizeId'] == $sizeIdToRemove) {
+                unset($_SESSION['cart'][$key]);
+                echo '
+                    <script>
+                        alert("Product has been removed from cart");
+                    </script>
+                ';
+            }
         }
     }
 ?>
@@ -258,7 +262,7 @@
             </td>
         </tr>
     </table>
-    <table id="list"style="width: 60%;">
+    <table style="width: 60%;">
         <tr>
             <td>
             <?php
@@ -311,6 +315,7 @@
                 </tr> 
                 <tr>
                     <td style="width: 60px;">Size</td>
+                    <input type="hidden" name="sizeId" value="'.$sizeId.'">
                     <td>'.$sizeId.'</td>
                     <td style="text-align: right;">
                         <button type="submit" name="remove" style="background-color: #C30D23; color: white; border: none; border-radius: 15px; cursor: pointer; padding: 5px 10px; font-size: 12px; font-weight: bold;">REMOVE</button>

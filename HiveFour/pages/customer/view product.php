@@ -1,95 +1,89 @@
 <?php
-	include '../../config/dbconn.php';
+    include '../../config/dbconn.php';
 
-	session_start();
-	
-	$session = $_SESSION['User_ID'];
-	if (empty($session)) {
-		header("Location: login.php");
-		exit();
-	}
-	
-	if (isset($_GET['productId'])) {
-		$pId = $_GET['productId'];
-	
-		$product = getProduct($pId);
-		$rowProduct = mysqli_num_rows($product);
-	
-		if ($rowProduct == 0) {
-			echo "No record found";
-		} else {
-			$rProduct = mysqli_fetch_assoc($product);
-	
-			$pName = $rProduct['Product_Name'];
-			$pImage = $rProduct['Product_Image'];
-			$pStatus = $rProduct['Product_Status_ID'];
-		}
+    session_start();
+    
+    $session = $_SESSION['User_ID'];
+    if (empty($session)) {
+        header("Location: login.php");
+        exit();
+    }
+    
+    if (isset($_GET['productId'])) {
+        $pId = $_GET['productId'];
+    
+        $product = getProduct($pId);
+        $rowProduct = mysqli_num_rows($product);
+    
+        if ($rowProduct == 0) {
+            echo "No record found";
+        } else {
+            $rProduct = mysqli_fetch_assoc($product);
+    
+            $pName = $rProduct['Product_Name'];
+            $pImage = $rProduct['Product_Image'];
+            $pStatus = $rProduct['Product_Status_ID'];
+        }
 
-		if (isset($_POST['addToCart'])) {
-			if (isset($_SESSION['cart'])) {
-				$item_array_id = array_column($_SESSION['cart'], 'productId');
-		
-				if (in_array($pId, $item_array_id)) {
-					echo '
-						<script>
-							alert("Product is already added in cart!");
-							window.location.href = "cart.php";
-						</script> 
-					';
+        if (isset($_POST['addToCart'])) {
+            $sIdSelect = $_POST['sizeId'];
+            $quantity = $_POST['quantity'];
 
-				} else {
-					echo 'ss';
-					$count = count($_SESSION['cart']);
-		
-					$sIdSelect = $_POST['sizeId'];
-					$sizeSelect = getSizeOnId($sIdSelect);
-					$rSize = mysqli_fetch_assoc($sizeSelect);
-					$sName = $rSize['Size_Name'];
-					$sPrice = $rSize['Size_Price'];
-		
-					$item_array = array(
-						'productId' => $pId,
-						'productName' => $pName,
-						'productImg' => $pImage,
-						'price' => $sPrice,
-						'sizeId' => $sIdSelect,
-						'sizeName' => $sName,
-						'quantity' => $_POST['quantity'],
-					);
-		
-					$_SESSION['cart'][$count] = $item_array;
-					header("Location: cart.php");
-				}
-			} else {
-				echo 'aaaa';
-				$sIdSelect = $_POST['sizeId'];
-				$sizeSelect = getSizeOnId($sIdSelect);
-				$rSize = mysqli_fetch_assoc($sizeSelect);
-				$sName = $rSize['Size_Name'];
-				$sPrice = $rSize['Size_Price'];
-		
-				$item_array = array(
-					'productId' => $pId,
-					'productName' => $pName,
-					'productImg' => $pImage,
-					'price' => $sPrice,
-					'sizeId' => $sIdSelect,
-					'sizeName' => $sName,
-					'quantity' => $_POST['quantity'],
-				);
-		
-				//Create new session variable
-				$_SESSION['cart'][0] = $item_array;
-				header("Location: cart.php");
-			}
-		}
-		
-		if (isset($_POST['unavailable'])) {
-			echo "<script>
-				alert('Product is unavailable!');
-			</script>"; 
-		}
-	}
+            if (isset($_SESSION['cart'])) {
+                $item_exists = false;
+                foreach ($_SESSION['cart'] as $key => $item) {
+                    if ($item['productId'] == $pId && $item['sizeId'] == $sIdSelect) {
+                        $_SESSION['cart'][$key]['quantity'] += $quantity;
+                        $item_exists = true;
+                        break;
+                    }
+                }
+                if (!$item_exists) {
+                    $sizeSelect = getSizeOnId($sIdSelect);
+                    $rSize = mysqli_fetch_assoc($sizeSelect);
+                    $sName = $rSize['Size_Name'];
+                    $sPrice = $rSize['Size_Price'];
+        
+                    $item_array = array(
+                        'productId' => $pId,
+                        'productName' => $pName,
+                        'productImg' => $pImage,
+                        'price' => $sPrice,
+                        'sizeId' => $sIdSelect,
+                        'sizeName' => $sName,
+                        'quantity' => $quantity,
+                    );
+        
+                    $_SESSION['cart'][] = $item_array;
+                }
+            } else {
+                $sizeSelect = getSizeOnId($sIdSelect);
+                $rSize = mysqli_fetch_assoc($sizeSelect);
+                $sName = $rSize['Size_Name'];
+                $sPrice = $rSize['Size_Price'];
+        
+                $item_array = array(
+                    'productId' => $pId,
+                    'productName' => $pName,
+                    'productImg' => $pImage,
+                    'price' => $sPrice,
+                    'sizeId' => $sIdSelect,
+                    'sizeName' => $sName,
+                    'quantity' => $quantity,
+                );
+        
+                $_SESSION['cart'][] = $item_array;
+            }
+            header("Location: cart.php");
+            exit();
+        }
+        
+        if (isset($_POST['unavailable'])) {
+            echo "<script>
+                alert('Product is unavailable!');
+            </script>"; 
+        }
+    }
 ?>
 <!DOCTYPE html>
 <html>
