@@ -12,6 +12,14 @@ if(isset($_POST['update'])){
     $priceM= $_POST['priceM']; 
     $priceL= $_POST['priceL'];
 
+    if($priceS == "" || $priceM == "" || $priceL == "") {
+        // Display the alert
+        echo "<script>alert('One or more prices are empty!'); 
+        window.location.href = 'update price.php';
+        </script>";
+        exit();
+    }    
+
     ## execute SQL UPDATE command 
     $sqlUpdateS = "UPDATE size SET Size_Price = '" . $priceS . "'
     WHERE Size_ID = 'S'";

@@ -1,3 +1,12 @@
+<?php
+	session_start();
+
+	// Hide error reporting
+	error_reporting(0);
+	ini_set('display_errors', 0);
+
+	$session = isset($_SESSION['User_ID']) ? $_SESSION['User_ID'] : null;
+?>
 <!DOCTYPE html>
 <html>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -5,6 +14,25 @@
 	<title>Hive4 About Us</title>
 	<head>
 		<style>
+			@keyframes pop {
+            0% { transform: scale(0.5); opacity: 0; }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); opacity: 1; }
+			}
+
+			.pop-up {
+				animation: pop 1s;
+			}
+
+			@keyframes moveUp {
+            from { transform: translateY(100px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+			}
+
+			.move-up {
+				animation: moveUp 1s forwards;
+			}
+
 			body{
         		margin:0;
       		}
@@ -55,6 +83,10 @@
 		</style>
 	</head>
 	<table id=header  border="0">
+	<?php
+			if (empty($session)) {
+		?>
+		<table id=header  border="0">
 		<tr>
 			<th style="padding-left: 20px;">
 				<a href="HOME.php">
@@ -71,7 +103,7 @@
 				ABOUT US
 				</a>
 			</th>
-			<td colspan=2><img src="design 1.png"  style="width:80px; height:80px;"></td>
+			<td colspan=2><img src="design 1.png"  style="width:80px; height:80px; padding-right: 100px;">
 			<th style="padding-left:60px;">
 				<a href="login.php">
 					LOGIN
@@ -83,28 +115,33 @@
 				</a>
 			</th>
 		</tr>
+		</table>
+		<?php }else{?>
+			<?php include 'customer header.php'; ?>
+		<?php }?>
 	</table>
 	<br>
-	<table style="color: white; width: 100%; margin: 0 auto; text-align: center;">
+	<table style="color: black; width: 100%; margin: 0 auto; text-align: center;">
 		<tr>
-			<td style="font-size: 100px; font-family: 'Times New Roman';">
+			<td style="font-size: 100px; font-family: 'Times New Roman';" class="pop-up">
 				About Us<br>
 			</td>
 		</tr>
 		<tr>
-			<td style="font-size: 20px; font-family:Verdana; text-align: left;">
+			<td style="font-size: 20px; font-family:Verdana; text-align: left;" class="move-up">
 			<p style="font-size: 30px; text-align: center;"><b>Introduction</b></p>
-			HiveFour is a website was created to create a user-friendly, informative and aesthetically pleasing digital storefront 
+			<p style="text-align: center;">HiveFour is a website was created to create a user-friendly, informative and aesthetically pleasing digital storefront 
 			<br>that showcases our eco-friendly beewax wrap that promotes sustainable living by offering high-quality Bee wax wrap 
 			<br>as a reusable alternative compared to a single-use plastic wrap. Our website is not only focused as an e-commerce 
 			<br>platform but also as an educational resource, raising awareness about the environmental benefits of sustainable products.
 			<br> The team went big for the educational website that aims to attract and retain customers passionate about reducing their 
 			<br>environmental footprint. By promoting the use of our product, we also contribute to the global effort to decrease plastic 
 			<br>waste. HiveFour really took it seriously in action to take care of the environment and give the best product for everyone.
-			<p style="font-size: 30px; text-align: center;">
+			</p>
+			<p style="font-size: 30px; text-align: center;" class="move-up">
 				<b>The Developer</b>
 				<br><br>
-				<img src="organizational.png"></p>  
+				<img src="organizational.png" style="border-radius: 20%;"></p>  
 			</td>
 		</tr>
 	</table>

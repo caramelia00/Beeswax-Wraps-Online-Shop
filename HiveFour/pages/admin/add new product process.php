@@ -69,6 +69,12 @@
                     window.location.href = 'admin product list.php';
                 </script>";  
             }
+        }else {
+            echo "<script>
+                    alert('Product image cannot be empty!');
+                    window.location.href = 'add new product.php';
+                </script>";
+                exit();
         }
     }
 

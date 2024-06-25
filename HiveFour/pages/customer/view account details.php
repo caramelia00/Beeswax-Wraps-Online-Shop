@@ -53,6 +53,9 @@ $password_asterisks = str_repeat('*', $password_length);
         body {
             margin: 0;
             background-image: url(loginbg.png);
+			background-size: cover;
+			background-repeat: no-repeat;
+			background-position: center;
         }
         #acc {
             margin-left: auto;
@@ -95,41 +98,7 @@ $password_asterisks = str_repeat('*', $password_length);
     </style>
 </head>
 <body>
-<table id=header  border="0">
-		<tr>
-        <th style="padding-left: 20px;">
-				<a href="HOME.php">
-					HOME
-				</a>
-			</th>
-			<th>
-				<a href="search product.php">
-					PRODUCTS
-				</a>
-			</th>
-			<th>
-				<a href="About Us.php">
-				ABOUT US
-				</a>
-			</th>
-			<td colspan=2><img src="design 1.png"  style="width:80px; height:80px; padding-right: 30px;"></td>
-			<td>
-				<a href="order.php">
-					<img src="order.png" style="width: 50px;height: 50px;" class="user">
-				</a>
-			</td>
-			<td>
-				<a href="cart.php">
-					<img src="cart.png" style="width: 50px;height: 50px;" class="user">
-				</a>
-			</td>
-			<td>
-				<a href="view account details.php">
-					<img src="user.png" style="width:71px; height:40px;" class="user">
-				</a>
-			</td>
-		</tr>
-	</table>
+<?php include 'customer header.php'; ?>
     <br><br>
 	<table id=acc border="0" style="width: 80%;">
 		<tr>
@@ -182,7 +151,7 @@ $password_asterisks = str_repeat('*', $password_length);
 			<td><?php echo htmlspecialchars($State); ?></td>
 		</tr>
 		<tr>
-			<td style="padding:20px;">Phone<br>Number</td>
+			<td style="padding:20px;">Phone Number</td>
 			<td><?php echo htmlspecialchars($Phone_No); ?></td>
 		</tr>
 	</table>

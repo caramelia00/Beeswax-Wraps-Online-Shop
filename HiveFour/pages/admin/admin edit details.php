@@ -22,7 +22,86 @@
 		$profPic= $r['Profile_Pic'];
 		$pw = $r['User_Password'];
 	}
-	
+
+	##If the update button is clicked 
+	if(isset($_POST['update'])){
+
+		##	capture values from HTML form 
+		if($_POST['pw'] != $_POST['confirmPw'] ){
+			echo "<script>
+				alert('Password is not matching');
+				window.location.href = 'admin edit details.php';
+			</script>";
+		}else{
+			$uId= $_SESSION['User_ID']; 
+			$uName= $_POST['username']; 
+			$uFullName= $_POST['fullname']; 
+			$uEmail= $_POST['email']; 
+			$pw= $_POST['pw'];
+			$confirmPw = $_POST['confirmPw'];
+
+			if (empty($_POST['fullname']) || empty($_POST['username']) || empty($_POST['email']) || empty($_POST['pw']) || empty($_POST['confirmPw'])) {
+				echo "<script>
+					alert('One or more fields are empty!');
+				</script>";
+			}else if($row != 0){
+				echo "<script>alert('The username is already existed'); 
+						</script>";
+			}else{
+				// Image upload handling
+				if(isset($_FILES['image']) && $_FILES['image']['error'] == 0){
+					$file = $_FILES['image'];
+
+					$fileName = $_FILES['image']['name'];
+					$fileTmpName = $_FILES['image']['tmp_name'];
+					$fileSize = $_FILES['image']['size'];
+					$fileError = $_FILES['image']['error'];
+					$fileType = $_FILES['image']['type'];
+
+					$fileExt = explode('.', $fileName);
+					$fileActualExt = strtolower(end($fileExt));
+
+					$allowed = array('jpg','jpeg','png');
+
+					if(in_array($fileActualExt, $allowed)) {
+						if($fileError === 0) {
+							//file size must be < 10MB
+							if($fileSize < 10485760) {
+								$fileNameNew = $uId.".".$fileActualExt;
+								$fileDestination = '../../assets/userPic/'. $fileNameNew;
+
+								move_uploaded_file($fileTmpName, $fileDestination); //to upload file to a specific folder
+
+								## execute SQL UPDATE command 
+								$sqlUpdate = "UPDATE users SET User_Full_Name = '" . $uFullName . "',
+								User_Email= '" . $uEmail . "', User_Password = '" . $pw . "', Profile_Pic = '$fileDestination'
+								WHERE User_ID = '" . $uId . "'";
+								
+								mysqli_query($dbconn, $sqlUpdate) or die ("Error: " . mysqli_error($dbconn));
+								/* display a message */
+								echo "<script>
+										alert('Data has been updated');
+										window.location.href = 'admin view account.php';
+									</script>";
+							} else {
+								echo "<script>
+									alert('File is too big!');
+								</script>";   
+							}
+						} else {
+							echo "<script>
+								alert('There is an error in this file!');
+							</script>";  
+						}
+					} else {
+						echo "<script>
+							alert('PNG, JPG, JPEG only!');
+						</script>";  
+					}
+				}
+			}
+		}
+	}
 ?>
 
 <!DOCTYPE html>
@@ -89,46 +168,22 @@
 			}
 		</style>
 	</head>
-	<table id=header  border="0">
-		<tr>
-			<th style="padding-left: 20px;">
-				<a href="admin users list.php">
-					USERS
-				</a>
-			</th>
-			<th>
-				<a href="admin product list.php">
-					PRODUCTS
-				</a>
-			</th>
-			<th>
-				<a href="admin orders.php">
-				ORDERS
-				</a>
-			</th>
-			<td colspan=2><img src="design 1.png"  style="width:60px; height:60px;"></td>
-			<th style="padding-left:60px;">
-				<a href="admin dashboard.php">
-					DASHBOARD
-				</a>
-			</th>
-			<td>
-				<a href="admin view account.php">
-					<img src="user.png" style="width:71px; height:40px;" class="user">
-				</a>
-			</td>
-		</tr>
+	<?php include 'admin header.php'; ?>
 	</table>
 	<br><br>
-	<form id="editForm" action="update account proccess.php" method="POST" enctype="multipart/form-data">
+	<form id="editForm" action="" method="POST" enctype="multipart/form-data">
 		<table id=acc border="0">
 			<tr>
 				<th colspan=3 style="font-size:40px">ACCOUNT DETAILS</th>
 			</tr>
 			<tr>
-				<td rowspan=3 style="text-align:center"><img src="<?php echo $profPic; ?>" style="width: 150px; height: 150px; border-radius: 50%; object-fit: cover; overflow: hidden;"></td>
+				<td rowspan=4 style="text-align:center"><img src="<?php echo $profPic; ?>" style="width: 150px; height: 150px; border-radius: 50%; object-fit: cover; overflow: hidden;"></td>
 				<td style="padding:10px;">Full Name</td>
 				<td><input type="text" id="fullname" name="fullname" value="<?php echo $uFullName; ?>"></td>
+			</tr>
+			<tr>
+				<td style="padding:10px;">Username</td>
+				<td><input type="text" id="username" name="username" value="<?php echo $uName; ?>"></td>
 			</tr>
 			<tr>
 				<td style="padding:10px;">Email</td>
@@ -145,9 +200,6 @@
 			</tr>
 			<tr>
 				<td><span style="color: white; font-size: 13px; font-style: italic;"> File type: .jpg, .jpeg, & .png only & max 10MB </span></td>
-			</tr>
-			<tr>
-                <td style="text-align:center; font-size:30px"><?php echo $uName; ?></td>
 			</tr>
 			<tr>
                 <td style="text-align:center"><?php echo $uId; ?></td>

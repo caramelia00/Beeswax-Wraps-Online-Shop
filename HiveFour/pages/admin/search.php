@@ -14,7 +14,7 @@
     <style>
         body{
             background-color: #E6DAD1;
-            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            font-family:calibri, sans-serif;
             margin: 0;
 			padding: 0;    
         }
@@ -129,36 +129,7 @@
         </script>
 </head>
 <body>
-	<table id="header" border="0">
-		<tr>
-			<th style="padding-left: 20px;">
-				<a href="admin users list.php">
-					USERS
-				</a>
-			</th>
-			<th>
-				<a href="admin product list.php">
-					PRODUCTS
-				</a>
-			</th>
-			<th>
-				<a href="admin orders.php">
-				ORDERS
-				</a>
-			</th>
-			<td colspan=2><img src="design 1.png"  style="width:60px; height:60px;"></td>
-			<th style="padding-left:60px;">
-				<a href="admin dashboard.php">
-					DASHBOARD
-				</a>
-			</th>
-			<td>
-				<a href="admin view account.php">
-					<img src="user.png" style="width:71px; height:40px;" class="user">
-				</a>
-			</td>
-		</tr>
-	</table>
+<?php include 'admin header.php'; ?>
 
     <?php
         include '../../config/dbconn.php';
@@ -167,6 +138,12 @@
             displayCustomerSearchBar();
 
             $search = mysqli_real_escape_string($dbconn, $_POST['query']);
+            if($search==""){
+                echo "<script>alert('Enter query!'); 
+                    window.location.href = 'admin users list.php';
+                    </script>";
+                exit();
+            }
             $result = getCustomer($search);
             $queryResult = mysqli_num_rows($result);
 
@@ -184,6 +161,12 @@
             displayProductSearchBar();
 
             $search = mysqli_real_escape_string($dbconn, $_POST['query']);
+            if($search==""){
+                echo "<script>alert('Enter query!'); 
+                    window.location.href = 'admin product list.php';
+                    </script>";
+                exit();
+            }
             $result = getProduct($search);
             $queryResult = mysqli_num_rows($result);
 
@@ -201,6 +184,12 @@
             displayOrderSearchBar();
         
             $search = mysqli_real_escape_string($dbconn, $_POST['query']);
+            if($search==""){
+                echo "<script>alert('Enter query!'); 
+                    window.location.href = 'admin orders.php';
+                    </script>";
+                exit();
+            }
             $result = getOrders($search);
             
             if ($result) { // Check if the query was successful
@@ -403,7 +392,7 @@ function getOrders($search){
     JOIN size on size.Size_ID = order_details.Size_ID
     WHERE orders.Payment_Receipt <> ''
     AND (orders.Order_ID LIKE '%$search%' OR product.Product_Name LIKE '%$search%' 
-    OR users.User_Full_Name LIKE '%$search%')";
+    OR users.User_Full_Name LIKE '%$search%' OR status.Status_Name LIKE '%$search%')";
     $result = mysqli_query($dbconn, $query);
     return $result;
 }
@@ -419,7 +408,7 @@ function displayOrderSearchBar(){
                     <form action="search.php" method="POST">
                         <tr>
                             <td style="text-align: center;">
-                                <input type="text" name="query" placeholder="Insert order ID or customer and product name" class="searchbar">
+                                <input type="text" name="query" placeholder="Insert order ID, order status, customer name, product name" class="searchbar">
                             </td>
                             <td style="text-align: right;">
                                 <button type="submit" name="submitOrder" class="sIcon" style="width: 22px; height: 22px; background: none; border: none; padding: 0; cursor: pointer;">

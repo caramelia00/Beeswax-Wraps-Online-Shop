@@ -1,5 +1,6 @@
 <?php
     session_start();
+    include '../../config/dbconn.php';
     
     $session = $_SESSION['User_ID'];
     if (empty($session)) {
@@ -31,6 +32,22 @@
         $result = mysqli_query($dbconn, $query);
         return $result;
     }
+
+    //get order/product based on name/id from database
+    function getOrderSearch($search){
+        include '../../config/dbconn.php';
+
+        $query = "SELECT * 
+        FROM orders
+        JOIN status on status.Status_ID = orders.Status_ID
+        JOIN users on users.User_ID = orders.User_ID
+        JOIN order_details on order_details.Order_ID = orders.Order_ID
+        JOIN product on product.Product_ID = order_details.Product_ID
+        JOIN size on size.Size_ID = order_details.Size_ID
+        WHERE orders.Order_ID LIKE '%$search%' OR product.Product_Name LIKE '%$search%'";
+        $result = mysqli_query($dbconn, $query);
+        return $result;
+    }
 ?>
 <!DOCTYPE html>
 <html>
@@ -42,7 +59,7 @@
         body{
             margin:0;
             background-color: #E6DAD1;
-            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            font-family:calibri, sans-serif;
         }
         #bar{
             width: 100%;
@@ -149,53 +166,21 @@
     </style>
 </head>
 <body>
-	<table id=header  border="0">
-		<tr>
-			<th style="padding-left: 20px;">
-				<a href="HOME.php">
-					HOME
-				</a>
-			</th>
-			<th>
-				<a href="search product.php">
-					PRODUCTS
-				</a>
-			</th>
-			<th>
-				<a href="About Us.php">
-				ABOUT US
-				</a>
-			</th>
-			<td colspan=2><img src="design 1.png"  style="width:80px; height:80px; padding-right: 30px;"></td>
-			<td>
-				<a href="order.php">
-					<img src="order.png" style="width: 50px;height: 50px;" class="user">
-				</a>
-			</td>
-			<td>
-				<a href="cart.php">
-					<img src="cart.png" style="width: 50px;height: 50px;" class="user">
-				</a>
-			</td>
-			<td>
-				<a href="view account details.php">
-					<img src="user.png" style="width:71px; height:40px;" class="user">
-				</a>
-			</td>
-		</tr>
-	</table>
-    <br>
-    <form action="search.php" method="get">
+<?php include 'customer header.php'; ?>
+    <h1 style="text-align: center; color: #8AB49C;">SEARCH ORDER</h1>
+    <form action="" method="POST">
         <table style="width: 800px; border-spacing: 5px;" border="0">
             <tr>
                 <td>
                     <table id="bar" border="0">
                         <tr>
                             <td style="text-align: center;">
-                                    <input type="text" name="query" placeholder="Insert order ID" class="searchbar">
+                                    <input type="text" name="query" placeholder="Insert order ID or product name" class="searchbar">
                             </td>
                             <td style="text-align: right;">
-                                <button type="submit" class="sIcon"><img src="search.png" style="width: 22px; height: 22px;"></button>
+                                <button type="submit" name="submitOrder" class="sIcon" style="width: 22px; height: 22px; background: none; border: none; padding: 0; cursor: pointer;">
+                                    <img src="search.png" alt="Submit" style="display: inline-block;">
+                                </button>
                             </td>
                         </tr>
                     </table>
@@ -204,18 +189,121 @@
         </table>
     </form>
     <br>
+    <!-- SEARCH ORDER -->
     <?php
-        $order = getOrders($session);
-        if (mysqli_num_rows($order) > 0) {
-            while ($rOrd = mysqli_fetch_assoc($order)) {
-                $shipPrice = 5;
-    ?>   
+        if (isset($_POST['submitOrder'])) {
+        
+            $search = mysqli_real_escape_string($dbconn, $_POST['query']);
+
+            if($search==""){
+                echo "<script>alert('Enter query!'); 
+                    window.location.href = 'order.php';
+                    </script>";
+                exit();
+            }
+            $result = getOrderSearch($search);
+            
+            if ($result) { // Check if the query was successful
+                $queryResult = mysqli_num_rows($result);
+        
+                if ($queryResult > 0) {
+                    while ($rOrd = mysqli_fetch_assoc($result)) {
+                        $shipPrice = 5;
+    ?>
+                        <tr>
+                        <td colspan="2"> 
+                        <table id="list" border="0">
+                            <tr>
+                                <td colspan="2">
+                                    <b>ORDER ID:</b> <?php echo $rOrd['Order_ID'];?>
+                                </td>
+                                <td style="text-align: center;">
+                                    <a href="../../pages/admin/invoice.php?orderId=<?php echo $rOrd['Order_ID'];?>" target="_blank" style="display: inline-block; padding: 7px 12px; background-color: white; color: #8AB49C; border-radius: 10px; font-size: 12px; border: none; cursor: pointer;">
+                                        INVOICE
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                <?php
+                                    $orderDetails = getOrderDetails($rOrd['Order_ID']);
+                                    $totPrice=0;
+
+                                    if (mysqli_num_rows($orderDetails) > 0) {
+                                        while ($rOrdDetails = mysqli_fetch_assoc($orderDetails)) {
+                                            $itemTotalPrice = $rOrdDetails['Size_Price'] * $rOrdDetails['Quantity'];
+                                            $totPrice += $itemTotalPrice;
+                                ?>
+                                    <table id="three" border="0">
+                                        <tr>
+                                            <td id="img" rowspan="2"><img src="<?php echo $rOrdDetails['Product_Image'];?>" id="orderImg"></td>
+                                            <td id="name"><?php echo $rOrdDetails['Product_Name'];?></td>
+                                            <td rowspan="2">x<?php echo $rOrdDetails['Quantity'];?></td>
+                                            <td rowspan="2">RM<?php echo $rOrdDetails['Size_Price'];?></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="vertical-align: text-top;">Size: <?php echo $rOrdDetails['Size_ID'];?></td>
+                                        </tr>
+                                    </table>
+                                    <?php
+                                        }
+                                    }else {
+                                        $detailsHtml .= '<tr><td colspan="4">No order details found.</td></tr>';
+                                    }
+                                ?>
+                                </td>
+                                <td rowspan="2">
+                                    <b><?php if($rOrd['Status_Name']=='Pending') {
+                                                echo 'Order Placed';
+                                                }else echo $rOrd['Status_Name'];?></b><br>
+                                    Total Payment<br>
+                                    RM
+                                    <?php 
+                                        $orderTotalPrice = $totPrice + $shipPrice;
+                                        echo number_format($orderTotalPrice, 2);
+                                    ?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" style="text-align: center;">
+                                    <!-- link to specific product details -->
+                                    <a href="status.php?orderId=<?php echo $rOrd['Order_ID'];?>">
+                                        <b>view</b>
+                                    </a> 
+                                </td>
+                            </tr>
+                        </table>
+                        </td>
+                        </tr>
+                        <br>
+
+    <?php
+                    }
+                } else {
+                    echo "<br>";
+                    echo "<center>There is no result matching your search!</center>";
+                    exit();
+                }
+            } else {
+                echo "Error: " . mysqli_error($dbconn); // Output the error message if the query fails
+            }
+        }else{
+            $order = getOrders($session);
+            if (mysqli_num_rows($order) > 0) {
+                while ($rOrd = mysqli_fetch_assoc($order)) {
+                    $shipPrice = 5;    
+    ?>
     <tr>
     <td colspan="2"> 
-    <table id="list" border="1">
+    <table id="list" border="0">
         <tr>
             <td colspan="2">
                 <b>ORDER ID:</b> <?php echo $rOrd['Order_ID'];?>
+            </td>
+            <td style="text-align: center;">
+                <a href="../../pages/admin/invoice.php?orderId=<?php echo $rOrd['Order_ID'];?>" target="_blank" style="display: inline-block; padding: 7px 12px; background-color: white; color: #8AB49C; border-radius: 10px; font-size: 12px; border: none; cursor: pointer;">
+                    INVOICE
+                </a>
             </td>
         </tr>
         <tr>
@@ -229,7 +317,7 @@
                         $itemTotalPrice = $rOrdDetails['Size_Price'] * $rOrdDetails['Quantity'];
                         $totPrice += $itemTotalPrice;
             ?>
-                <table id="three" border="1">
+                <table id="three" border="0">
                     <tr>
                         <td id="img" rowspan="2"><img src="<?php echo $rOrdDetails['Product_Image'];?>" id="orderImg"></td>
                         <td id="name"><?php echo $rOrdDetails['Product_Name'];?></td>
@@ -262,9 +350,9 @@
         <tr>
             <td colspan="3" style="text-align: center;">
                 <!-- link to specific product details -->
-                <a href="status.php">
+                <a href="status.php?orderId=<?php echo $rOrd['Order_ID'];?>">
                     <b>view</b>
-                </a>
+                </a> 
             </td>
         </tr>
     </table>
@@ -272,6 +360,12 @@
     </tr>
     <br>
     <?php
+                }
+            }else {
+                echo '<div style="text-align: center;margin-top: 5rem;margin-bottom: 5rem">';
+                echo '<p>You have no order(s) been made yet!</p>';
+                echo '<p>Back to <strong><a href="search product.php" style="color: orange">Shop</a></strong></p>';
+                echo '</div>';
             }
         }
     ?>

@@ -19,6 +19,83 @@ if (isset($_GET['productId'])) {
     }
 }
 
+## If the update button is clicked 
+if(isset($_POST['update'])) {
+
+    ## Capture values from HTML form 
+    $pId = $_POST['pId']; 
+    $pName = $_POST['pName']; 
+    $pStatus = $_POST['newStatus'];
+
+    ## Check if product name is empty
+    if (empty($pName)) {
+        echo "<script>
+                alert('Product name cannot be empty!');
+                window.location.href = 'admin update product.php?productId=$pId';
+              </script>";
+    }else{
+        
+    ## Image upload handling
+    if(isset($_FILES['image']) && $_FILES['image']['error'] == 0){
+        $file = $_FILES['image'];
+
+        $fileName = $_FILES['image']['name'];
+        $fileTmpName = $_FILES['image']['tmp_name'];
+        $fileSize = $_FILES['image']['size'];
+        $fileError = $_FILES['image']['error'];
+        $fileType = $_FILES['image']['type'];
+
+        $fileExt = explode('.', $fileName);
+        $fileActualExt = strtolower(end($fileExt));
+
+        $allowed = array('jpg','jpeg','png');
+
+        if(in_array($fileActualExt, $allowed)) {
+            if($fileError === 0) {
+                // File size must be < 10MB
+                if($fileSize < 10485760) {
+                    $fileNameNew = $pId.".".$fileActualExt;
+                    $fileDestination = '../../assets/prodPic/'. $fileNameNew;
+
+                    move_uploaded_file($fileTmpName, $fileDestination); // To upload file to a specific folder
+
+                    $sqlUpdateImage = "UPDATE product SET Product_Image = '$fileDestination' WHERE Product_ID = '$pId'";
+                    mysqli_query($dbconn, $sqlUpdateImage) or die ("Error: " . mysqli_error($dbconn));
+                } else {
+                    echo "<script>
+                            alert('File is too big!');
+                          </script>";   
+                    exit();
+                }
+            } else {
+                echo "<script>
+                        alert('There is an error in this file!');
+                      </script>";  
+                exit();
+            }
+        } else {
+            echo "<script>
+                    alert('PNG, JPG, JPEG only!');
+                  </script>";  
+            exit();
+        }
+    } else {
+        echo "<script>
+                alert('Product image cannot be empty!');
+              </script>";
+    }
+
+    $sqlUpdate = "UPDATE product SET Product_Name = '$pName',  Product_Status_ID = '$pStatus' WHERE Product_ID = '$pId'";
+    mysqli_query($dbconn, $sqlUpdate) or die ("Error: " . mysqli_error($dbconn));
+
+    /* Display a message */
+    echo "<script>
+            alert('Data has been updated');
+            window.location.href = 'admin product list.php';
+          </script>";   
+}
+}
+
 function getProduct($productId)
 {
     global $dbconn;
@@ -103,30 +180,9 @@ function getProduct($productId)
     </style>
 </head>
 <body>
-    <table id="header" border="0">
-        <tr>
-            <th style="padding-left: 20px;">
-                <a href="admin users list.php">USERS</a>
-            </th>
-            <th>
-                <a href="admin product list.php">PRODUCTS</a>
-            </th>
-            <th>
-                <a href="admin orders.php">ORDERS</a>
-            </th>
-            <td colspan=2><img src="design 1.png" style="width:60px; height:60px;"></td>
-            <th style="padding-left:60px;">
-                <a href="admin dashboard.php">DASHBOARD</a>
-            </th>
-            <td>
-                <a href="admin view account.php">
-                    <img src="user.png" style="width:71px; height:40px;" class="user">
-                </a>
-            </td>
-        </tr>
-    </table>
+<?php include 'admin header.php'; ?>
     <br><br>
-    <form action="update product details process.php" method="POST" enctype="multipart/form-data">
+    <form action="" method="POST" enctype="multipart/form-data">
         <table id="acc" border="0">
             <tr>
                 <th colspan=5 style="font-size:40px">UPDATE PRODUCT DETAILS </th>

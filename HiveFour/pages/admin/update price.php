@@ -15,6 +15,43 @@ if (isset($_POST['update'])) {
     $priceL = $rowL['Size_Price'];
 }
 
+##If the update button is clicked 
+if(isset($_POST['updatePrice'])){
+
+    ##	capture values from HTML form  
+    $priceS= $_POST['priceS']; 
+    $priceM= $_POST['priceM']; 
+    $priceL= $_POST['priceL'];
+
+    if($priceS == "" || $priceM == "" || $priceL == "") {
+        // Display the alert
+        echo "<script>alert('One or more prices are empty!'); 
+        </script>";
+    }else{ 
+
+    ## execute SQL UPDATE command 
+    $sqlUpdateS = "UPDATE size SET Size_Price = '" . $priceS . "'
+    WHERE Size_ID = 'S'";
+    mysqli_query($dbconn, $sqlUpdateS) or die ("Error: " . mysqli_error($dbconn));
+
+    $sqlUpdateS = "UPDATE size SET Size_Price = '" . $priceM . "'
+    WHERE Size_ID = 'M'";
+    mysqli_query($dbconn, $sqlUpdateS) or die ("Error: " . mysqli_error($dbconn));
+
+    $sqlUpdateS = "UPDATE size SET Size_Price = '" . $priceL . "'
+    WHERE Size_ID = 'L'";
+    mysqli_query($dbconn, $sqlUpdateS) or die ("Error: " . mysqli_error($dbconn));
+
+
+    /* display a message */
+    echo "<script>
+            alert('Data has been updated');
+            window.location.href = 'admin product list.php';
+        </script>";
+    }
+        
+}
+
 function getSize($sizeId)
 {
     global $dbconn;
@@ -99,30 +136,9 @@ function getSize($sizeId)
     </style>
 </head>
 <body>
-    <table id="header" border="0">
-        <tr>
-            <th style="padding-left: 20px;">
-                <a href="admin users list.php">USERS</a>
-            </th>
-            <th>
-                <a href="admin product list.php">PRODUCTS</a>
-            </th>
-            <th>
-                <a href="admin orders.php">ORDERS</a>
-            </th>
-            <td colspan=2><img src="design 1.png" style="width:60px; height:60px;"></td>
-            <th style="padding-left:60px;">
-                <a href="admin dashboard.php">DASHBOARD</a>
-            </th>
-            <td>
-                <a href="admin view account.php">
-                    <img src="user.png" style="width:71px; height:40px;" class="user">
-                </a>
-            </td>
-        </tr>
-    </table>
+<?php include 'admin header.php'; ?>
     <br><br>
-    <form action="update price process.php" method="POST">
+    <form action="" method="POST">
         <table id="acc" border="0">
             <tr>
                 <th colspan=5 style="font-size:40px">UPDATE PRODUCT PRICES </th>
@@ -158,7 +174,7 @@ function getSize($sizeId)
                         <tr>
                             <td style="width: 48px;">
                                 <p style="text-align: center;">
-                                    <button type="submit" name="update" style="display: inline-block; padding: 10px 20px; background-color: #ffffff; color: #a5695d; border-radius: 40px; font-size: 13px; border: none; cursor: pointer;">UPDATE PRICE</button>
+                                    <button type="submit" name="updatePrice" style="display: inline-block; padding: 10px 20px; background-color: #ffffff; color: #a5695d; border-radius: 40px; font-size: 13px; border: none; cursor: pointer;">UPDATE PRICE</button>
                                 </p>
                             </td>
                         </tr>

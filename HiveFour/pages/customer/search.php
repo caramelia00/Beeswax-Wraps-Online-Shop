@@ -13,7 +13,7 @@
     <style>
         body{
             background-color: #E6DAD1;
-            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            font-family:calibri, sans-serif;
             margin: 0;
 			padding: 0;    
         }
@@ -120,35 +120,7 @@
     </style>
 </head>
 <body>
-<table id="header" border="0">
-        <tr>
-            <th style="padding-left: 20px;">
-                <a href="HOME.php">HOME</a>
-            </th>
-            <th>
-                <a href="search product.php">PRODUCTS</a>
-            </th>
-            <th>
-                <a href="About Us.php">ABOUT US</a>
-            </th>
-            <td colspan="2"><img src="design 1.png" style="width:80px; height:80px; padding-right: 30px;"></td>
-            <td>
-                <a href="order.php">
-                    <img src="order.png" style="width: 50px;height: 50px;" class="user">
-                </a>
-            </td>
-            <td>
-                <a href="cart.php">
-                    <img src="cart.png" style="width: 50px;height: 50px;" class="user">
-                </a>
-            </td>
-            <td>
-                <a href="view account details.php">
-                    <img src="user.png" style="width:71px; height:40px;" class="user">
-                </a>
-            </td>
-        </tr>
-    </table>
+<?php include 'customer header.php'; ?>
 
 <?php
 //--- PRODUCT ---
@@ -354,6 +326,14 @@ function displayOrders($orderId, $orderStatus, $orderPrice, $orderTotalPrice, $o
             displayProductSearchBar();
 
             $search = mysqli_real_escape_string($dbconn, $_POST['query']);
+            
+            if($search==""){
+                echo "<script>alert('Enter query!'); 
+                    window.location.href = 'search product.php';
+                    </script>";
+                exit();
+            }
+
             $result = getProduct($search);
             $queryResult = mysqli_num_rows($result);
 

@@ -57,6 +57,15 @@
     </script>
 	<head>
 		<style>
+      @keyframes pop {
+      0% { transform: scale(0.5); opacity: 0; }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); opacity: 1; }
+			}
+			.pop-up {
+				animation: pop 1s;
+			}
+
       body{
         margin:0;
       }
@@ -166,7 +175,7 @@
 				ABOUT US
 				</a>
 			</th>
-			<td colspan=2><img src="design 1.png"  style="width:80px; height:80px;"></td>
+			<td colspan=2><img src="design 1.png"  style="width:80px; height:80px; padding-right: 100px;">
 			<th style="padding-left:60px;">
 				<a href="login.php">
 					LOGIN
@@ -180,6 +189,7 @@
 		</tr>
 	</table>
 	<br><br>
+  <div class="pop-up">
   <form name="registerForm" action="register.php" method="POST" onsubmit="return checkEmptyFields()">
 	<table id=acc border="0">
 			<tr>
@@ -239,4 +249,5 @@
 		  </tr>
 	</table>
   </form>
+  </div>
 </html>

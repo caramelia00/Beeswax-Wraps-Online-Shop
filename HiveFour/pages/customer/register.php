@@ -17,6 +17,7 @@ if(isset($_POST['Submit'])){
     $city = $_POST['city'];
     $state = $_POST['state'];
     $typeID = "UT01";
+    $profilePic = "../../assets/userPic/default.jpg";
 
     /* execute SQL SELECT command */
     $sql = "SELECT User_Name FROM users WHERE User_Name = '$username'";
@@ -37,7 +38,7 @@ if(isset($_POST['Submit'])){
     }
     else{
         /* execute SQL INSERT commands */
-        $sql2 = "INSERT INTO users (User_ID, User_Name, User_Email, User_Password, User_Full_Name, Type_ID) VALUES ('$uId','$username', '$email', '$password', '$fullName', '$typeID')";
+        $sql2 = "INSERT INTO users (User_ID, User_Name, User_Email, User_Password, User_Full_Name, Type_ID, Profile_Pic) VALUES ('$uId','$username', '$email', '$password', '$fullName', '$typeID', '$profilePic')";
         $sql3 = "INSERT INTO user_details (User_Details_ID, Phone_No, Address1, Address2, Postcode, City, State, User_ID) VALUES ('$udId', '$phoneNumber', '$address1', '$address2', '$postcode', '$city', '$state', '$uId')";
 
         if (mysqli_query($dbconn, $sql2) && mysqli_query($dbconn, $sql3)) {

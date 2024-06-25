@@ -90,19 +90,19 @@
                     } else {
                         echo "<script>
                             alert('File is too big!');
-                            window.location.href = 'cart.php';
+                            window.location.href = 'checkout.php';
                         </script>";   
                     }
                 } else {
                     echo "<script>
                         alert('There is an error in this file!');
-                        window.location.href = 'cart.php';
+                        window.location.href = 'checkout.php';
                     </script>";  
                 }
             } else {
                 echo "<script>
                     alert('PNG, JPG, JPEG, PDF only!');
-                    window.location.href = 'cart.php';
+                    window.location.href = 'checkout.php';
                 </script>";  
             }
         }

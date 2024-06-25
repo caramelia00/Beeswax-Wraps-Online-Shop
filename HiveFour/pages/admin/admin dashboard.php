@@ -12,12 +12,12 @@
 	<title>Hive4</title>
 	<head>
 		<style>
-			body{
-				background-color:#E6DAD1;
-				margin: 0;
-				padding: 0;
-				/* font-size: 20px; */
-			}
+        body{
+            background-color: #E6DAD1;
+            font-family:calibri, sans-serif;
+            margin: 0;
+			padding: 0;
+        }
 			#top{
 				width: 1120px;
 				margin-left:auto;
@@ -115,36 +115,8 @@
 			}
 		</style>
 	</head>
-	<table id=header  border="0">
-		<tr>
-			<th style="padding-left: 20px;">
-				<a href="admin users list.php">
-					USERS
-				</a>
-			</th>
-			<th>
-				<a href="admin product list.php">
-					PRODUCTS
-				</a>
-			</th>
-			<th>
-				<a href="admin orders.php">
-				ORDERS
-				</a>
-			</th>
-			<td colspan=2><img src="design 1.png"  style="width:60px; height:60px;"></td>
-			<th style="padding-left:60px;">
-				<a href="admin dashboard.php">
-					DASHBOARD
-				</a>
-			</th>
-			<td>
-				<a href="admin view account.php">
-					<img src="user.png" style="width:71px; height:40px;" class="user">
-				</a>
-			</td>
-		</tr>
-	</table>
+	<?php include 'admin header.php'; ?>
+	<body>
 	<table id=top border="0">
 		<tr>
 			<td>
@@ -317,6 +289,7 @@
 			
 		</tr>
 	</table>
+</body>
 </html>
 
 <?php
@@ -327,7 +300,7 @@ header("Location: ../../pages/customer/login.php");
 }
 
 //--- RECENT ORDERS ---
-function getOrdersDashboard() {
+function getOrdersDashboard() { //select 5 recent orders
 	include '../../config/dbconn.php';
   
 	$sql = "SELECT *
@@ -338,7 +311,8 @@ function getOrdersDashboard() {
 	JOIN product ON product.Product_ID = order_details.Product_ID
 	JOIN status ON status.Status_ID = orders.Status_ID
 	WHERE orders.Payment_Receipt <> ''
-	ORDER BY orders.Order_Date DESC";
+	ORDER BY orders.Order_Date DESC
+	LIMIT 5";
 
 	$result = mysqli_query($dbconn, $sql);
 	return $result;
@@ -374,13 +348,21 @@ function getOrdersDashboard() {
 }
   //--- USERS --- 
 
-  function getUsersDetailsDashboard() {
+  function getUsersDetailsDashboard() { //select 7 customer with recent order
 	require '../../config/dbconn.php';
   
-	$sql = "SELECT *
-	FROM users";
+	$sql = "SELECT u.*
+	FROM users u
+	JOIN (
+		SELECT DISTINCT orders.User_ID
+		FROM orders
+		ORDER BY orders.Order_Date DESC
+		LIMIT 7
+		) recent_orders ON recent_orders.User_ID = u.User_ID";
 	$result = mysqli_query($dbconn, $sql);
 	return $result;
+
+
 }
 
   function users($name, $profilePic, $email) {

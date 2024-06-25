@@ -13,7 +13,7 @@
 	<head>
 		<style>
             body{
-                font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+                font-family:calibri, sans-serif;
                 background-color: #E6DAD1;
                 margin: 0;
 				padding: 0;
@@ -164,36 +164,7 @@
 
 	</head>
     <body>
-	<table id=header border="0">
-		<tr>
-			<th style="padding-left: 20px;">
-				<a href="admin users list.php">
-					USERS
-				</a>
-			</th>
-			<th>
-				<a href="admin product list.php">
-					PRODUCTS
-				</a>
-			</th>
-			<th>
-				<a href="admin orders.php">
-				ORDERS
-				</a>
-			</th>
-			<td colspan=2><img src="design 1.png"  style="width:60px; height:60px;"></td>
-			<th style="padding-left:60px;">
-				<a href="admin dashboard.php">
-					DASHBOARD
-				</a>
-			</th>
-			<td>
-				<a href="admin view account.php">
-					<img src="user.png" style="width:71px; height:40px;" class="user">
-				</a>
-			</td>
-		</tr>
-	</table>
+    <?php include 'admin header.php'; ?>
 
 	<h1 style="text-align: center; color: #8AB49C;">SEARCH ORDER</h1>
     <table id="one" style="border-spacing: 5px;" border="0">
@@ -203,7 +174,7 @@
                     <form action="search.php" method="POST">
                         <tr>
                             <td style="text-align: center;">
-                                <input type="text" name="query" placeholder="Insert order ID or customer and product name" class="searchbar">
+                                <input type="text" name="query" placeholder="Insert order ID, order status, customer name, product name" class="searchbar">
                             </td>
                             <td style="text-align: right;">
                                 <button type="submit" name="submitOrder" class="sIcon" style="width: 22px; height: 22px; background: none; border: none; padding: 0; cursor: pointer;">
@@ -261,7 +232,7 @@ function generateOrderDetailsHtml($orderId) {
             $itemTotalPrice = $rOrdDetails['Size_Price'] * $rOrdDetails['Quantity'];
             $totPrice += $itemTotalPrice;
             $detailsHtml .= '
-            <table id="three" border="1">
+            <table id="three" border="0">
                 <tr>
                     <td id="img" rowspan="2"><img src="' . htmlspecialchars($rOrdDetails['Product_Image']) . '" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; overflow: hidden;"></td>
                     <td id="name">' . htmlspecialchars($rOrdDetails['Product_Name']) . '</td>

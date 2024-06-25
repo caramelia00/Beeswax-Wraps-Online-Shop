@@ -2,45 +2,8 @@
 		session_start();
 
 		include '../../config/dbconn.php';
-		
-		$userId = $_SESSION['User_ID']; 
 
-		if ($_SERVER["REQUEST_METHOD"] == "POST") {
-			// Retrieve the form data
-			$uName = $_POST['username'];
-			$uFullName = $_POST['fullname'];
-			$uEmail = $_POST['email'];
-			$pw = $_POST['pw'];
-			$address1 = $_POST['address1'];
-			$address2 = $_POST['address2'];
-			$postcode = $_POST['postcode'];
-			$City = $_POST['city'];
-			$State = $_POST['state'];
-			$Phone_No = $_POST['phone_no'];
-
-			// Update the database
-			$sql = "UPDATE users
-			JOIN user_details ON user_details.User_ID = users.User_ID
-			SET 
-				users.User_Name = '$uName',
-				users.User_Full_Name = '$uFullName',
-				users.User_Email = '$uEmail',
-				users.User_Password = '$pw',
-				user_details.Address1 = '$address1',
-				user_details.Address2 = '$address2',
-				user_details.Postcode = '$postcode',
-				user_details.City = '$City',
-				user_details.State = '$State',
-				user_details.Phone_No = '$Phone_No',
-				users.Profile_Pic = '$profPic'
-			WHERE users.User_ID = '$userId'";
-	
-		if (mysqli_query($dbconn, $sql)) {
-			echo "Record updated successfully";
-		} else {
-			echo "Error updating record: " . mysqli_error($dbconn);
-		}
-	}
+		$userId = $_SESSION['User_ID'];
 	
 		$sql= "SELECT * 
 		FROM users 
@@ -67,7 +30,107 @@
 			$City = $r['City'];
 			$State = $r['State'];
 			$Phone_No = $r['Phone_No'];
-		}	
+		} 
+
+		if (isset($_POST['update'])) {
+			// Retrieve the form data
+			$uName = $_POST['username'];
+			$uFullName = $_POST['fullname'];
+			$uEmail = $_POST['email'];
+			$pw = $_POST['pw'];
+			$address1 = $_POST['address1'];
+			$address2 = $_POST['address2'];
+			$postcode = $_POST['postcode'];
+			$City = $_POST['city'];
+			$State = $_POST['state'];
+			$Phone_No = $_POST['phone_no'];
+
+			/* execute SQL SELECT command */
+			$sqlUName = "SELECT User_Name FROM users WHERE User_Name = '$username' AND User_ID !='$uId' ";
+			echo $sql;
+			$qUName = mysqli_query($dbconn, $sqlUName);
+		
+			if (!$query) {
+				die("Error: " . mysqli_error($dbconn));
+			}
+		
+			$rUName = mysqli_num_rows($qUName);
+
+			if (empty($uName) || empty($uFullName) || empty($uEmail) || empty($pw) || empty($address1) || empty($address2) || empty($postcode) || empty($City) || empty($State) || empty($Phone_No)) {
+				echo "<script>
+					alert('One or more fields are empty!');
+				</script>";
+			}else if($rUName != 0){
+				echo "<script>alert('The username is already existed'); 
+						</script>";
+			}else{
+				// Image upload handling
+				if(isset($_FILES['image']) && $_FILES['image']['error'] == 0){
+					$file = $_FILES['image'];
+
+					$fileName = $_FILES['image']['name'];
+					$fileTmpName = $_FILES['image']['tmp_name'];
+					$fileSize = $_FILES['image']['size'];
+					$fileError = $_FILES['image']['error'];
+					$fileType = $_FILES['image']['type'];
+
+					$fileExt = explode('.', $fileName);
+					$fileActualExt = strtolower(end($fileExt));
+
+					$allowed = array('jpg','jpeg','png');
+
+					if(in_array($fileActualExt, $allowed)) {
+						if($fileError === 0) {
+							//file size must be < 10MB
+							if($fileSize < 10485760) {
+								$fileNameNew = $uId.".".$fileActualExt;
+								$fileDestination = '../../assets/userPic/'. $fileNameNew;
+
+								move_uploaded_file($fileTmpName, $fileDestination); //to upload file to a specific folder
+
+								// Update the database
+								$sqlUpdate= "UPDATE users
+								JOIN user_details ON user_details.User_ID = users.User_ID
+								SET 
+									users.User_Name = '$uName',
+									users.User_Full_Name = '$uFullName',
+									users.User_Email = '$uEmail',
+									users.User_Password = '$pw',
+									user_details.Address1 = '$address1',
+									user_details.Address2 = '$address2',
+									user_details.Postcode = '$postcode',
+									user_details.City = '$City',
+									user_details.State = '$State',
+									user_details.Phone_No = '$Phone_No',
+									Profile_Pic = '$fileDestination'
+								WHERE users.User_ID = '$userId'";
+						
+								if (mysqli_query($dbconn, $sqlUpdate)) {
+									echo "<script>
+											alert('Record updated successfully');
+											window.location.href = 'view account details.php';
+										</script>";
+								} else {
+									echo "Error updating record: " . mysqli_error($dbconn);
+								}
+							} else {
+								echo "<script>
+									alert('File is too big!');
+								</script>";   
+							}
+						} else {
+							echo "<script>
+								alert('There is an error in this file!');
+							</script>";  
+						}
+					} else {
+						echo "<script>
+							alert('PNG, JPG, JPEG only!');
+						</script>";  
+					}
+				}
+			}
+		}
 	?>
 
 <!DOCTYPE html>
@@ -81,6 +144,9 @@
         body {
             margin: 0;
             background-image: url(loginbg.png);
+			background-size: cover;
+			background-repeat: no-repeat;
+			background-position: center;
         }
         #acc {
             margin-left: auto;
@@ -123,42 +189,9 @@
     </style>
 </head>
 <body>
-<table id=header  border="0">
-		<tr>
-        <th style="padding-left: 20px;">
-				<a href="HOME.php">
-					HOME
-				</a>
-			</th>
-			<th>
-				<a href="search product.php">
-					PRODUCTS
-				</a>
-			</th>
-			<th>
-				<a href="About Us.php">
-				ABOUT US
-				</a>
-			</th>
-			<td colspan=2><img src="design 1.png"  style="width:80px; height:80px; padding-right: 30px;"></td>
-			<td>
-				<a href="order.php">
-					<img src="order.png" style="width: 50px;height: 50px;" class="user">
-				</a>
-			</td>
-			<td>
-				<a href="cart.php">
-					<img src="cart.png" style="width: 50px;height: 50px;" class="user">
-				</a>
-			</td>
-			<td>
-				<a href="view account details.php">
-					<img src="user.png" style="width:71px; height:40px;" class="user">
-				</a>
-			</td>
-		</tr>
-	</table>
+<?php include 'customer header.php'; ?>
     <br><br>
+	<form action="" method="POST" enctype="multipart/form-data">
 	<table id=acc border="0" style="width: 80%;">
 		<tr>
 			<th colspan=3 style="font-size:40px">ACCOUNT DETAILS</th>
@@ -188,14 +221,17 @@
 			<td><input type="text" id="address1" name="address1" value="<?php echo $address1; ?>"></td>
 		</tr>
 		<tr>
-			<td><span style="color: white; font-size: 13px; font-style: italic;"> File type: .jpg, .jpeg, & .png only & max 10MB </span></td>
+			<td style="text-align:center;"><span style="color: white; font-size: 13px; font-style: italic;"> File type: .jpg, .jpeg, & .png only & max 10MB </span></td>
 			<td style="padding:10px;">Address 2</td>
 			<td><input type="text" id="address2" name="address2" value="<?php echo $address2; ?>"></td>
 		</tr>
 		<tr>
 			<td rowspan =2 style="text-align:center; padding-top:10px;">
-			<button type="submit" style="background:none;border:none;">
-			<img src="save changes.png" style="width: 180px; height: 50px;">
+
+			<button type="submit" name="update" style="background: none; border: none; padding: 0; cursor: pointer;">
+				<img src="save changes.png" alt="Submit" value="update" style="width: 180px; height: 50px; display: inline-block;">
+			</button>	
+
 			</td>
 			<td style="padding:10px;">Postcode</td>
 			<td><input type="text"  name="postcode" value="<?php echo $postcode ?>"></td>
@@ -208,15 +244,16 @@
 					<img src="back.png">
 				</a>
 			</td>
-			<td style="padding:20px;">State</td>
+			<td style="padding:10px;">State</td>
 			<td><input type="text" name="state" value="<?php echo $State ?>"></td>
 		</tr>
 		<tr>
-			<td style="padding:20px;">Phone<br>Number</td>
-			<td><input type="text" name="state" value="<?php echo $Phone_No ?>"></td>
+			<td style="padding:10px;">Phone Number</td>
+			<td><input type="text" name="phone_no" value="<?php echo $Phone_No ?>"></td>
 				</table>
 			</td>
 		</tr>
 	</table>
+	</form>
 </body>
 </html>	

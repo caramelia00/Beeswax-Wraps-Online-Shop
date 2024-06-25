@@ -224,43 +224,19 @@
             input[type="submit"]:hover {
                 background-color: #9D5A4D;
             }
+			.zoom-effect {
+				overflow: hidden;
+				position: relative;
+				border-radius: 5%;
+			}
+
+			.zoom-effect:hover img {
+				transform: scale(3); /* Increase the scale to zoom in (1.2 means 120% of original size) */
+				transition: transform 0.3s; /* Add a smooth transition effect */
+			}
 		</style>
 	</head>
-	<table id=header border="0">
-		<tr>
-			<th style="padding-left: 20px;">
-				<a href="HOME.php">
-					HOME
-				</a>
-			</th>
-			<th>
-				<a href="search product.php">
-					PRODUCTS
-				</a>
-			</th>
-			<th>
-				<a href="About Us.php">
-				ABOUT US
-				</a>
-			</th>
-			<td colspan=2><img src="design 1.png"  style="width:80px; height:80px; padding-right: 30px;"></td>
-			<td>
-				<a href="order.php">
-					<img src="order.png" style="width: 50px;height: 50px;" class="user">
-				</a>
-			</td>
-			<td>
-				<a href="cart.php">
-					<img src="cart.png" style="width: 50px;height: 50px;" class="user">
-				</a>
-			</td>
-			<td>
-				<a href="view account details.php">
-					<img src="user.png" style="width:71px; height:40px;" class="user">
-				</a>
-			</td>
-		</tr>
-	</table>
+	<?php include 'customer header.php'; ?>
 	<body>
 	<script>
 		// Ensure that at least one option is selected
@@ -287,8 +263,8 @@
 						<td colspan=2>
 							<table id=ord border="0">
 								<tr>
-									<td>
-										<img src="<?php echo $pImage?>" name="productImg" style="width: 400px; height: 400px;">
+									<td class="zoom-effect">
+										<img src="<?php echo $pImage?>" name="productImg" style="width: 400px; height: 400px; border-radius: 5%">
 									</td>
 								</tr>
 							</table>
@@ -332,7 +308,7 @@
 							<?php }else{ ?>
 								<input type="submit" name="unavailable" VALUE="UNAVAILABLE">
 							<?php }?>
-							<a href="search product.php"><input type="submit" value="BACK"></a>
+							<!-- <a href="search product.php"><input type="submit" value="BACK"></a> -->
 						</td>
 					</tr>
 				</table>

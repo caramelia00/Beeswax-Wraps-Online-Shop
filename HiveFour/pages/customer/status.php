@@ -1,34 +1,55 @@
 <?php
- session_start();
+session_start();
+include '../../config/dbconn.php';
 
- include("dbconn.php");
+if (isset($_GET['orderId'])) {
+    $updateOrderId = $_GET['orderId'];
 
-// Check if the form is submitted
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['order_received'])) {
-    $orderId = $_POST['Status_ID'];
+    $order = getOrders($updateOrderId);
+    $rowOrder = mysqli_num_rows($order);
 
-
-    // Check connection
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
-    }
-
-    // Update order status to "received"
-    $sql = "UPDATE order SET status = 'received' WHERE Status_ID = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param('i', $statusID);
-
-    if ($stmt->execute()) {
-        echo "<p>Order status updated successfully!</p>";
+    if ($rowOrder == 0) {
+        echo "No record found";
     } else {
-        echo "<p>Error updating order status: " . $stmt->error . "</p>";
-    }
+        $rOrder = mysqli_fetch_assoc($order);
 
-    $stmt->close();
-    $conn->close();
+        $oId = $rOrder['Order_ID'];
+        $oStatus = $rOrder['Status_ID'];
+        $uFullName = $rOrder['User_Full_Name'];
+        $uAddress1 = $rOrder['Address1'];
+        $uAddress2 = $rOrder['Address2'];
+        $postcode = $rOrder['Postcode'];
+        $state = $rOrder['State'];
+        $city = $rOrder['City'];
+    }
+}
+
+function getOrders($orderId)
+{
+    global $dbconn;
+    $sql = "SELECT *
+            FROM orders
+            JOIN order_details on order_details.Order_ID = orders.Order_ID
+            JOIN status on status.Status_ID = orders.Status_ID
+            JOIN users on users.User_ID = orders.User_ID
+            JOIN user_details on user_details.User_ID = users.User_ID
+            WHERE orders.Order_ID='$orderId'";
+    $result = mysqli_query($dbconn, $sql);
+    return $result;
+}
+
+function getOrderDetails($orderId){
+    global $dbconn;
+    $sql = "SELECT *
+            FROM order_details
+            JOIN orders on orders.Order_ID = order_details.Order_ID
+            JOIN product on product.Product_ID = order_details.Product_ID
+            JOIN size on size.Size_ID = order_details.Size_ID
+            WHERE orders.Order_ID='$orderId'";
+    $result = mysqli_query($dbconn, $sql);
+    return $result;
 }
 ?>
-
 <!DOCTYPE html>
 <html>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -36,9 +57,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['order_received'])) {
 	<title>Hive4 Status Order</title>
 	<head>
 		<style>
-            body{
-                margin:0;
-            }
             #one{
                 width: 80%;
                 background-color: #E6DAD1;
@@ -85,7 +103,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['order_received'])) {
                 padding-left: 10px;
             }
             body{
-                font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+                margin:0;
+                font-family:calibri, sans-serif;
                 background-color: #8AB49C;   
             }
 			#header{
@@ -130,41 +149,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['order_received'])) {
 		</style>
 	</head>
 	<body>
-		<table id=header  border="0">
-			<tr>
-				<th style="padding-left: 20px;">
-                    <a href="HOME.php">
-                        HOME
-                    </a>
-                </th>
-                <th>
-                    <a href="search product.php">
-                        PRODUCTS
-                    </a>
-                </th>
-                <th>
-                    <a href="About Us.php">
-                    ABOUT US
-                    </a>
-                </th>
-                <td colspan=2><img src="design 1.png"  style="width:80px; height:80px; padding-right: 30px;"></td>
-                <td>
-                    <a href="order.php">
-                        <img src="order.png" style="width: 50px;height: 50px;" class="user">
-                    </a>
-                </td>
-                <td>
-                    <a href="cart.php">
-                        <img src="cart.png" style="width: 50px;height: 50px;" class="user">
-                    </a>
-                </td>
-                <td>
-                    <a href="view account details.php">
-                        <img src="user.png" style="width:71px; height:40px;" class="user">
-                    </a>
-                </td>
-			</tr>
-		</table>
+    <?php include 'customer header.php'; ?>
 		<br><br>
         <table id="one">
             <tr>
@@ -180,10 +165,33 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['order_received'])) {
                             <td><b>Completed</b></td>
                         </tr>
                         <tr>
-                            <td><img src="done.png" width="40px" height="40px"></td>
-                            <td><img src="done.png" width="40px" height="40px"></td>
-                            <td><img src="done.png" width="40px" height="40px"></td>
-                            <td><img src="default.png" width="40px" height="40px"></td>
+                            <?php
+                            if($oStatus=="S01"){
+                                echo '<td><img src="done.png" width="40px" height="40px"></td>
+                                    <td><img src="default.png" width="40px" height="40px"></td>
+                                    <td><img src="default.png" width="40px" height="40px"></td>
+                                    <td><img src="default.png" width="40px" height="40px"></td>
+                                ';
+                            }else if($oStatus=="S02"){
+                                echo '<td><img src="done.png" width="40px" height="40px"></td>
+                                    <td><img src="done.png" width="40px" height="40px"></td>
+                                    <td><img src="default.png" width="40px" height="40px"></td>
+                                    <td><img src="default.png" width="40px" height="40px"></td>
+                                ';
+                            }else if($oStatus=="S03"){
+                                echo '<td><img src="done.png" width="40px" height="40px"></td>
+                                    <td><img src="done.png" width="40px" height="40px"></td>
+                                    <td><img src="done.png" width="40px" height="40px"></td>
+                                    <td><img src="default.png" width="40px" height="40px"></td>
+                                ';
+                            }else if($oStatus=="S04"){
+                                echo '<td><img src="done.png" width="40px" height="40px"></td>
+                                    <td><img src="done.png" width="40px" height="40px"></td>
+                                    <td><img src="done.png" width="40px" height="40px"></td>
+                                    <td><img src="done.png" width="40px" height="40px"></td>
+                                ';
+                            }
+                            ?>
                         </tr>
                     </table>
                 </td>
@@ -201,33 +209,47 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['order_received'])) {
                                 ITEMS ORDERED
                             </td>
                         </tr>
-                        <tr>
-                            <td rowspan="3">
-                                <img src="earth.png" style="width: 90px; height: 90px;">
-                            </td>
-                            <td colspan="2">
-                                Earth & Sun Beeswax Wraps
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="2">
-                                Size: L
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                X2
-                            </td>
-                            <td style="text-align: right;">
-                                RM30.00
-                            </td>
-                        </tr>
+
+                        <?php 
+                                $orderDetails = getOrderDetails($oId);
+                                $totPrice=0;
+                            
+                                if (mysqli_num_rows($orderDetails) > 0) {
+                                    while ($rOrdDetails = mysqli_fetch_assoc($orderDetails)) {
+                                        $itemTotalPrice = $rOrdDetails['Size_Price'] * $rOrdDetails['Quantity'];
+                                        $totPrice += $itemTotalPrice;
+                        ?>
+                                        <tr>
+                                            <td rowspan="3">
+                                                <img src="<?php echo $rOrdDetails['Product_Image'];?>" style="width: 90px; height: 90px; border-radius: 50%; object-fit: cover; overflow: hidden;">
+                                            </td>
+                                            <td colspan="2">
+                                                <?php echo $rOrdDetails['Product_Name'];?>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2">
+                                                Size: <?php echo $rOrdDetails['Size_ID'];?>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                X<?php echo $rOrdDetails['Quantity'];?>
+                                            </td>
+                                            <td style="text-align: right;">
+                                                RM<?php echo $rOrdDetails['Size_Price'];?>
+                                            </td>
+                                        </tr>
+                        <?php
+                                }
+                            }
+                        ?>
                         <tr>
                             <td>
                                 Items Subtotal
                             </td>
                             <td colspan="2">
-                                RM60.00
+                                RM<?php echo number_format($totPrice, 2); ?>
                             </td>
                         </tr>
                         <tr>
@@ -243,7 +265,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['order_received'])) {
                                 Total Payment
                             </td>
                             <td colspan="2" style="font-size: 30px;">
-                                RM65.00
+                                RM<?php echo number_format(($totPrice + 5), 2);?>
                             </td>
                         </tr>
                     </table>
@@ -256,65 +278,33 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['order_received'])) {
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="Name">
-                                NAME
-                                <br>
-                                Daniel Choi <br>
+                            <td colspan="2">
+                                FULL NAME <br>
+                                <?php echo $uFullName; ?>
+                            </td>
                         </tr>
                         <tr>
                             <td colspan="2">
-                                ADDRESS
-                                <br>
-                                Menara TM,<br>
-                                Jalan Pantai Baharu, <br>
-                                50672 Kuala Lumpur <br>
-                                Malaysia
+                                ADDRESS <br>
+                                <?php echo $uAddress1; ?>,<br>
+                                    <?php if($uAddress2 != 'NULL') echo $uAddress2 . ',<br>'; ?>
+                                    <?php echo $postcode; ?> <?php echo $city; ?>, <br>
+                                    <?php echo $state; 
+                                ?>
                             </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                ORDER ID <br>
+                                <?php echo $oId; ?>
+                            </td>
+                        </tr>
                     </table>
                 </td>
             </tr>
-            <tr>
-            <div class="container">
-                <h1>Order Details</h1>
-                <p>Order ID: 12345</p>
-                <form method="post" action="">
-                <input type="hidden" name="Status_ID" value="12345">
-                <button type="submit" name="order_received">Order Received</button>
-            </form>
-            </div>
-            </tr>
         </table>
-        <script>
-            const selectElements = document.querySelectorAll('.mySelect');
-            const imageElements = document.querySelectorAll('.myImage');
-
-            selectElements.forEach((selectElement, index) => {
-                const imageElement = imageElements[index];
-
-                selectElement.addEventListener('change', function() {
-                    const selectedValue = this.value;
-
-                    if (selectedValue === 'default') {
-                        // Hide the image when the default option is selected
-                        imageElement.style.display = 'none';
-                    } else {
-                        // Show the image when an option other than the default is selected
-                        imageElement.style.display = 'block';
-
-                        const imageSrc = selectedValue === 'true' ? 'done.png' : 'default.png';
-                        imageElement.src = imageSrc;
-
-                        if (selectedValue === 'true') {
-                            imageElement.style.width = '40px';
-                            imageElement.style.height = '40px';
-                        } else {
-                            imageElement.style.width = '40px';
-                            imageElement.style.height = '40px';
-                        }
-                    }
-                });
-            });
-        </script>
 	</body>
 </html>
+	
+	
 	
