@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 14, 2024 at 04:28 PM
+-- Generation Time: Jun 26, 2024 at 12:31 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.0.28
 
@@ -20,6 +20,9 @@ SET time_zone = "+00:00";
 --
 -- Database: `hivefour`
 --
+DROP DATABASE IF EXISTS `hivefour`;
+CREATE DATABASE IF NOT EXISTS `hivefour` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+USE `hivefour`;
 
 -- --------------------------------------------------------
 
@@ -43,7 +46,10 @@ CREATE TABLE `orders` (
 INSERT INTO `orders` (`Order_ID`, `Order_Date`, `Order_Time`, `Status_ID`, `User_ID`, `Payment_Receipt`) VALUES
 ('O01', '2024-05-01', '10:00:00.000000', 'S04', 'U01', '../../assets/payReceipt/O01.pdf'),
 ('O02', '2024-05-02', '11:15:00.000000', 'S01', 'U02', '../../assets/payReceipt/O02.pdf'),
-('O03', '2024-05-03', '09:30:00.000000', 'S03', 'U03', '../../assets/payReceipt/O03.pdf');
+('O03', '2024-05-03', '09:30:00.000000', 'S03', 'U03', '../../assets/payReceipt/O03.pdf'),
+('O04', '2024-06-15', '04:54:53', 'S01', 'U01', '../../assets/payReceipt/O04.pdf'),
+('O05', '2024-06-15', '05:13:34', 'S01', 'U06', '../../assets/payReceipt/O05.pdf'),
+('O06', '2024-06-19', '10:28:58', 'S02', 'U01', '../../assets/payReceipt/O06.pdf');
 
 -- --------------------------------------------------------
 
@@ -66,7 +72,12 @@ CREATE TABLE `order_details` (
 INSERT INTO `order_details` (`Order_Details_ID`, `Quantity`, `Product_ID`, `Order_ID`, `Size_ID`) VALUES
 ('OD01', 2, 'PD1', 'O01', 'S'),
 ('OD02', 3, 'PD2', 'O02', 'L'),
-('OD03', 6, 'PD3', 'O03', 'M');
+('OD03', 6, 'PD3', 'O03', 'M'),
+('OD04', 9, 'PD2', 'O04', 'M'),
+('OD05', 1, 'PD3', 'O04', 'S'),
+('OD06', 3, 'PD2', 'O05', 'S'),
+('OD07', 4, 'PD2', 'O06', 'L'),
+('OD08', 1, 'PD3', 'O06', 'L');
 
 -- --------------------------------------------------------
 
@@ -88,7 +99,12 @@ CREATE TABLE `product` (
 INSERT INTO `product` (`Product_ID`, `Product_Name`, `Product_Image`, `Product_Status_ID`) VALUES
 ('PD1', 'Earth Beeswax Wraps', '../../assets/prodPic/PD1.png', 'PDS2'),
 ('PD2', 'Gummy Bears Beeswax Wraps', '../../assets/prodPic/PD2.png', 'PDS1'),
-('PD3', 'Dried Caesalpinia Flower Beeswax Wraps', '../../assets/prodPic/PD3.png', 'PDS1');
+('PD3', 'Dried Caesalpinia Flower Beeswax Wraps', '../../assets/prodPic/PD3.png', 'PDS1'),
+('PD4', 'Red & Green Beeswax Wraps', '../../assets/prodPic/PD4.png', 'PDS1'),
+('PD5', 'Fried Chicken Beeswax Wraps', '../../assets/prodPic/PD5.png', 'PDS1'),
+('PD6', 'Hari Hari Raya Beeswax Wraps', '../../assets/prodPic/PD6.png', 'PDS1'),
+('PD7', 'UiTM Di Hatiku Beeswax Wraps', '../../assets/prodPic/PD7.png', 'PDS1'),
+('PD8', 'I am (Not) Ok Beeswax Wraps', '../../assets/prodPic/PD8.png', 'PDS1');
 
 -- --------------------------------------------------------
 
@@ -173,11 +189,13 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`User_ID`, `User_Name`, `User_Full_Name`, `User_Email`, `User_Password`, `Profile_Pic`, `Type_ID`) VALUES
-('U01', 'amzati2004', 'Amirah Izzati Binti Aminuddin', 'amirah@gmail.com', 'amirah123', '../../assets/userPic/amirah.jpg', 'UT01'),
+('U01', 'amzati200', 'Amirah Izzati Binti Aminuddin', 'amirah@gmail.com', 'amirah123', '../../assets/userPic/amirah.jpg', 'UT01'),
 ('U02', 'aalifAziz', 'Aliff Aziz Bin Alif Syukri', 'aaziz@gmail.com', 'alifaziz098', '../../assets/userPic/alif.jpg', 'UT01'),
 ('U03', 'syabat04', 'Nur Batrisyia Binti Norul Haizal', 'batrisyia@gmail.com', 'batrisyia123', '../../assets/userPic/batrisyia.jpg', 'UT01'),
-('U04', 'aidandellion', 'Aida Shazwani Binti Samani', 'aidasyazwani04@gmail.com', 'aida', '../../assets/userPic/aida.jpg', 'UT02'),
-('U05', 'a_alicafe23', 'Nurul Aliah Haifaa Binti Nasiruddin', 'aliah@gmail.com', 'aliah123', '../../assets/userPic/aliah.jpg', 'UT02');
+('U04', 'aidandellion', 'Aida Syazwani Binti Samani', 'aida@gmail.com', 'aida', '../../assets/userPic/aida.jpg', 'UT02'),
+('U05', 'a_alicafe23', 'Nurul Aliah Haifaa Binti Nasiruddin', 'aliah@gmail.com', 'aliah123', '../../assets/userPic/aliah.jpg', 'UT01'),
+('U06', 'Ainaalysha', 'Aina Alysha Binti Mohd Nasir', 'ainaalysha01@gmail.com', 'Ainaalysha2902', '../../assets/userPic/default.jpg', 'UT01'),
+('U07', 'aida004', 'Aida Shazwani Binti Samani', 'aida04@gmail.com', 'aida', '../../assets/userPic/U07.jpg', 'UT01');
 
 -- --------------------------------------------------------
 
@@ -205,7 +223,9 @@ INSERT INTO `user_details` (`User_Details_ID`, `Address1`, `Address2`, `Postcode
 ('UD02', '45, Jalan Ampang', 'Taman Ampang', '68000', 'WP Kuala Lumpur', 'Ampang', '01239485760', 'U02'),
 ('UD03', '789, Jalan Sultan Ismail', 'NULL', '50250', 'WP Kuala Lumpur', 'Kuala Lumpur', '0146060411', 'U03'),
 ('UD04', 'Lot 2410, Lorong Kenanga', 'Kampung Sijangkang', '42500', 'Selangor', 'Telok Panglima Garang', '01647839256', 'U04'),
-('UD05', '12, Jalan Kuchai Lama', 'NULL', '58200', 'WP Kuala Lumpur', 'Kuala Lumpur', '01452378695', 'U05');
+('UD05', '12, Jalan Kuchai Lama', 'NULL', '58200', 'WP Kuala Lumpur', 'Kuala Lumpur', '01452378695', 'U05'),
+('UD06', 'No 37, Lorong Sungai Isap Damai 25', 'r', '25150', 'Pahang', 'Kuantan', '011-17825256', 'U06'),
+('UD07', 'Floor 99', 'Menara KLCC', '0000', 'WP Kuala Lumpur', 'Kuala Lumpur', '011111111', 'U07');
 
 -- --------------------------------------------------------
 
