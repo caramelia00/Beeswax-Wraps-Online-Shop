@@ -139,9 +139,9 @@
 			<br>waste. HiveFour really took it seriously in action to take care of the environment and give the best product for everyone.
 			</p>
 			<p style="font-size: 30px; text-align: center;" class="move-up">
-				<b>The Developer</b>
+				<b>Organizational Structure</b>
 				<br><br>
-				<img src="organizational.png" style="border-radius: 20%;"></p>  
+				<img src="organizational chart.png" style="width: 50%; border-radius: 20%;"></p>  
 			</td>
 		</tr>
 	</table>

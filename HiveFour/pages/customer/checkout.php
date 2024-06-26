@@ -263,7 +263,7 @@
                         </tr>
                         <tr>
                             <td style="text-align: center;">
-                                <img src="qr.png" style="width: 200px; height: 200px;"><br>12345678912345
+                                <img src="qr bank.png" style="width: 200px; height: 200px;"><br>12345678912345
                             </td>
                         </tr>
                     </table>

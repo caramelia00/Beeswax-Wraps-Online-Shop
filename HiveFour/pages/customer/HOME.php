@@ -122,15 +122,16 @@
 	<br>
 	<table style="color: black; width: 100%; margin: 0 auto; text-align: center;">
 		<tr>
-			<td style="font-size: 100px; font-family: 'Times New Roman';" class="pop-up">
-				BEESWAX<br>WRAPS<br>
+			<td style="font-size: 100px; font-family: 'Times New Roman'; line-height: 1.9;" class="pop-up">
+				BEESWAX WRAPS<br>
 			</td>
 		</tr>
 		<tr>
-			<td style="font-size: 40px; font-family:Verdana;" class="move-up">
+			<td style="font-size: 35px; font-family:Verdana;" class="move-up">
 				Say goodbye to plastic and hello to
 				<br>sustainable freshness of our beeswax
-				<br>wrap, one wrap at a time.
+				<br>wrap, one wrap at a time. <br>
+				<img src="wraps demo.png"  style="width: 30%; text-align: center;"> 
 			</td>
 		</tr>
 	</table>
