@@ -46,8 +46,7 @@
 			$Phone_No = $_POST['phone_no'];
 
 			/* execute SQL SELECT command */
-			$sqlUName = "SELECT User_Name FROM users WHERE User_Name = '$username' AND User_ID !='$uId' ";
-			echo $sql;
+			$sqlUName = "SELECT User_Name FROM users WHERE User_Name = '$uName' AND User_ID !='$uId' ";
 			$qUName = mysqli_query($dbconn, $sqlUName);
 		
 			if (!$query) {
@@ -127,6 +126,31 @@
 						echo "<script>
 							alert('PNG, JPG, JPEG only!');
 						</script>";  
+					}
+				}else{
+					// Update the database
+					$sqlUpdate= "UPDATE users
+					JOIN user_details ON user_details.User_ID = users.User_ID
+					SET 
+						users.User_Name = '$uName',
+						users.User_Full_Name = '$uFullName',
+						users.User_Email = '$uEmail',
+						users.User_Password = '$pw',
+						user_details.Address1 = '$address1',
+						user_details.Address2 = '$address2',
+						user_details.Postcode = '$postcode',
+						user_details.City = '$City',
+						user_details.State = '$State',
+						user_details.Phone_No = '$Phone_No'
+					WHERE users.User_ID = '$userId'";
+			
+					if (mysqli_query($dbconn, $sqlUpdate)) {
+						echo "<script>
+								alert('Record updated successfully');
+								window.location.href = 'view account details.php';
+							</script>";
+					} else {
+						echo "Error updating record: " . mysqli_error($dbconn);
 					}
 				}
 			}

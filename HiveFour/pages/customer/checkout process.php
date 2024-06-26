@@ -72,7 +72,7 @@
                                 '" . $oId . "',
                                 '" . $sId . "'
                             )";
-                            echo $sqlInsertOrdDetails;
+                            //echo $sqlInsertOrdDetails;
                             mysqli_query($dbconn, $sqlInsertOrdDetails) or die ("Error: " . mysqli_error($dbconn));
                         }
                         

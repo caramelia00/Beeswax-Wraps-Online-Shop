@@ -79,11 +79,7 @@ if(isset($_POST['update'])) {
                   </script>";  
             exit();
         }
-    } else {
-        echo "<script>
-                alert('Product image cannot be empty!');
-              </script>";
-    }
+    } else
 
     $sqlUpdate = "UPDATE product SET Product_Name = '$pName',  Product_Status_ID = '$pStatus' WHERE Product_ID = '$pId'";
     mysqli_query($dbconn, $sqlUpdate) or die ("Error: " . mysqli_error($dbconn));

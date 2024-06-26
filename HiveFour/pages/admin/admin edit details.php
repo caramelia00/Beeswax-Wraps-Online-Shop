@@ -40,11 +40,21 @@
 			$pw= $_POST['pw'];
 			$confirmPw = $_POST['confirmPw'];
 
+			/* execute SQL SELECT command */
+			$sqlUName = "SELECT User_Name FROM users WHERE User_Name = '$uName' AND User_ID !='$uId' ";
+			$qUName = mysqli_query($dbconn, $sqlUName);
+		
+			if (!$query) {
+				die("Error: " . mysqli_error($dbconn));
+			}
+		
+			$rUName = mysqli_num_rows($qUName);
+
 			if (empty($_POST['fullname']) || empty($_POST['username']) || empty($_POST['email']) || empty($_POST['pw']) || empty($_POST['confirmPw'])) {
 				echo "<script>
 					alert('One or more fields are empty!');
 				</script>";
-			}else if($row != 0){
+			}else if($rUName != 0){
 				echo "<script>alert('The username is already existed'); 
 						</script>";
 			}else{
@@ -73,7 +83,7 @@
 								move_uploaded_file($fileTmpName, $fileDestination); //to upload file to a specific folder
 
 								## execute SQL UPDATE command 
-								$sqlUpdate = "UPDATE users SET User_Full_Name = '" . $uFullName . "',
+								$sqlUpdate = "UPDATE users SET User_Full_Name = '" . $uFullName . "', User_Name = '" . $uName . "',
 								User_Email= '" . $uEmail . "', User_Password = '" . $pw . "', Profile_Pic = '$fileDestination'
 								WHERE User_ID = '" . $uId . "'";
 								
@@ -97,11 +107,28 @@
 						echo "<script>
 							alert('PNG, JPG, JPEG only!');
 						</script>";  
+					} 
+				}else {
+						// Execute SQL UPDATE command without image upload
+						$sqlUpdate = "UPDATE users SET 
+							User_Full_Name = '$uFullName', 
+							User_Name = '$uName',
+							User_Email = '$uEmail', 
+							User_Password = '$pw'
+							WHERE User_ID = '$uId'";
+	
+						if (mysqli_query($dbconn, $sqlUpdate)) {
+							echo "<script>
+								alert('Data has been updated');
+								window.location.href = 'admin view account.php';
+							</script>";
+						} else {
+							die("Error updating record: " . mysqli_error($dbconn));
+						}
 					}
 				}
 			}
 		}
-	}
 ?>
 
 <!DOCTYPE html>
