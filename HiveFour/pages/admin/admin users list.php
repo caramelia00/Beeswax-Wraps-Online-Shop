@@ -10,11 +10,11 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8">
-    <title>Hive4</title>
+    <title>Users</title>
     <style>
         body{
             background-color: #E6DAD1;
-            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            font-family:calibri, sans-serif;
             margin: 0;
 			padding: 0;    
         }
@@ -93,37 +93,8 @@
         }
     </style>
 </head>
+<?php include 'admin header.php'; ?>
 <body>
-	<table id="header" border="0">
-		<tr>
-			<th style="padding-left: 20px;">
-				<a href="admin users list.php">
-					USERS
-				</a>
-			</th>
-			<th>
-				<a href="admin product list.php">
-					PRODUCTS
-				</a>
-			</th>
-			<th>
-				<a href="admin orders.php">
-				ORDERS
-				</a>
-			</th>
-			<td colspan=2><img src="design 1.png"  style="width:60px; height:60px;"></td>
-			<th style="padding-left:60px;">
-				<a href="admin dashboard.php">
-					DASHBOARD
-				</a>
-			</th>
-			<td>
-				<a href="admin view account.php">
-					<img src="user.png" style="width:71px; height:40px;" class="user">
-				</a>
-			</td>
-		</tr>
-	</table>
     <h1 style="text-align: center; color: #8AB49C;">SEARCH CUSTOMER</h1>
     <form id="searchForm" action="search.php" method="POST">
         <table style="width: 800px; border-spacing: 5px;" border="0">
@@ -152,31 +123,13 @@
         displayCustomer($row['User_ID'], $row['User_Name'], $row['Profile_Pic']);
         }
     ?>
-    <!---
-    <script>
-        document.getElementById('searchForm').addEventListener('submit', function(event) {
-        event.preventDefault(); // Prevent default form submission
-
-        const query = document.getElementById('searchInput').value;
-
-        // Make an AJAX request to fetch search results
-        fetch('search.php?q=' + query)
-            .then(response => response.json())
-            .then(data => {
-                // Display search results in the 'searchResults' div
-                document.getElementById('searchResults').innerHTML = data;
-            })
-            .catch(error => console.error('Error:', error));
-        });
-    </script>
-    --->
 </body>
 </html>
 
 <?php
 }else
 {	## if the session username is no admin, redirect the page to the login page 
-header("Location: login.php");
+header("Location: ../../pages/customer/login.php");
 }
 
 // get customers from database
@@ -216,4 +169,3 @@ function displayCustomer($userId, $userName, $profilePic){
     echo $user;
 }
 ?>
-

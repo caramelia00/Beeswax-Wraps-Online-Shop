@@ -1,10 +1,38 @@
+<?php
+	session_start();
+	
+    // Hide error reporting
+    error_reporting(0);
+    ini_set('display_errors', 0);
+
+    $session = isset($_SESSION['User_ID']) ? $_SESSION['User_ID'] : null;
+?>
 <!DOCTYPE html>
 <html>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8">
-	<title>Hive4 HOME</title>
+	<title>Home</title>
 	<head>
 		<style>
+			 @keyframes pop {
+            0% { transform: scale(0.5); opacity: 0; }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); opacity: 1; }
+			}
+
+			.pop-up {
+				animation: pop 1s;
+			}
+
+			@keyframes moveUp {
+            from { transform: translateY(100px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+			}
+
+			.move-up {
+				animation: moveUp 1s forwards;
+			}
+
 			body{
         		margin:0;
       		}
@@ -54,7 +82,10 @@
 			}
 		</style>
 	</head>
-	<table id=header  border="0">
+		<?php
+			if (empty($session)) {
+		?>
+		<table id=header  border="0">
 		<tr>
 			<th style="padding-left: 20px;">
 				<a href="HOME.php">
@@ -71,7 +102,7 @@
 				ABOUT US
 				</a>
 			</th>
-			<td colspan=2><img src="design 1.png"  style="width:80px; height:80px;"></td>
+			<td colspan=2><img src="design 1.png"  style="width:80px; height:80px; padding-right: 100px;">
 			<th style="padding-left:60px;">
 				<a href="login.php">
 					LOGIN
@@ -83,19 +114,24 @@
 				</a>
 			</th>
 		</tr>
+		</table>
+		<?php }else{?>
+			<?php include 'customer header.php'; ?>
+		<?php }?>
 	</table>
 	<br>
 	<table style="color: black; width: 100%; margin: 0 auto; text-align: center;">
 		<tr>
-			<td style="font-size: 100px; font-family: 'Times New Roman';">
-				BEESWAX<br>WRAPS<br>
+			<td style="font-size: 100px; font-family: 'Times New Roman'; line-height: 1.9;" class="pop-up">
+				BEESWAX WRAPS<br>
 			</td>
 		</tr>
 		<tr>
-			<td style="font-size: 40px; font-family:Verdana;">
+			<td style="font-size: 35px; font-family:Verdana;" class="move-up">
 				Say goodbye to plastic and hello to
 				<br>sustainable freshness of our beeswax
-				<br>wrap, one wrap at a time.
+				<br>wrap, one wrap at a time. <br>
+				<img src="wraps demo.png"  style="width: 30%; text-align: center;"> 
 			</td>
 		</tr>
 	</table>

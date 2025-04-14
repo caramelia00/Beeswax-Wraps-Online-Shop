@@ -14,12 +14,12 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8">
-    <title>Hive4 products</title>
+    <title>Products</title>
     <style>
         body {
             margin: 0;
             background-color: #E6DAD1;
-            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            font-family:calibri, sans-serif;
         }
         #bar {
             width: 100%;
@@ -95,35 +95,7 @@
     </style>
 </head>
 <body>
-    <table id="header" border="0">
-        <tr>
-            <th style="padding-left: 20px;">
-                <a href="HOME.php">HOME</a>
-            </th>
-            <th>
-                <a href="search product.php">PRODUCTS</a>
-            </th>
-            <th>
-                <a href="About Us.php">ABOUT US</a>
-            </th>
-            <td colspan="2"><img src="design 1.png" style="width:80px; height:80px; padding-right: 30px;"></td>
-            <td>
-                <a href="order.php">
-                    <img src="order.png" style="width: 50px;height: 50px;" class="user">
-                </a>
-            </td>
-            <td>
-                <a href="cart.php">
-                    <img src="cart.png" style="width: 50px;height: 50px;" class="user">
-                </a>
-            </td>
-            <td>
-                <a href="view account details.php">
-                    <img src="user.png" style="width:71px; height:40px;" class="user">
-                </a>
-            </td>
-        </tr>
-    </table>
+<?php include 'customer header.php'; ?>
     <h1 style="text-align: center; color: #8AB49C;">SEARCH PRODUCT</h1>
     <table style="width: 800px; border-spacing: 5px;" border="0">
             <tr>
@@ -132,7 +104,7 @@
                     <table id="bar" border="0">
                         <tr>
                             <td style="text-align: center;">
-                                    <input type="text" name="query" placeholder="Insert product name or ID" class="searchbar">
+                                <input type="text" name="query" placeholder="Insert product name or ID" class="searchbar">
                             </td>
                             <td style="text-align: right;">
                                 <button type="submit" name="submitProduct" class="sIcon" style="width: 22px; height: 22px; background: none; border: none; padding: 0; cursor: pointer;">
@@ -145,7 +117,21 @@
                 </td>
         </tr>
     </table>
-
+    <?php
+        $result = getProduct();
+        while ($row = mysqli_fetch_assoc($result)) {
+        displayProduct($row['Product_Name'], $row['Product_Image'], $row['Product_Status_ID'], $row['Product_ID']);
+        }
+    ?>
+</body>
+</html>
+<?php
+    }else
+    {	## if the session username is no admin, redirect the page to the login page 
+        echo "<script>
+                    alert('Log in first!');
+                    window.location.href = 'login.php';
+                </script>"; 
     }
     include '../../config/dbconn.php';
 
@@ -176,11 +162,11 @@
             echo'
             <tr>
                 <td style="width: 54px; padding-right: 10px;"><img src="'.$productPic.'" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; overflow: hidden;"></td>
-                <td style="width: 150px;">product name</td>
+                
                 <td>'.$productName.'</td>
                 <td rowspan=2 style="width: 120px; padding-left:25px;">
                     <a href="view product.php?productId='.$productId.'">
-                        <b>view</b>
+                        <b>buy</b>
                 </td>
             </tr>
             </table>
@@ -188,4 +174,3 @@
         ';
     }
 ?>
-

@@ -9,7 +9,7 @@
 <html>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8">
-	<title>Hive4</title>
+	<title>Add New Product</title>
 	<head>
 		<style>
 			body{
@@ -73,35 +73,7 @@
 			}
 		</style>
 	</head>
-	<table id=header  border="0">
-		<tr>
-			<th style="padding-left: 20px;">
-				<a href="admin users list.php">
-					USERS
-				</a>
-			</th>
-			<th>
-				<a href="admin product list.php">
-					PRODUCTS
-				</a>
-			</th>
-			<th>
-				<a href="admin orders.php">
-				ORDERS
-				</a>
-			</th>
-			<td colspan=2><img src="design 1.png"  style="width:60px; height:60px;"></td>
-			<th style="padding-left:60px;">
-				<a href="admin dashboard.php">
-					DASHBOARD
-				</a>
-			</th>
-			<td>
-				<a href="admin view account.php">
-					<img src="user.png" style="width:71px; height:40px;" class="user">
-				</a>
-			</td>
-		</tr>
+	<?php include 'admin header.php'; ?>
 	</table>
 	<br><br>
     <form action="add new product process.php" method="POST" enctype="multipart/form-data">
@@ -144,6 +116,6 @@
 <?php
 }else
 {	## if the session username is no admin, redirect the page to the login page 
-header("Location: login.php");
+header("Location: ../../pages/customer/login.php");
 }
 ?>

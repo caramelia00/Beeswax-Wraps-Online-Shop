@@ -5,17 +5,16 @@
 	if(isset($_SESSION['username']) && $_SESSION['username'] == "Administrator"){
 ?>
 
-
 <!DOCTYPE html>
 <html>
 <head>
     <meta name="update" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8">
-    <title>Hive4</title>
+    <title>Products</title>
     <style>
         body{
             background-color: #E6DAD1;
-            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            font-family:calibri, sans-serif;
             margin: 0;
 			padding: 0;
         }
@@ -71,7 +70,7 @@
             background-color: #8AB49C;
             border: 1px solid #8AB49C;
             color: #E6DAD1;
-            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            font-family:calibri, sans-serif;
             font-size: 20px;
             text-align: left;
         }*/
@@ -102,38 +101,8 @@
         }
     </style>
 </head>
+<?php include 'admin header.php'; ?>
 <body>
-	<table id=header  border="0">
-		<tr>
-			<th style="padding-left: 20px;">
-				<a href="admin users list.php">
-					USERS
-				</a>
-			</th>
-			<th>
-				<a href="admin product list.php">
-					PRODUCTS
-				</a>
-			</th>
-			<th>
-				<a href="admin orders.php">
-				ORDERS
-				</a>
-			</th>
-			<td colspan=2><img src="design 1.png"  style="width:60px; height:60px;"></td>
-			<th style="padding-left:60px;">
-				<a href="admin dashboard.php">
-					DASHBOARD
-				</a>
-			</th>
-			<td>
-				<a href="admin view account.php">
-					<img src="user.png" style="width:71px; height:40px;" class="user">
-				</a>
-			</td>
-		</tr>
-	</table>
-
     <!--- SEARCH PRODUCT --->
     <h1 style="text-align: center; color: #8AB49C;">SEARCH PRODUCT</h1>
         <table style="width: 800px; border-spacing: 5px;" border="0">
@@ -180,12 +149,11 @@
 </body>
 </html>
 
-
 <?php
 } 
 Else
 {	## if the session username is no admin, redirect the page to the login page 
-header("Location: login.php");
+header("Location: ../../pages/customer/login.php");
 }
 
 // get products from database
@@ -218,7 +186,6 @@ function displayProduct($productName, $productPic, $prodStatus, $productId){
         echo'
         <tr>
             <td style="width: 54px; padding-right: 10px;"><img src="'.$productPic.'" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; overflow: hidden;"></td>
-            <td style="width: 150px;">product name</td>
             <td>'.$productName.'</td>
             <td rowspan=2 style="width: 120px; padding-left:25px;">
                 <!-- link to specific product details -->

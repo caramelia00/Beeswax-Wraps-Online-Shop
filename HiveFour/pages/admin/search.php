@@ -10,11 +10,11 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8">
-    <title>Hive4</title>
+    <title>Search</title>
     <style>
         body{
             background-color: #E6DAD1;
-            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            font-family:calibri, sans-serif;
             margin: 0;
 			padding: 0;    
         }
@@ -129,36 +129,7 @@
         </script>
 </head>
 <body>
-	<table id="header" border="0">
-		<tr>
-			<th style="padding-left: 20px;">
-				<a href="admin users list.php">
-					USERS
-				</a>
-			</th>
-			<th>
-				<a href="admin product list.php">
-					PRODUCTS
-				</a>
-			</th>
-			<th>
-				<a href="admin orders.php">
-				ORDERS
-				</a>
-			</th>
-			<td colspan=2><img src="design 1.png"  style="width:60px; height:60px;"></td>
-			<th style="padding-left:60px;">
-				<a href="admin dashboard.php">
-					DASHBOARD
-				</a>
-			</th>
-			<td>
-				<a href="admin view account.php">
-					<img src="user.png" style="width:71px; height:40px;" class="user">
-				</a>
-			</td>
-		</tr>
-	</table>
+<?php include 'admin header.php'; ?>
 
     <?php
         include '../../config/dbconn.php';
@@ -167,6 +138,12 @@
             displayCustomerSearchBar();
 
             $search = mysqli_real_escape_string($dbconn, $_POST['query']);
+            if($search==""){
+                echo "<script>alert('Enter query!'); 
+                    window.location.href = 'admin users list.php';
+                    </script>";
+                exit();
+            }
             $result = getCustomer($search);
             $queryResult = mysqli_num_rows($result);
 
@@ -184,6 +161,12 @@
             displayProductSearchBar();
 
             $search = mysqli_real_escape_string($dbconn, $_POST['query']);
+            if($search==""){
+                echo "<script>alert('Enter query!'); 
+                    window.location.href = 'admin product list.php';
+                    </script>";
+                exit();
+            }
             $result = getProduct($search);
             $queryResult = mysqli_num_rows($result);
 
@@ -201,6 +184,12 @@
             displayOrderSearchBar();
         
             $search = mysqli_real_escape_string($dbconn, $_POST['query']);
+            if($search==""){
+                echo "<script>alert('Enter query!'); 
+                    window.location.href = 'admin orders.php';
+                    </script>";
+                exit();
+            }
             $result = getOrders($search);
             
             if ($result) { // Check if the query was successful
@@ -230,7 +219,7 @@
 <?php
 }else
 {	## if the session username is no admin, redirect the page to the login page 
-header("Location: login.php");
+header("Location: ../../pages/customer/login.php");
 }
 
 //--- CUSTOMER ---
@@ -363,7 +352,6 @@ function displayProduct($productName, $productPic, $prodStatus, $productId){
         echo'
         <tr>
             <td style="width: 54px; padding-right: 10px;"><img src="'.$productPic.'" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; overflow: hidden;"></td>
-            <td style="width: 150px;">product name</td>
             <td>'.$productName.'</td>
             <td rowspan=2 style="width: 120px; padding-left:25px;">
                 <a href="admin update product.php?productId='.$productId.'">
@@ -403,7 +391,7 @@ function getOrders($search){
     JOIN size on size.Size_ID = order_details.Size_ID
     WHERE orders.Payment_Receipt <> ''
     AND (orders.Order_ID LIKE '%$search%' OR product.Product_Name LIKE '%$search%' 
-    OR users.User_Full_Name LIKE '%$search%')";
+    OR users.User_Full_Name LIKE '%$search%' OR status.Status_Name LIKE '%$search%')";
     $result = mysqli_query($dbconn, $query);
     return $result;
 }
@@ -419,7 +407,7 @@ function displayOrderSearchBar(){
                     <form action="search.php" method="POST">
                         <tr>
                             <td style="text-align: center;">
-                                <input type="text" name="query" placeholder="Insert order ID or customer and product name" class="searchbar">
+                                <input type="text" name="query" placeholder="Insert order ID, order status, customer name, product name" class="searchbar">
                             </td>
                             <td style="text-align: right;">
                                 <button type="submit" name="submitOrder" class="sIcon" style="width: 22px; height: 22px; background: none; border: none; padding: 0; cursor: pointer;">
@@ -429,11 +417,6 @@ function displayOrderSearchBar(){
                         </tr>
                     </form>
                 </table>
-            </td>
-            <td style="width: 183px;">
-                <a href="admin order invoice.php">
-                    <img src="invoice.png">
-                </a>
             </td>
         </tr>
     </table>
@@ -477,8 +460,12 @@ function displayOrders($orderId, $orderStatus, $orderPrice, $orderTotalPrice, $o
                 <td colspan="2">
                     <table id="list" border="0">
                         <tr>
-                            <td style="width: 150px; padding-left: 10px;">Order ID:</td>
-                            <td>' . htmlspecialchars($orderId) . '</td>
+                            <td colspan="2" style="width: 150px; padding-left: 10px;"><b>Order ID: </b>' . htmlspecialchars($orderId) . '</td>
+                            <td style="text-align: center;">
+                                <a href="receipt.php?orderId=' . htmlspecialchars($orderId) . '" target="_blank" style="display: inline-block; padding: 7px 12px; background-color: white; color: #8AB49C; border-radius: 10px; font-size: 12px; border: none; cursor: pointer;">
+                                    RECEIPT
+                                </a>
+                            </td>
                         </tr>
                         <tr>
                             <td colspan="2">' . $orderDetailsHtml . '</td>
@@ -511,4 +498,3 @@ function displayOrders($orderId, $orderStatus, $orderPrice, $orderTotalPrice, $o
             </tr>';
         }
 ?>
-

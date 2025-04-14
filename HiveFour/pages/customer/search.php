@@ -9,11 +9,11 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8">
-    <title>Hive4</title>
+    <title>Search</title>
     <style>
         body{
             background-color: #E6DAD1;
-            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            font-family:calibri, sans-serif;
             margin: 0;
 			padding: 0;    
         }
@@ -120,35 +120,7 @@
     </style>
 </head>
 <body>
-<table id="header" border="0">
-        <tr>
-            <th style="padding-left: 20px;">
-                <a href="HOME.php">HOME</a>
-            </th>
-            <th>
-                <a href="search product.php">PRODUCTS</a>
-            </th>
-            <th>
-                <a href="About Us.php">ABOUT US</a>
-            </th>
-            <td colspan="2"><img src="design 1.png" style="width:80px; height:80px; padding-right: 30px;"></td>
-            <td>
-                <a href="order.php">
-                    <img src="order.png" style="width: 50px;height: 50px;" class="user">
-                </a>
-            </td>
-            <td>
-                <a href="cart.php">
-                    <img src="cart.png" style="width: 50px;height: 50px;" class="user">
-                </a>
-            </td>
-            <td>
-                <a href="view account details.php">
-                    <img src="user.png" style="width:71px; height:40px;" class="user">
-                </a>
-            </td>
-        </tr>
-    </table>
+<?php include 'customer header.php'; ?>
 
 <?php
 //--- PRODUCT ---
@@ -210,12 +182,11 @@ function displayProduct($productName, $productPic, $prodStatus, $productId){
         echo'
         <tr>
             <td style="width: 54px; padding-right: 10px;"><img src="'.$productPic.'" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; overflow: hidden;"></td>
-            <td style="width: 150px;">product name</td>
             <td>'.$productName.'</td>
             <td rowspan=2 style="width: 120px; padding-left:25px;">
                 <!-- link to specific product details -->
                 <a href="view product.php?productId='.$productId.'">
-                    <b>view</b>
+                    <b>buy</b>
                 </a> 
             </td>
         </tr>
@@ -354,6 +325,14 @@ function displayOrders($orderId, $orderStatus, $orderPrice, $orderTotalPrice, $o
             displayProductSearchBar();
 
             $search = mysqli_real_escape_string($dbconn, $_POST['query']);
+            
+            if($search==""){
+                echo "<script>alert('Enter query!'); 
+                    window.location.href = 'search product.php';
+                    </script>";
+                exit();
+            }
+
             $result = getProduct($search);
             $queryResult = mysqli_num_rows($result);
 

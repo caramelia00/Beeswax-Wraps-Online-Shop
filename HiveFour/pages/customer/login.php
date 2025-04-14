@@ -8,41 +8,74 @@ if(isset($_POST['submit'])){
 	$email = mysqli_real_escape_string($dbconn, $_POST['email']);
 	$password = mysqli_real_escape_string($dbconn, $_POST['pass']);
 
-	$sql= "SELECT * FROM users WHERE User_Email = '$email' AND User_Password = '$password'";
+	$sql= "SELECT * FROM users WHERE User_Email = '$email'";
 	$query = mysqli_query($dbconn, $sql) or die("Error: " . mysqli_error($dbconn));
 	$row = mysqli_num_rows($query);
 
-	if($row == 0){  
-		echo "<script>
-			alert('Incorrect email or password.');
-			window.location.href = 'login.php';
-			</script>";
-	}
-	else{
-		$r = mysqli_fetch_assoc($query);
-		if($r['Type_ID']=='UT02'){
-			$_SESSION['username'] = "Administrator";
-			$_SESSION['User_ID'] = $r['User_ID'];
-		
-			echo "<pre>";
-			var_dump($_SESSION);
-			echo "</pre>";
+	if ($row > 0) {
+        $r = mysqli_fetch_assoc($query);
 
-			header("Location: ../../pages/admin/admin dashboard.php");
+		$hashes_password = $r['User_Password'];
+
+        // Verify the password
+		//if ($password == $r['User_Password']) {
+        if (password_verify($password, $hashes_password)) {
+			if($r['Type_ID']=='UT02'){
+				$_SESSION['username'] = "Administrator";
+				$_SESSION['User_ID'] = $r['User_ID'];
+			
+				header("Location: ../../pages/admin/admin dashboard.php");
+				exit();
+			}
+			else{       
+				$_SESSION['username'] = "Customer";
+				$_SESSION['User_ID'] = $r['User_ID'];
+	
+				header("Location: search product.php");
 			exit();
-		}
-		else{       
-			$_SESSION['username'] = "Customer";
-			$_SESSION['User_ID'] = $r['User_ID'];
-		
-			echo "<pre>";
-			var_dump($_SESSION);
-			echo "</pre>";
+			}
+        } else {
+            echo "<script>
+			alert('Incorrect email or password.');
+			</script>";
+        }
+    } else {
+        echo "<script>
+			alert('Incorrect email or password.');
+			</script>";
+    }
 
-			header("Location: search product.php");
-		exit();
-		}
-	}
+	// if($row == 0){  
+	// 	echo "<script>
+	// 		alert('Incorrect email or password.');
+	// 		window.location.href = 'login.php';
+	// 		</script>";
+	// }
+	// else{
+	// 	$r = mysqli_fetch_assoc($query);
+	// 	if($r['Type_ID']=='UT02'){
+	// 		$_SESSION['username'] = "Administrator";
+	// 		$_SESSION['User_ID'] = $r['User_ID'];
+		
+	// 		// echo "<pre>";
+	// 		// var_dump($_SESSION);
+	// 		// echo "</pre>";
+
+	// 		header("Location: ../../pages/admin/admin dashboard.php");
+	// 		exit();
+	// 	}
+	// 	else{       
+	// 		$_SESSION['username'] = "Customer";
+	// 		$_SESSION['User_ID'] = $r['User_ID'];
+		
+	// 		// echo "<pre>";
+	// 		// var_dump($_SESSION);
+	// 		// echo "</pre>";
+
+	// 		header("Location: search product.php");
+	// 	exit();
+	// 	}
+	// }
 }
 mysqli_close($dbconn);
 ?> 
@@ -50,14 +83,27 @@ mysqli_close($dbconn);
 <html>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8">
-	<title>Hive4 LOGIN</title>
+	<title>Login</title>
 	<head>
 		<style>
+			@keyframes pop {
+            0% { transform: scale(0.5); opacity: 0; }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); opacity: 1; }
+			}
+
+			.pop-up {
+				animation: pop 1s;
+			}
+
 			body{
         		margin:0;
       		}
 			body{
 				background-image: url(loginbg.png);
+				background-size: cover;
+				background-repeat: no-repeat;
+				background-position: center;
 			}
 			#acc{
 				margin-left: auto;
@@ -158,7 +204,7 @@ mysqli_close($dbconn);
 				ABOUT US
 				</a>
 			</th>
-			<td colspan=2><img src="design 1.png"  style="width:80px; height:80px;"></td>
+			<td colspan=2><img src="design 1.png"  style="width:80px; height:80px; padding-right: 100px;">
 			<th style="padding-left:60px;">
 				<a href="login.php">
 					LOGIN
@@ -171,6 +217,7 @@ mysqli_close($dbconn);
 			</th>
 		</tr>
 	</table>
+	<div class="pop-up">
 		<br><br>
 		<table id=acc border="0">
 				<tr>
@@ -192,9 +239,10 @@ mysqli_close($dbconn);
 					</form>
 				</td>
 			</tr>
-    </table>
+    	</table>
 		  Don't have an account yet? <a href ="register1.php">REGISTER</a>
 		  </td>
 		  </tr>
+	</div>
 	</table>
 </html>

@@ -9,11 +9,11 @@
 <html>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8">
-	<title>Hive4</title>
+	<title>Orders</title>
 	<head>
 		<style>
             body{
-                font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+                font-family:calibri, sans-serif;
                 background-color: #E6DAD1;
                 margin: 0;
 				padding: 0;
@@ -93,7 +93,6 @@
                 opacity: 0.8;
             }
             #list{
-
                 border-spacing: 10px;
                 padding-left: 50px;
                 background-color:#8AB49C;
@@ -165,36 +164,7 @@
 
 	</head>
     <body>
-	<table id=header border="0">
-		<tr>
-			<th style="padding-left: 20px;">
-				<a href="admin users list.php">
-					USERS
-				</a>
-			</th>
-			<th>
-				<a href="admin product list.php">
-					PRODUCTS
-				</a>
-			</th>
-			<th>
-				<a href="admin orders.php">
-				ORDERS
-				</a>
-			</th>
-			<td colspan=2><img src="design 1.png"  style="width:60px; height:60px;"></td>
-			<th style="padding-left:60px;">
-				<a href="admin dashboard.php">
-					DASHBOARD
-				</a>
-			</th>
-			<td>
-				<a href="admin view account.php">
-					<img src="user.png" style="width:71px; height:40px;" class="user">
-				</a>
-			</td>
-		</tr>
-	</table>
+    <?php include 'admin header.php'; ?>
 
 	<h1 style="text-align: center; color: #8AB49C;">SEARCH ORDER</h1>
     <table id="one" style="border-spacing: 5px;" border="0">
@@ -204,7 +174,7 @@
                     <form action="search.php" method="POST">
                         <tr>
                             <td style="text-align: center;">
-                                <input type="text" name="query" placeholder="Insert order ID or customer and product name" class="searchbar">
+                                <input type="text" name="query" placeholder="Insert order ID, order status, customer name, product name" class="searchbar">
                             </td>
                             <td style="text-align: right;">
                                 <button type="submit" name="submitOrder" class="sIcon" style="width: 22px; height: 22px; background: none; border: none; padding: 0; cursor: pointer;">
@@ -215,11 +185,6 @@
                     </form>
                 </table>
             </td>
-            <td style="width: 183px;">
-                <a href="admin order invoice.php">
-                    <img src="invoice.png">
-                </a>
-            </td>
         </tr>
     </table>
     <?php displayOrders(); ?>
@@ -229,7 +194,7 @@
 } 
 else {
     // If the session username is not admin, redirect the page to the login page 
-    header("Location: login.php");
+    header("Location: ../../pages/customer/login.php");
     exit;
 }
 
@@ -298,10 +263,14 @@ function displayOrders() {
             <br>
             <tr>
                 <td colspan="2">
-                    <table id="list" border="0">
+                    <table id="list" border=0">
                         <tr>
-                            <td style="width: 150px; padding-left: 10px;">Order ID:</td>
-                            <td>' . htmlspecialchars($rOrd['Order_ID']) . '</td>
+                            <td colspan="2" style="width: 150px; padding-left: 10px;"><b>Order ID:</b> ' . htmlspecialchars($rOrd['Order_ID']) . '</td>
+                            <td style="text-align: center;">
+                                <a href="receipt.php?orderId=' . htmlspecialchars($rOrd['Order_ID']) . '" target="_blank" style="display: inline-block; padding: 7px 12px; background-color: white; color: #8AB49C; border-radius: 10px; font-size: 12px; border: none; cursor: pointer;">
+                                    RECEIPT
+                                </a>
+                            </td>
                         </tr>
                         <tr>
                             <td colspan="2">' . $orderDetailsHtml . '</td>
@@ -337,6 +306,5 @@ function displayOrders() {
         echo '<tr><td colspan="7">No orders found.</td></tr>';
     }
 }
-
-
 ?>
+

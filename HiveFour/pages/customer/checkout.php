@@ -1,8 +1,19 @@
+<?php
+	include '../../config/dbconn.php';
+
+	session_start();
+	
+	$session = $_SESSION['User_ID'];
+	if (empty($session)) {
+		header("Location: login.php");
+		exit();
+	}
+?>
 <!DOCTYPE html>
 <html>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8">
-	<title>Hive4 Checkout</title>
+	<title>Checkout</title>
 	<head>
 		<style>
             body{
@@ -51,7 +62,7 @@
                 padding-left: 10px;
             }
             body{
-                font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+                font-family:calibri, sans-serif;
                 background-color: #8AB49C;   
             }
 			#header{
@@ -64,6 +75,20 @@
 				font-size:30px;	
 				color:#E6DAD1;
 			}
+            #list{
+                margin-left: auto;
+                margin-right: auto;
+                padding-top: 10px;
+                padding-bottom: 10px;
+                padding-right: 50px;
+                padding-left: 50px;
+                background-color:#8AB49C;
+                border-radius: 50px;   
+                width: 800px;   
+                text-align: left; 
+                font-size: 20px;
+                color: #E6DAD1;
+            }
 			a{
 				text-align: center;
 				color: #E6DAD1;
@@ -74,11 +99,14 @@
 			}
             button{
 				text-align: center;
-                background-color: #8AB49C;
-                border: 1px solid #8AB49C;
-				color: #E6DAD1;
-                font-size: 24px;
-				text-decoration: none;
+                width: 100%;
+                padding: 10px;
+                background-color: white;
+                color: #9D5A4D;
+                border: none;
+                border-radius: 30px;
+                cursor: pointer;
+                font-weight: bold;
 			}
 			button:hover{
 				color: #5e7b6a;
@@ -106,42 +134,8 @@
             }
 		</style>
 	</head>
+    <?php include 'customer header.php'; ?>
 	<body>
-		<table id=header  border="0">
-			<tr>
-				<th style="padding-left: 20px;">
-                    <a href="HOME.php">
-                        HOME
-                    </a>
-                </th>
-                <th>
-                    <a href="search product.php">
-                        PRODUCTS
-                    </a>
-                </th>
-                <th>
-                    <a href="About Us.php">
-                    ABOUT US
-                    </a>
-                </th>
-                <td colspan=2><img src="design 1.png"  style="width:80px; height:80px; padding-right: 30px;"></td>
-                <td>
-                    <a href="order.php">
-                        <img src="order.png" style="width: 50px;height: 50px;" class="user">
-                    </a>
-                </td>
-                <td>
-                    <a href="cart.php">
-                        <img src="cart.png" style="width: 50px;height: 50px;" class="user">
-                    </a>
-                </td>
-                <td>
-                    <a href="view account details.php">
-                        <img src="user.png" style="width:71px; height:40px;" class="user">
-                    </a>
-                </td>
-			</tr>
-		</table>
 		<br><br>
         <table id="one">
             <tr>
@@ -152,7 +146,7 @@
                                 <img src="preparing.png" width="60px" height="60px">
                             </td>
                             <td style="text-align: center; margin: 0 auto;">
-                                <img src="shipped.png" width="140px" height="100px">
+                                <img src="shipped.png" width="110px" height="50px">
                             </td>
                             <td style="text-align: left; margin: 0 auto;">
                                 <img src="done payment.png" width="80px" height="45px">
@@ -166,6 +160,7 @@
                 </td>
                 <td>
                     <table id="summary" border="0" style="padding-left: 40px;">
+                    <form method="POST" enctype="multipart/form-data" action="checkout process.php">
                         <tr>
                             <td colspan="3" style="font-size: 30px;">
                                 ORDER SUMMARY
@@ -176,33 +171,47 @@
                                 ITEMS ORDERED
                             </td>
                         </tr>
-                        <tr>
-                            <td rowspan="3">
-                                <img src="earth.png" style="width: 90px; height: 90px;">
-                            </td>
-                            <td colspan="2">
-                                Earth & Sun Beeswax Wraps
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="2">
-                                Size: L
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                X2
-                            </td>
-                            <td style="text-align: right;">
-                                RM30.00
-                            </td>
-                        </tr>
+
+                        <?php
+                            $total = 0;
+                            if(!empty($_SESSION['cart'])) {
+                            foreach($_SESSION['cart'] as $keys => $value) {
+                                $total = $total + ($value['price'] * $value['quantity']);
+                        ?>
+                                <tr>
+                                    <td rowspan="3" style="width: 54px; padding-right: 10px;">
+                                        <img src="<?php echo $value['productImg'] ?>" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; overflow: hidden;">
+                                    </td>
+                                    <td colspan="2">
+                                        <input type="hidden" name="pId" value="<?php echo $value['productId']; ?>">
+                                        <?php echo $value['productName']; ?>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                        <input type="hidden" name="sId" value="<?php echo $value['sizeId']; ?>">
+                                        Size: <?php echo $value['sizeId']; ?>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input type="hidden" name="qty" value="<?php echo $value['quantity']; ?>">
+                                        X<?php echo $value['quantity']; ?>
+                                    </td>
+                                    <td style="text-align: right;">
+                                        RM<?php echo $value['price']; ?>
+                                    </td>
+                                </tr>
+                            <?php
+                            }
+                            }
+                            ?>   
                         <tr>
                             <td>
                                 Items Subtotal
                             </td>
                             <td colspan="2">
-                                RM60.00
+                                RM<?php echo $total; ?>
                             </td>
                         </tr>
                         <tr>
@@ -218,22 +227,33 @@
                                 Total Payment
                             </td>
                             <td colspan="2" style="font-size: 30px;">
-                                RM65.00
+                                RM<?php echo $total+5; ?>
                             </td>
                         </tr>
                         <tr>
                             <td>
                                 ADDRESS
                             </td>
+                            <?php 
+                                $uId = $_SESSION['User_ID'];
+                                $uDetails = getUserDetails($uId);
+                                $rUser = mysqli_fetch_assoc($uDetails);
+
+                                $uAddress1 = $rUser['Address1'];
+                                $uAddress2 = $rUser['Address2'];
+                                $postcode = $rUser['Postcode'];
+                                $state = $rUser['State'];
+                                $city = $rUser['City'];
+
+                            ?>
                             <td colspan="2">
-                                Menara TM,<br>
-                                Jalan Pantai Baharu, <br>
-                                50672 Kuala Lumpur <br>
-                                Malaysia
+                            <?php echo $uAddress1; ?>,<br>
+                            <?php if($uAddress2 != 'NULL') echo $uAddress2 . ',<br>'; ?>
+                            <?php echo $postcode; ?> <?php echo $city; ?>, <br>
+                            <?php echo $state; ?>
                             </td>
                         </tr>
                     </table>
-                </td>
                 <td>
                     <table id="pay" border="0">
                         <tr>
@@ -243,62 +263,40 @@
                         </tr>
                         <tr>
                             <td style="text-align: center;">
-                                <img src="qr.png" style="width: 200px; height: 200px;"><br>12345678912345
+                                <img src="qr bank.png" style="width: 200px; height: 200px;"><br>12345678912345
                             </td>
                         </tr>
                     </table>
                     <table>
                         <tr>
                             <td>
-                                <input type="submit" value="UPLOAD RECEIPT">
-                            </td>
-                            <td>
-                                <input type="submit" value="SUBMIT ORDER">
+                                <input type="file" id="receipt" name="receipt" accept="image/*" required>
                             </td>
                         </tr>
                         <tr>
                             <td>
-                                <input type="submit" value="PRINT INVOICE">
-                            </td>
+                                <input type="submit" name="submitOrder" value="SUBMIT ORDER">
                         </tr>
                     </table>
                 </td>
             </tr>
         </table>
-        <script>
-            const selectElements = document.querySelectorAll('.mySelect');
-            const imageElements = document.querySelectorAll('.myImage');
-
-            selectElements.forEach((selectElement, index) => {
-                const imageElement = imageElements[index];
-
-                selectElement.addEventListener('change', function() {
-                    const selectedValue = this.value;
-
-                    if (selectedValue === 'default') {
-                        // Hide the image when the default option is selected
-                        imageElement.style.display = 'none';
-                    } else {
-                        // Show the image when an option other than the default is selected
-                        imageElement.style.display = 'block';
-
-                        const imageSrc = selectedValue === 'true' ? 'done.png' : 'default.png';
-                        imageElement.src = imageSrc;
-
-                        if (selectedValue === 'true') {
-                            imageElement.style.width = '40px';
-                            imageElement.style.height = '40px';
-                        } else {
-                            imageElement.style.width = '40px';
-                            imageElement.style.height = '40px';
-                        }
-                    }
-                });
-            });
-            //change date
-        </script>
+        </form>
+        <br>
 	</body>
 </html>
+<?php 
+    function getUserDetails($uId){
+        include '../../config/dbconn.php';
+      
+        $sql = "SELECT *
+        FROM users
+        JOIN user_details on user_details.User_ID = users.User_ID
+        WHERE users.User_ID='$uId'";
+        $result = mysqli_query($dbconn, $sql);
+        return $result;
+    }
+?>
 	
 	
 	
